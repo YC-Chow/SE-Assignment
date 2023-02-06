@@ -4,9 +4,9 @@
 /// Summary description for Class1
 /// </summary>
 /// 
-public class Payment
+public class Voucher
 {
-    public Payment() { }
+    public Voucher() { }
    
     private int voucherId;
     public int VoucherId   // property
