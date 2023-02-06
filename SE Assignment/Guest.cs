@@ -4,9 +4,19 @@ using System.Collection;
 public class Guest
 {
 
-    public Guest()
+    public Guest(string name,string passportNo, string icNo, string emailAddress,string contactNo)
     {
-
+        name = name;
+        if (icNo != null)
+        {
+            icNo = icNo;
+        }
+        if (passportNo != null){
+            passportNo = passportNo;
+        }  
+        emailAddress = emailAddress;
+        contactNo = contactNo;
+        voucherList = new List<Voucher>();
     }
     private string name;
     public string Name
@@ -71,4 +81,32 @@ public class Guest
     {
         VoucherList.Add(v);
     }
+    public int registerGuest(string name,string passportNo = "", string icNo = "" ,string emailAddress,string contactNo)
+    {
+        
+        if (!string.IsNullOrEmpty(name) && (!string.IsNullOrEmpty(passportNo) || !string.IsNullOrEmpty(icNo)) && !string.IsNullOrEmpty(emailAddress) && !string.IsNullOrEmpty(contactNo))
+        {
+            Guest guest = new Guest(name,passportNo,icNo,emailAddress,contactNo);
+            guest.guestId = 1; //to be confirmed
+            return guest.guestId;
+        }
+        else
+        {
+            Console.WriteLine("Missing Guest Credentials. Please check whether Name, Contact No., Email Address and Passport Number or NRIC are provided. ");
+            return 0;
+        }
+    }
+    public bool loginGuest(int idNo, List<Guest> guestList)
+    {
+        bool guestFound = false;
+        foreach(Guest g in guestList)
+        {
+            if (g.guestId == idNo)
+            {
+                guestFound == true;
+                break;
+            }
+        }
+        return guestFound;
+    } 
 }

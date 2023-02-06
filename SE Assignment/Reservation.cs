@@ -2,8 +2,17 @@
 
 public class Reservation
 {
-	public Reservation()//constructor
+	const int SUBMITTED = 0;
+	const int CONFIRMED = 1;
+	const int FULFILLED = 2;
+	const int CANCELLED = 3;
+	const int NO_SHOW = 4;
+
+	public Reservation(DateTime checkInDate,DateTime checkOutDate)//constructor
 	{
+		this.checkInDate = checkInDate;
+		this.checkOutDate = checkOutDate;
+		
 	}
 	private int reservationId;
 	public int ReservationId
@@ -59,7 +68,12 @@ public class Reservation
 			}
 		}
     }
-
+	private List<RoomTypeReservation> roomReservationList;
+	public List<RoomTypeReservation> RoomReservationList
+    {
+        set { roomReservationList = value; }
+		get { return value; }
+	}
 	private Payment myPayment;
 	public Payment MyPayment
     {
@@ -71,5 +85,63 @@ public class Reservation
 				value.myReservation = this;
             }
         }
+    }
+	
+	public void makeReservation(DateTime checkInDate, DateTime checkOutDate,int roomId,Guest guest)
+    {
+		
+		Reservation r = new Reservation(checkInDate,checkOutDate);
+		r.ReservedByGuest = guest;
+		
+		if (r.reservationStatus == null)
+        {
+			r.reservationStatus = SUBMITTED;
+			r.reservationDate = DateTime.Today();
+			
+			r.ReservationId = 0;
+			guest.addReservation(r);
+		}
+		else if (r.reservationStatus == CONFIRMED)
+        {
+			Console.WriteLine("You have an existing reservation confirmed! You can't rebook the same reservation.");
+        }else if (r.reservationStatus == CANCELLED)
+        {
+			Console.WriteLine("This reservation has been cancelled.");
+        }else if (r.reservationStatus == NO_SHOW)
+        {
+			Console.WriteLine("Error. This existing reservation has been marked as no-show");
+        }
+		
+
+    }
+	public void GuestCheckIn(int bookingId)
+    {
+		if (reservationStatus == SUBMITTED){
+			Console.WriteLine("Payment has not been made yet. Please make payment to confirm this booking.");
+        }else if(reservationStatus == CANCELLED)
+        {
+			Console.WriteLine("This booking has been cancelled. No check-ins allowed.");
+        }else if (reservationStatus = NO_SHOW)
+        {
+			Console.WriteLine("You have exceeded the grace period for checking-in. Sorry, check-in not allowed.");
+        }else if (reservationStatus == CONFIRMED)
+        {
+			if (DateTime.Now == checkInDate && DateTime.Now.Hour < 23 && DateTime.Now.Minute >= 14)//ontime
+            {
+				reservationStatus = FULFILLED;
+				Console.WriteLine("Successfully checked-in to hotel.");
+
+			}
+			else
+            {
+				reservationStatus = NO_SHOW;
+				Console.WriteLine("You have exceeded the grace period for checking-in. Sorry, check-in not allowed.");
+
+			}
+		}
+    }
+	public void CancelReservation()
+    {
+
     }
 }
