@@ -29,7 +29,28 @@ namespace SE_Assignment {
 			get { return hasVoucher; }
 			set { hasVoucher = value; }
 		}
-		
+
+		private List<Review> reviews;
+
+		public List<Review> Reviews {
+			get { return reviews; }
+			set { reviews = value; }
+		}
+
+		private List<HotelAdmin> hotelAdmins;
+
+		public List<HotelAdmin> HotelAdmins {
+			get { return hotelAdmins; }
+			set { hotelAdmins = value; }
+		}
+
+		private List<RoomType> roomTypes;
+
+		public List<RoomType> RoomTypes {
+			get { return roomTypes; }
+			set { roomTypes = value; }
+		}
+
 
 		public Hotel() { }
 
