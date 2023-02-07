@@ -105,5 +105,13 @@ public class Guest
             }
         }
         return guestFound;
-    } 
+    }
+
+    public void makeReview(int rating, string description, Reservation res)
+    {
+        Review newReview = new Review(rating, description, res);
+        Hotel hotel = res.Hotel;
+        hotel.Reviews.Add(newReview);
+    }
+
 }

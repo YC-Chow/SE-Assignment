@@ -54,8 +54,8 @@ namespace SE_Assignment {
 
 		public Hotel() { }
 
-		public double getRating() {
-			return 0;
+		public List<Review> getReview() {
+			return List<Review> reviews;
 		}
 
 		public int getNumOfRooms() {
