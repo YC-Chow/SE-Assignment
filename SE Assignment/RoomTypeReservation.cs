@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SE_Assignment
 {
-    class RoomTypeReservation
+    public class RoomTypeReservation
     {
         public int RoomTypeId
         {
@@ -16,7 +11,7 @@ namespace SE_Assignment
             }
             get
             {
-                return value;
+                return RoomTypeId;
             }
         }
         private int roomTypeId;
@@ -24,7 +19,7 @@ namespace SE_Assignment
         public int ReservationId
         {
             set { reservationId = value; }
-            get { return value; }
+            get { return reservationId; }
         }
     }
 }

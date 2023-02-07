@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 /// <summary>
 /// Summary description for Class1
 /// </summary>
@@ -17,7 +16,7 @@ public class Payment
         }
 
         private double payableAmount;
-        public string PayableAmount   // property
+        public double PayableAmount   // property
         {
             get { return payableAmount; }   // get method
             set { payableAmount = value; }  // set method
