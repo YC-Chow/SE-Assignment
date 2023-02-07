@@ -1,8 +1,12 @@
-﻿using System;
-
-public class Facility
+﻿public class Facility
 {
-    public Facility() { }
+    public Facility(int facilityId, string facilityName) { 
+        
+        this.facilityId = facilityId;
+        this.facilityName = facilityName;
+        this.roomTypes= new List<RoomType>();
+
+    }
 
     private int facilityId;
     public int FacilityId
@@ -16,6 +20,13 @@ public class Facility
     {
         get { return facilityName; }
         set { facilityName = value; }
+    }
+
+    private List<RoomType> roomTypes;
+    public List<RoomType> RoomTypes
+    {
+        get { return roomTypes; }
+        set { roomTypes = value; }
     }
 }
 

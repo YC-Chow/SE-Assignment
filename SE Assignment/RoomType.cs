@@ -1,14 +1,21 @@
-﻿using System;
-using System.Collections;
-
-public class RoomType
+﻿public class RoomType
 {
-    public RoomType() { }
+    public RoomType(int roomTypeId, string roomTypeName, int maxNumGuest, double roomTypeCost, bool breakfastServed, string roomDescription) {
+        
+        this.roomTypeId = roomTypeId;
+        this.roomTypeName = roomTypeName;
+        this.maxNumGuest = maxNumGuest;
+        this.roomTypeCost = roomTypeCost;
+        this.breakfastServed = breakfastServed;
+        this.roomDescription = roomDescription;
+        this.facilities = new List<Facility>();
+
+    }
 
     private int roomTypeId;
-    public int RoomTypeId { 
-        get { return roomTypeId; } 
-        set { roomTypeId = value; } 
+    public int RoomTypeId {
+        get { return roomTypeId; }
+        set { roomTypeId = value; }
     }
 
     private string roomTypeName;
@@ -45,4 +52,16 @@ public class RoomType
         get { return roomDescription; }
         set { roomDescription = value; }
     }
-}
+
+    private List<Facility> facilities;
+    public List<Facility> Facilities
+    {
+        get { return facilities; }
+        set { facilities = value; }
+    }
+
+    public List<Facility> getFacilities()
+    {
+        return facilities;
+    }
+} 
