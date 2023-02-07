@@ -1,4 +1,6 @@
-﻿public class HotelAdmin
+﻿using SE_Assignment;
+
+public class HotelAdmin
 {
     public HotelAdmin() { }
 
@@ -9,6 +11,7 @@
         set { name = value; }
     }
 
+    private string emailAddress;
     public string EmailAddress
     {
         get { return emailAddress; }
@@ -19,20 +22,21 @@
 
     public Hotel ManagedHotel
     {
+        get { return managedHotel; }
+
         set
         {
             if (managedHotel != value)
             {
                 managedHotel = value;
-                value.addHotel(this);
+                //value.addHotel(this);
             }
         }
     }
 
-    public Reservation BookHotelRoom(DateTime checkInDate, DateTime checkInDate, int roomId, int guestId )
+    public Reservation BookHotelRoom(DateTime checkInDate, DateTime checkOutDate, int roomId, int guestId )
     {
-
-        return Reservation;
+        return null; //temporrary return
     }
 
 

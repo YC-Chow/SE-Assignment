@@ -1,21 +1,18 @@
-using System;
-using System.Collection;
-
 public class Guest
 {
 
     public Guest(string name,string passportNo, string icNo, string emailAddress,string contactNo)
     {
-        name = name;
+        Name = name;
         if (icNo != null)
         {
-            icNo = icNo;
+            this.IcNo = icNo;
         }
         if (passportNo != null){
-            passportNo = passportNo;
+            PassportNo = passportNo;
         }  
-        emailAddress = emailAddress;
-        contactNo = contactNo;
+        EmailAddress = emailAddress;
+        ContactNo = contactNo;
         voucherList = new List<Voucher>();
     }
     private string name;
@@ -24,13 +21,13 @@ public class Guest
         get { return name; }
         set { name = value; }
     }
-    private string icNo = null;
+    private string icNo = "";
     public string IcNo
     {
         get { return icNo; }
         set { icNo = value; }
     }
-    private string passportNo = null;
+    private string passportNo = "";
     public string PassportNo
     {
         get { return passportNo; }
@@ -62,7 +59,7 @@ public class Guest
             if (voucherList != value)
             {
                 voucherList = value;
-                voucherList.myGuest = this;
+                //voucherList.myGuest = this;
             }
         }
     }
@@ -77,11 +74,11 @@ public class Guest
     {
         ReservationList.Add(r);
     }
-    public addVoucher(Voucher v)
+    public void addVoucher(Voucher v)
     {
         VoucherList.Add(v);
     }
-    public int registerGuest(string name,string passportNo = "", string icNo = "" ,string emailAddress,string contactNo)
+    public int registerGuest(string name, string emailAddress, string contactNo,string passportNo = "", string icNo = "" )
     {
         
         if (!string.IsNullOrEmpty(name) && (!string.IsNullOrEmpty(passportNo) || !string.IsNullOrEmpty(icNo)) && !string.IsNullOrEmpty(emailAddress) && !string.IsNullOrEmpty(contactNo))
@@ -103,7 +100,7 @@ public class Guest
         {
             if (g.guestId == idNo)
             {
-                guestFound == true;
+                guestFound = true;
                 break;
             }
         }

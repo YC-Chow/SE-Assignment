@@ -9,8 +9,8 @@
         set { reviewId = value; }  // set method
     }
 
-    private Datetime reviewDate;
-    public Datetime ReviewDate   // property
+    private DateTime reviewDate;
+    public DateTime ReviewDate   // property
     {
         get { return reviewDate; }   // get method
         set { reviewDate = value; }  // set method
