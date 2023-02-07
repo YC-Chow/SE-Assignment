@@ -1,3 +1,5 @@
+using SE_Assignment.Iterator;
+
 public class Guest
 {
 
@@ -63,16 +65,15 @@ public class Guest
             }
         }
     }
-    private List<Reservation> reservationList;
-    public List<Reservation> ReservationList
-    {
-        set {  reservationList = value;}
+    private ReservationCollection reservationList = new ReservationCollection();
+
+    public ReservationCollection ReservationList {
         get { return reservationList; }
     }
 
     public void addReservation(Reservation r)
     {
-        ReservationList.Add(r);
+        reservationList.Add(r);
     }
     public void addVoucher(Voucher v)
     {
@@ -106,4 +107,37 @@ public class Guest
         }
         return guestFound;
     } 
+
+    public void ListAllReservations() {
+        //iterator pattern for reservation
+        int count = 1;
+        ReservationIterator iterator = reservationList.createIterator();
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
+            if (rsvp.CheckOutDate != null){
+                Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
+                rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
+                , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.ToString()));
+            }
+            else {
+                Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
+                rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
+                , "--------", rsvp.ReservationStatus.ToString()));
+            }
+            count++;
+        }
+
+    }
+
+    public bool cancelReservation(Reservation reservation) {
+        ReservationIterator iterator = reservationList.createIterator();
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
+            if (rsvp.ReservationId == reservation.ReservationId) {
+                if (rsvp.ReservationStatus == Reservation.Status.SUBMITTED || rsvp.ReservationStatus == Reservation.Status.CONFIRMED) {
+                    rsvp.ReservationStatus = Reservation.Status.CANCELLED;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
