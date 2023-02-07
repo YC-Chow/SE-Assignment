@@ -2,12 +2,15 @@
 
 public class Reservation
 {
-	const int SUBMITTED = 0;
-	const int CONFIRMED = 1;
-	const int FULFILLED = 2;
-	const int CANCELLED = 3;
-	const int NO_SHOW = 4;
 
+
+	public enum Status {
+		SUBMITTED, //0
+		CONFIRMED, //1
+		FULFILLED, //2
+		CANCELED, //3
+		NO_SHOW //4
+	}
 	public Reservation(DateTime checkInDate,DateTime checkOutDate)//constructor
 	{
 		this.checkInDate = checkInDate;
@@ -38,8 +41,8 @@ public class Reservation
 		get { return checkOutDate; }
 		set { checkOutDate = value; }
 	}
-	private string reservationStatus;
-	public string ReservationStatus
+	private Status reservationStatus;
+	public Status ReservationStatus
 	{
 		get { return reservationStatus; }
 		set { reservationStatus = value; }
@@ -64,16 +67,18 @@ public class Reservation
 			if (bookedRoomTypes != value)
             {
 				bookedRoomTypes = value;
-				value.reservedRoomsList.addReservation(this);
+				//ReservedRoomsList.addReservation(this);
+				//create new method to add reservation
 			}
 		}
     }
 	private List<RoomTypeReservation> roomReservationList;
-	public List<RoomTypeReservation> RoomReservationList
-    {
-        set { roomReservationList = value; }
-		get { return value; }
+
+	public List<RoomTypeReservation> RoomReservationList {
+		get { return roomReservationList; }
+		set { roomReservationList = value; }
 	}
+
 	private Payment myPayment;
 	public Payment MyPayment
     {
@@ -82,7 +87,7 @@ public class Reservation
 			if (myPayment != value)
             {
 				myPayment = value;
-				value.myReservation = this;
+				//value.myReservation = this;
             }
         }
     }
@@ -95,19 +100,19 @@ public class Reservation
 		
 		if (r.reservationStatus == null)
         {
-			r.reservationStatus = SUBMITTED;
-			r.reservationDate = DateTime.Today();
+			r.reservationStatus = Status.SUBMITTED;
+			r.reservationDate = DateTime.Today;
 			
 			r.ReservationId = 0;
 			guest.addReservation(r);
 		}
-		else if (r.reservationStatus == CONFIRMED)
+		else if (r.reservationStatus == Status.CONFIRMED)
         {
 			Console.WriteLine("You have an existing reservation confirmed! You can't rebook the same reservation.");
-        }else if (r.reservationStatus == CANCELLED)
+        }else if (r.reservationStatus == Status.CANCELED)
         {
 			Console.WriteLine("This reservation has been cancelled.");
-        }else if (r.reservationStatus == NO_SHOW)
+        }else if (r.reservationStatus == Status.NO_SHOW)
         {
 			Console.WriteLine("Error. This existing reservation has been marked as no-show");
         }
@@ -116,32 +121,28 @@ public class Reservation
     }
 	public void GuestCheckIn(int bookingId)
     {
-		if (reservationStatus == SUBMITTED){
+		if (reservationStatus == Status.SUBMITTED){
 			Console.WriteLine("Payment has not been made yet. Please make payment to confirm this booking.");
-        }else if(reservationStatus == CANCELLED)
+        }else if(reservationStatus == Status.CANCELED)
         {
 			Console.WriteLine("This booking has been cancelled. No check-ins allowed.");
-        }else if (reservationStatus = NO_SHOW)
+        }else if (reservationStatus == Status.NO_SHOW)
         {
 			Console.WriteLine("You have exceeded the grace period for checking-in. Sorry, check-in not allowed.");
-        }else if (reservationStatus == CONFIRMED)
+        }else if (reservationStatus == Status.CONFIRMED)
         {
 			if (DateTime.Now == checkInDate && DateTime.Now.Hour < 23 && DateTime.Now.Minute >= 14)//ontime
             {
-				reservationStatus = FULFILLED;
+				reservationStatus = Status.FULFILLED;
 				Console.WriteLine("Successfully checked-in to hotel.");
 
 			}
 			else
             {
-				reservationStatus = NO_SHOW;
+				reservationStatus = Status.NO_SHOW;
 				Console.WriteLine("You have exceeded the grace period for checking-in. Sorry, check-in not allowed.");
 
 			}
 		}
-    }
-	public void CancelReservation()
-    {
-
     }
 }
