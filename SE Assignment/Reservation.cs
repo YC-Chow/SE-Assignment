@@ -8,7 +8,7 @@ public class Reservation
 		SUBMITTED, //0
 		CONFIRMED, //1
 		FULFILLED, //2
-		CANCELED, //3
+		CANCELLED, //3
 		NO_SHOW //4
 	}
 	public Reservation(DateTime checkInDate,DateTime checkOutDate)//constructor
@@ -109,7 +109,7 @@ public class Reservation
 		else if (r.reservationStatus == Status.CONFIRMED)
         {
 			Console.WriteLine("You have an existing reservation confirmed! You can't rebook the same reservation.");
-        }else if (r.reservationStatus == Status.CANCELED)
+        }else if (r.reservationStatus == Status.CANCELLED)
         {
 			Console.WriteLine("This reservation has been cancelled.");
         }else if (r.reservationStatus == Status.NO_SHOW)
@@ -123,7 +123,7 @@ public class Reservation
     {
 		if (reservationStatus == Status.SUBMITTED){
 			Console.WriteLine("Payment has not been made yet. Please make payment to confirm this booking.");
-        }else if(reservationStatus == Status.CANCELED)
+        }else if(reservationStatus == Status.CANCELLED)
         {
 			Console.WriteLine("This booking has been cancelled. No check-ins allowed.");
         }else if (reservationStatus == Status.NO_SHOW)
