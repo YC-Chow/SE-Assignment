@@ -2,12 +2,12 @@
 {
     public interface IFacilityCollection
     {
-        IFacilityIterator CreateIterator();
+        FacilityIterator CreateIterator();
     }
 
     public class FacilityCollection : List<Facility>, IFacilityCollection
     {
-        public IFacilityIterator CreateIterator()
+        public FacilityIterator CreateIterator()
         {
             return new FacilityIterator(this);
         }

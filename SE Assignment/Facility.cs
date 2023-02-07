@@ -1,10 +1,12 @@
-﻿public class Facility
+﻿using SE_Assignment.Iterator;
+
+public class Facility
 {
     public Facility(int facilityId, string facilityName) { 
         
         this.facilityId = facilityId;
         this.facilityName = facilityName;
-        this.roomTypes= new List<RoomType>();
+        this.roomTypes= new RoomTypeCollection();
 
     }
 
@@ -22,11 +24,30 @@
         set { facilityName = value; }
     }
 
-    private List<RoomType> roomTypes;
-    public List<RoomType> RoomTypes
+    private RoomTypeCollection roomTypes;
+    public RoomTypeCollection RoomTypes
     {
         get { return roomTypes; }
         set { roomTypes = value; }
+    }
+
+    public void listAllRoomTypes() //Lists all room types with the facility
+    {
+        if (roomTypes.Count > 0)
+        {
+            Console.WriteLine("The following room types contain this facility");
+            RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();
+            for (RoomType roomType = roomTypeIterator.First();
+                !roomTypeIterator.isCompleted;
+                roomType = roomTypeIterator.Next())
+            {
+                Console.WriteLine(string.Format("[{0}] {1}", roomType.RoomTypeId, roomType.RoomTypeName));
+            }
+        }
+        else
+        {
+            Console.WriteLine("There are no room types with such a facility");
+        }
     }
 }
 

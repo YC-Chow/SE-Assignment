@@ -2,12 +2,12 @@
 {
     public interface IHotelCollection
     {
-        IHotelIterator CreateIterator();
+        HotelIterator CreateIterator();
     }
 
     public class HotelCollection : List<Hotel>, IHotelCollection
     {
-        public IHotelIterator CreateIterator()
+        public HotelIterator CreateIterator()
         {
             return new HotelIterator(this);
         }

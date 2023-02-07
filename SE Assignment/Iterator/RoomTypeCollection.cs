@@ -2,14 +2,18 @@
 {
     public interface IRoomTypeCollection
     {
-        IRoomTypeIterator CreateIterator();
+        RoomTypeIterator CreateIterator();
     }
 
     public class RoomTypeCollection : List<RoomType>, IRoomTypeCollection
     {
-        public IRoomTypeIterator CreateIterator()
+        public RoomTypeIterator CreateIterator()
         {
             return new RoomTypeIterator(this);
+        }
+        public int count
+        {
+            get { return this.Count; }
         }
     }
 }

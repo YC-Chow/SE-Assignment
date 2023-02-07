@@ -1,4 +1,6 @@
-﻿public class RoomType
+﻿using SE_Assignment.Iterator;
+
+public class RoomType
 {
     public RoomType(int roomTypeId, string roomTypeName, int maxNumGuest, double roomTypeCost, bool breakfastServed, string roomDescription) {
         
@@ -8,7 +10,7 @@
         this.roomTypeCost = roomTypeCost;
         this.breakfastServed = breakfastServed;
         this.roomDescription = roomDescription;
-        this.facilities = new List<Facility>();
+        this.facilities = new FacilityCollection();
 
     }
 
@@ -53,15 +55,29 @@
         set { roomDescription = value; }
     }
 
-    private List<Facility> facilities;
-    public List<Facility> Facilities
+    private FacilityCollection facilities;
+    public FacilityCollection Facilities
     {
         get { return facilities; }
         set { facilities = value; }
     }
 
-    public List<Facility> getFacilities()
+    public void listAllFacilities()
     {
-        return facilities;
+        if (facilities.Count > 0)
+        {
+            Console.WriteLine("This Room Type contains the following facilities:");
+            FacilityIterator facilityIterator = facilities.CreateIterator();
+            for (Facility facility = facilityIterator.First();
+                !facilityIterator.isCompleted;
+                facility = facilityIterator.Next())
+            {
+                Console.WriteLine(string.Format("[{0}] {1}", facility.FacilityId, facility.FacilityName));
+            }
+        }
+        else
+        {
+            Console.WriteLine("This Room Type does not conain any facilities. ");
+        }
     }
 } 
