@@ -1,61 +1,111 @@
 ﻿
-namespace SE_Assignment {
-    public class Hotel {
+using SE_Assignment.Iterator;
 
-		private int hotelId;
 
-		public int HotelId {
-			get { return hotelId; }
-			set { hotelId = value; }
+public class Hotel {
+
+	private int hotelId;
+
+	public int HotelId {
+		get { return hotelId; }
+		set { hotelId = value; }
+	}
+
+	private string hotelName;
+
+	public string HotelName {
+		get { return hotelName; }
+		set { hotelName = value; }
+	}
+
+	private string hotelType;
+
+	public string HotelType {
+		get { return hotelType; }
+		set { hotelType = value; }
+	}
+
+	private string area;
+
+	public string Area {
+		get { return area; }
+		set { area = value; }
+	}
+
+	private bool hasVoucher;
+
+	public bool HasVoucher {
+		get { return hasVoucher; }
+		set { hasVoucher = value; }
+	}
+
+	private List<Review> reviews;
+
+	public List<Review> Reviews {
+		get { return reviews; }
+		set { reviews = value; }
+	}
+
+	private List<HotelAdmin> hotelAdmins;
+
+	public List<HotelAdmin> HotelAdmins {
+		get { return hotelAdmins; }
+		set { hotelAdmins = value; }
+	}
+
+	private RoomTypeCollection roomTypes;
+
+	public RoomTypeCollection RoomTypes {
+		get { return roomTypes; }
+		set { roomTypes = value; }
+	}
+
+
+	public Hotel() { }
+
+	public List<Review> getReview() {
+		return reviews;
+	}
+
+	public int getNumOfRooms() {
+		return 0;
+	}
+
+	public RoomTypeCollection getRoomTypes() {
+		return roomTypes;
+	}
+
+	public RoomTypeCollection GetRoomTypes(List<Facility> facilities = null, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
+		RoomTypeCollection filteredRoomTypes = new RoomTypeCollection();
+
+		RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();
+		for (RoomType roomType = roomTypeIterator.First();
+			!roomTypeIterator.isCompleted;
+			roomType = roomTypeIterator.Next()){
+
+			if (roomType.RoomTypeCost >= minAmt && roomType.RoomTypeCost <= maxAmt) {
+				if (roomType.hasFacilities(facilities)) {
+					filteredRoomTypes.Add(roomType);
+				}
+			}
 		}
 
-		private string hotelName;
+		return roomTypes;
+	}
+	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, double maxReviewScore = 99999999999.99, string checkHotelType = "", bool? checkVouchers = null) {
+		bool satisfies = true;
 
-		public string HotelName {
-			get { return hotelName; }
-			set { hotelName = value; }
-		}
+		//Check Area
+		if (filterArea != "" && filterArea != area) { satisfies = false; }
 
-		private string hotelType;
+		//Check Review Score
 
-		public string HotelType {
-			get { return hotelType; }
-			set { hotelType = value; }
-		}
+		//Check hotel type
+		if (checkHotelType != "" && checkHotelType != hotelType) { satisfies = false; }
 
-		private bool hasVoucher;
+		//Check vouchers 
+		if (checkVouchers != null && checkVouchers != hasVoucher) { satisfies = false; }
 
-		public bool HasVoucher {
-			get { return hasVoucher; }
-			set { hasVoucher = value; }
-		}
-
-		private List<Review> reviews;
-
-		public List<Review> Reviews {
-			get { return reviews; }
-			set { reviews = value; }
-		}
-
-		private List<HotelAdmin> hotelAdmins;
-
-		public List<HotelAdmin> HotelAdmins {
-			get { return hotelAdmins; }
-			set { hotelAdmins = value; }
-		}
-
-		private List<RoomType> roomTypes;
-
-		public List<RoomType> RoomTypes {
-			get { return roomTypes; }
-			set { roomTypes = value; }
-		}
-
-
-		public Hotel() { }
-
-		public int getNumOfRooms() {
-			return 0;
-		}
-    }
+		return satisfies;
+	}
 }
