@@ -167,9 +167,6 @@ public class Guest
                     hotel.Reviews.Add(newReview);
                 }
             }
-
-
-
         }
 
     }
