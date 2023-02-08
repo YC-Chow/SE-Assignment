@@ -1,13 +1,13 @@
 ﻿public class Review
 {
-    public Review(int reviewId, DateTime reviewDate,int hotelId, int guestId, int reviewRating, string reviewDescription)
+    public Review(int reviewId, DateTime reviewDate,Hotel hotel, Guest guest, int reviewRating, string reviewDescription)
     {
         this.reviewId = reviewId;
-        this.ReviewDate = ReviewDate;
+        this.reviewDate = reviewDate;
         this.reviewRating = reviewRating;
         this.reviewDescription = reviewDescription;
-        this.hotelId = hotelId;
-        this.guestId = guestId;
+        this.hotel = hotel;
+        this.guest = guest;
     }
 
     private int reviewId;
@@ -24,18 +24,18 @@
         set { reviewDate = value; }  // set method
     }
 
-    private int hotelId;
-    public int HotelId   // property
+    private Hotel hotel;
+    public Hotel Hotel
     {
-        get { return hotelId; }   // get method
-        set { hotelId = value; }  // set method
+        get { return hotel; }   // get method
+        set { hotel = value; }
     }
 
-    private int guestId;
-    public int GuestId   // property
+    private Guest guest;
+    public Guest Guest
     {
-        get { return guestId; }   // get method
-        set { guestId = value; }  // set method
+        get { return guest; }   // get method
+        set { guest = value; }
     }
 
     private int reviewRating;
@@ -50,6 +50,13 @@
     {
         get { return reviewDescription; }   // get method
         set { reviewDescription = value; }  // set method
+    }
+
+    private Reservation reservation;
+    public Reservation Reservation
+    {
+        get { return reservation; }   // get method
+        set { reservation = value; }
     }
 
 }
