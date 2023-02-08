@@ -38,11 +38,11 @@ public class HotelAdmin
         }
     }
 
-    public Reservation BookHotelRoom(DateTime checkInDate, DateTime checkOutDate, int roomId, int guestId )
+    public Reservation BookHotelRoom(DateTime? checkInDate, DateTime? checkOutDate, int roomId, int guestId )
     {
-        if (!DateTime.IsNullOrEmpty(checkInDate) &&  (!DateTime.IsNullOrEmpty(checkOutDate)) && !int.IsNullOrEmpty(roomId) && !int.IsNullOrEmpty(guestId))
+        if (checkInDate != null &&  checkOutDate != null && roomId >0 && guestId > 0)
         {
-            Reservation res = new Reservation(DateTime.Now, checkInDate, checkOutDate, "Confirmed");
+            Reservation res = new Reservation(null,DateTime.Now, checkInDate, checkOutDate);
             //Auto-generate the reservationID
             return res;
         }

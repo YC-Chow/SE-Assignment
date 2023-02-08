@@ -70,8 +70,8 @@ hotelCollection.Add(hotel2);
 
 #endregion
 
-main();
-void main() {
+Main();
+void Main() {
     bool end = false;
     while (!end) {
         displayOptions();

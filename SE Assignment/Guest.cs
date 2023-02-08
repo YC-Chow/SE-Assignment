@@ -19,7 +19,6 @@ public class Guest
         voucherList = new List<Voucher>();
         AccBal = accBal;
     }
-
     private string name;
     public string Name
     {
@@ -57,13 +56,11 @@ public class Guest
         set { contactNo = value; }
     }
     private double accBal;
-
     public double AccBal
     {
         get { return accBal; }
         set { accBal = value; }
     }
-
     private List<Voucher> voucherList;
     public List<Voucher> VoucherList
     {

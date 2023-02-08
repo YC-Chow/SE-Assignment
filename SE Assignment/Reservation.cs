@@ -3,14 +3,17 @@
 public class Reservation
 {
 
-
-	
-	public Reservation(Guest reservedByGuest, DateTime checkInDate,DateTime checkOutDate)//constructor
+    public Reservation(Guest reservedByGuest, DateTime checkInDate,DateTime checkOutDate)//constructor
 	{
-		ReservedByGuest = reservedByGuest;
+		reservationStatus = new SubmittedState(); //initalise Reservation object to Submitted State
+        ReservedByGuest = reservedByGuest;
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
-		
+		//this.roomReservationList = roomTypeList;
+	}
+	public void setState(ReservationStatus state)
+	{
+		this.reservationStatus = state;
 	}
 	private int reservationId;
 	public int ReservationId
@@ -36,10 +39,15 @@ public class Reservation
 		get { return checkOutDate; }
 		set { checkOutDate = value; }
 	}
-	public IReservationStatus ReservationStatus;
+	public ReservationStatus ReservationStatus { 
+		get { return reservationStatus; } 
+		set { reservationStatus = value; } 
+	}
+	private ReservationStatus reservationStatus;
 	private Guest reservedByguest;
 	public Guest ReservedByGuest
 	{
+		get { return reservedByguest; }
 		set
 		{
 			if (reservedByguest != value)
@@ -77,9 +85,13 @@ public class Reservation
 			if (myPayment != value)
             {
 				myPayment = value;
-				//value.myReservation = this;
+				value.ReservationToPay = this;
             }
         }
+		get
+		{
+			return myPayment;
+		}
     }
 	
 	
