@@ -2,16 +2,17 @@
 
 public class RoomType
 {
+
+    public RoomType() { }
+
     public RoomType(int roomTypeId, string roomTypeName, int maxNumGuest, double roomTypeCost, bool breakfastServed, string roomDescription) {
         
-        this.roomTypeId = roomTypeId;
-        this.roomTypeName = roomTypeName;
-        this.maxNumGuest = maxNumGuest;
-        this.roomTypeCost = roomTypeCost;
-        this.breakfastServed = breakfastServed;
-        this.roomDescription = roomDescription;
-        this.facilities = new FacilityCollection();
-        this.hotel = new Hotel();
+        RoomTypeId = roomTypeId;
+        RoomTypeName = roomTypeName;
+        MaxNumGuest = maxNumGuest;
+        RoomTypeCost = roomTypeCost;
+        BreakfastServed = breakfastServed;
+        RoomDescription = roomDescription;
 
     }
 
