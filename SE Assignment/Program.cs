@@ -18,7 +18,7 @@ Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState()};
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new SubmittedState()};
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new SubmittedState()};
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState()};
+new Reservation(guest, DateTime.Now.AddDays(3), DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState()};
 #endregion
 
 main();
@@ -60,7 +60,10 @@ void cancelReservationOption() {
         Console.WriteLine("not valid option");
     }
     else {
-        guest.cancelReservation(guest.ReservationList.GetReservation(opt));
+        bool success = guest.cancelReservation(guest.ReservationList.GetReservation(opt));
+        if (!success) {
+            Console.WriteLine("Check in date within two days, cannot cancel");
+        }
     }
 }
 
