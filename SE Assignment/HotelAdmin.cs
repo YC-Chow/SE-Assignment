@@ -2,7 +2,11 @@
 
 public class HotelAdmin
 {
-    public HotelAdmin() { }
+    public HotelAdmin(string name, string email)
+    {
+        this.name = name;
+        this.emailAddress = email;
+    }
 
     private string name;
     public string Name
