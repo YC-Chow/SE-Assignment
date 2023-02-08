@@ -6,9 +6,15 @@
 /// 
 public class Voucher
 {
-    public Voucher(int VOUCHERiD) 
-    { }
-   
+    public Voucher(int voucherId, string issuer, DateTime expiryDate, bool isPercentage, bool isUsed)
+    {
+        this.voucherId = voucherId;
+        this.issuer = issuer;
+        this.expiryDate = expiryDate;
+        this.isPercentage = isPercentage;
+        this.isUsed = isUsed;
+    }
+
     private int voucherId;
     public int VoucherId   // property
     {
