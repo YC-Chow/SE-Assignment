@@ -29,6 +29,9 @@ void main() {
             case 0:
                 end = true;
                 break;
+            case 3:
+                reviewReservationOption();
+                break;
 
             case 4:
                 cancelReservationOption();
@@ -46,8 +49,6 @@ void displayOptions() {
 }
 
 void cancelReservationOption() {
-    
-
     guest.ListAllReservations();
     Console.Write("Which reservation to cancel? ");
     int opt = Int32.Parse(Console.ReadLine());
@@ -63,5 +64,17 @@ void cancelReservationOption() {
         else {
             Console.WriteLine("Reservation cancelled failed");
         }
+    }
+}
+
+void reviewReservationOption()
+{
+    guest.ListAllReservations();
+    Console.Write("Which reservation to review? ");
+    int opt = Int32.Parse(Console.ReadLine());
+    opt -= 1;
+    if (opt >= guest.ReservationList.Count)
+    {
+        Console.WriteLine("not valid option");
     }
 }

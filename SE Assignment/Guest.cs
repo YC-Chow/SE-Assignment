@@ -4,7 +4,7 @@ using SE_Assignment.Iterator;
 public class Guest
 {
 
-    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo)
+    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo,double accBal=0)
     {
         Name = name;
         if (icNo != null)
@@ -18,7 +18,9 @@ public class Guest
         EmailAddress = emailAddress;
         ContactNo = contactNo;
         voucherList = new List<Voucher>();
+        AccBal = accBal;
     }
+
     private string name;
     public string Name
     {
@@ -55,6 +57,14 @@ public class Guest
         get { return contactNo; }
         set { contactNo = value; }
     }
+    private double accBal;
+
+    public double AccBal
+    {
+        get { return accBal; }
+        set { accBal = value; }
+    }
+
     private List<Voucher> voucherList;
     public List<Voucher> VoucherList
     {
@@ -167,9 +177,6 @@ public class Guest
                     hotel.Reviews.Add(newReview);
                 }
             }
-
-
-
         }
 
     }

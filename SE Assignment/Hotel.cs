@@ -92,7 +92,7 @@ public class Hotel {
 
 		return roomTypes;
 	}
-	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, double maxReviewScore = 99999999999.99, string checkHotelType = "", bool checkVouchers) {
+	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, double maxReviewScore = 99999999999.99, string checkHotelType = "", bool? checkVouchers = null) {
 		bool satisfies = true;
 
 		//Check Area
