@@ -4,16 +4,17 @@ using SE_Assignment.Iterator;
 public class Guest
 {
 
-    public Guest(string name,string passportNo, string icNo, string emailAddress,string contactNo)
+    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo)
     {
         Name = name;
         if (icNo != null)
         {
             this.IcNo = icNo;
         }
-        if (passportNo != null){
+        if (passportNo != null)
+        {
             PassportNo = passportNo;
-        }  
+        }
         EmailAddress = emailAddress;
         ContactNo = contactNo;
         voucherList = new List<Voucher>();
@@ -37,7 +38,8 @@ public class Guest
         set { passportNo = value; }
     }
     private int guestId;
-    public int GuestId {
+    public int GuestId
+    {
         get { return guestId; }
         set { guestId = value; }
     }
@@ -68,7 +70,8 @@ public class Guest
     }
     private ReservationCollection reservationList = new ReservationCollection();
 
-    public ReservationCollection ReservationList {
+    public ReservationCollection ReservationList
+    {
         get { return reservationList; }
     }
 
@@ -80,12 +83,12 @@ public class Guest
     {
         VoucherList.Add(v);
     }
-    public int registerGuest(string name, string emailAddress, string contactNo,string passportNo = "", string icNo = "" )
+    public int registerGuest(string name, string emailAddress, string contactNo, string passportNo = "", string icNo = "")
     {
-        
+
         if (!string.IsNullOrEmpty(name) && (!string.IsNullOrEmpty(passportNo) || !string.IsNullOrEmpty(icNo)) && !string.IsNullOrEmpty(emailAddress) && !string.IsNullOrEmpty(contactNo))
         {
-            Guest guest = new Guest(name,passportNo,icNo,emailAddress,contactNo);
+            Guest guest = new Guest(name, passportNo, icNo, emailAddress, contactNo);
             guest.guestId = 1; //to be confirmed
             return guest.guestId;
         }
@@ -98,7 +101,7 @@ public class Guest
     public bool loginGuest(int idNo, List<Guest> guestList)
     {
         bool guestFound = false;
-        foreach(Guest g in guestList)
+        foreach (Guest g in guestList)
         {
             if (g.guestId == idNo)
             {
@@ -107,19 +110,23 @@ public class Guest
             }
         }
         return guestFound;
-    } 
+    }
 
-    public void ListAllReservations() {
+    public void ListAllReservations()
+    {
         //iterator pattern for reservation
         int count = 1;
         ReservationIterator iterator = reservationList.createIterator();
-        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
-            if (rsvp.CheckOutDate != null){
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        {
+            if (rsvp.CheckOutDate != null)
+            {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
                 rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
                 , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.ToString()));
             }
-            else {
+            else
+            {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
                 rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
                 , "--------", rsvp.ReservationStatus.ToString()));
@@ -129,11 +136,15 @@ public class Guest
 
     }
 
-    public bool cancelReservation(Reservation reservation) {
+    public bool cancelReservation(Reservation reservation)
+    {
         ReservationIterator iterator = reservationList.createIterator();
-        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
-            if (rsvp.ReservationId == reservation.ReservationId) {
-                if (rsvp.ReservationStatus == Reservation.Status.SUBMITTED || rsvp.ReservationStatus == Reservation.Status.CONFIRMED) {
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        {
+            if (rsvp.ReservationId == reservation.ReservationId)
+            {
+                if (rsvp.ReservationStatus == Reservation.Status.SUBMITTED || rsvp.ReservationStatus == Reservation.Status.CONFIRMED)
+                {
                     rsvp.ReservationStatus = Reservation.Status.CANCELLED;
                     return true;
                 }
@@ -141,13 +152,25 @@ public class Guest
         }
         return false;
     }
-    
 
-    public void makeReview(int rating, string description, Reservation res)
+
+    public void makeReview(int rating, string description, Hotel hotel, Reservation res)
     {
-        //Review newReview = new Review(rating, description, res);
-        //Hotel hotel = res.Hotel;
-        //hotel.Reviews.Add(newReview);
-    }
+        ReservationIterator iterator = reservationList.createIterator();
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        {
+            if (rsvp.ReservationId == res.ReservationId)
+            {
+                if (rsvp.ReservationStatus == Reservation.Status.FULFILLED)
+                {
+                    Review newReview = new Review(1,DateTime.Now,hotel.HotelId, guestId,rating,description);
+                    hotel.Reviews.Add(newReview);
+                }
+            }
 
+
+
+        }
+
+    }
 }
