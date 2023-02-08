@@ -6,7 +6,8 @@
 /// 
 public class Voucher
 {
-    public Voucher() { }
+    public Voucher(int VOUCHERiD) 
+    { }
    
     private int voucherId;
     public int VoucherId   // property
