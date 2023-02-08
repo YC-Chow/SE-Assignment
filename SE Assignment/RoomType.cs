@@ -80,4 +80,27 @@ public class RoomType
             Console.WriteLine("This Room Type does not conain any facilities. ");
         }
     }
+
+    public bool hasFacilities(List<Facility> checkFacilities) {
+        bool hasFacilities = true;
+
+        FacilityIterator facilityIterator = facilities.CreateIterator();
+        foreach (Facility checkFacility in checkFacilities) {
+        
+            for (Facility facility = facilityIterator.First();
+                !facilityIterator.isCompleted;
+                facility = facilityIterator.Next()) {
+
+                if(facility == checkFacility) {
+                    continue;
+                }
+
+                if (facilityIterator.isCompleted) {
+                    hasFacilities = false;
+                }
+            }
+        }
+
+        return hasFacilities;
+    }
 } 
