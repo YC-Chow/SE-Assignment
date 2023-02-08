@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Runtime.InteropServices;
 
+#region Initializing objects
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
     "Make Hotel Reservation",
@@ -17,6 +17,7 @@ guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(5)) { Re
 guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2});
 guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3});
 guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4});
+#endregion
 
 main();
 void main() {
