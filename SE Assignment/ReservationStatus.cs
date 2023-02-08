@@ -2,6 +2,7 @@
 
 namespace SE_Assignment
 {
+<<<<<<< HEAD:SE Assignment/ReservationStatus.cs
      public abstract class ReservationStatus
     {
         protected Reservation? reservation = null;
@@ -10,12 +11,30 @@ namespace SE_Assignment
 
         //public void makePayment(Double amount, int reservationId, string paymentMethod);
         public abstract void guestCheckIn(Reservation reservation);
+        public abstract string getStatusName();
     }
     class SubmittedState : ReservationStatus
+=======
+     public interface IReservationStatus
+     {
+        public void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
+        public void cancelReservation(Reservation reservation);
+
+        //public void makePayment(Double amount, int reservationId, string paymentMethod);
+        public void guestCheckIn(Reservation reservation);
+
+        public string getStatusName();
+     }
+    class SubmittedState : IReservationStatus
+>>>>>>> aea7ddd2c242d2a952a480627251ff399068f529:SE Assignment/IReservationStatus.cs
     {
         public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
         {
+<<<<<<< HEAD:SE Assignment/ReservationStatus.cs
             Reservation r = new Reservation(guest,checkInDate, checkOutDate);
+=======
+            Reservation r = new Reservation(guest, checkInDate, checkOutDate);
+>>>>>>> aea7ddd2c242d2a952a480627251ff399068f529:SE Assignment/IReservationStatus.cs
             r.ReservedByGuest = guest;
             r.setState(new ConfirmedState()); 
             r.ReservationDate = DateTime.Today;
@@ -30,6 +49,10 @@ namespace SE_Assignment
             Console.WriteLine("This booking has been cancelled successfully. No payment amount has been deducted.");
             reservation.setState(new CancelledState());
 
+        }
+
+        public string getStatusName() {
+            return "Submitted";
         }
     }
     class ConfirmedState : ReservationStatus
@@ -60,6 +83,10 @@ namespace SE_Assignment
             reservation.setState(new CancelledState());
 
         }
+
+        public string getStatusName() {
+            return "Confirmed";
+        }
     }
     class FulfilledState : ReservationStatus
     {
@@ -76,8 +103,9 @@ namespace SE_Assignment
             Console.WriteLine("This booking is ongoing as guests have already checked-in");
         }
 
-
-
+        public string getStatusName() {
+            return "Fulfiiled";
+        }
     }
     class NoShowState : ReservationStatus
     {
@@ -93,6 +121,9 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been paid, and cannot be refunded as user failed to check-in ontime.");
         }
 
+        public string getStatusName() {
+            return "No Show";
+        }
     }
     class CancelledState : ReservationStatus
     {
@@ -109,5 +140,8 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been cancelled.");
         }
 
+        public string getStatusName() {
+            return "Cancelled";
+        }
     }
 }
