@@ -1,4 +1,6 @@
 ﻿
+using SE_Assignment.Iterator;
+
 namespace SE_Assignment {
     public class Hotel {
 
@@ -23,6 +25,13 @@ namespace SE_Assignment {
 			set { hotelType = value; }
 		}
 
+		private string area;
+
+		public string Area {
+			get { return area; }
+			set { area = value; }
+		}
+
 		private bool hasVoucher;
 
 		public bool HasVoucher {
@@ -44,9 +53,9 @@ namespace SE_Assignment {
 			set { hotelAdmins = value; }
 		}
 
-		private List<RoomType> roomTypes;
+		private RoomTypeCollection roomTypes;
 
-		public List<RoomType> RoomTypes {
+		public RoomTypeCollection RoomTypes {
 			get { return roomTypes; }
 			set { roomTypes = value; }
 		}
@@ -60,6 +69,28 @@ namespace SE_Assignment {
 
 		public int getNumOfRooms() {
 			return 0;
+		}
+
+		public RoomTypeCollection getRoomTypes() {
+			return roomTypes;
+		}
+
+		public RoomTypeCollection GetRoomTypes(List<Facility> facilities = null, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
+			RoomTypeCollection filteredRoomTypes = new RoomTypeCollection();
+
+			RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();
+			for (RoomType roomType = roomTypeIterator.First();
+				!roomTypeIterator.isCompleted;
+				roomType = roomTypeIterator.Next()){
+
+				if (roomType.RoomTypeCost >= minAmt && roomType.RoomTypeCost <= maxAmt) {
+					if (roomType.hasFacilities(facilities)) {
+						filteredRoomTypes.Add(roomType);
+					}
+				}
+			}
+
+			return roomTypes;
 		}
     }
 }
