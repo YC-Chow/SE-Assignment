@@ -39,7 +39,10 @@ public class Reservation
 		get { return checkOutDate; }
 		set { checkOutDate = value; }
 	}
-	
+	public ReservationStatus ReservationStatus { 
+		get { return reservationStatus; } 
+		set { reservationStatus = value; } 
+	}
 	private ReservationStatus reservationStatus;
 	private Guest reservedByguest;
 	public Guest ReservedByGuest

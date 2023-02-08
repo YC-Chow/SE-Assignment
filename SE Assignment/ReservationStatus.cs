@@ -2,7 +2,7 @@
 
 namespace SE_Assignment
 {
-<<<<<<< HEAD:SE Assignment/ReservationStatus.cs
+
      public abstract class ReservationStatus
     {
         protected Reservation? reservation = null;
@@ -13,28 +13,12 @@ namespace SE_Assignment
         public abstract void guestCheckIn(Reservation reservation);
         public abstract string getStatusName();
     }
+   
     class SubmittedState : ReservationStatus
-=======
-     public interface IReservationStatus
-     {
-        public void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
-        public void cancelReservation(Reservation reservation);
-
-        //public void makePayment(Double amount, int reservationId, string paymentMethod);
-        public void guestCheckIn(Reservation reservation);
-
-        public string getStatusName();
-     }
-    class SubmittedState : IReservationStatus
->>>>>>> aea7ddd2c242d2a952a480627251ff399068f529:SE Assignment/IReservationStatus.cs
     {
         public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
         {
-<<<<<<< HEAD:SE Assignment/ReservationStatus.cs
             Reservation r = new Reservation(guest,checkInDate, checkOutDate);
-=======
-            Reservation r = new Reservation(guest, checkInDate, checkOutDate);
->>>>>>> aea7ddd2c242d2a952a480627251ff399068f529:SE Assignment/IReservationStatus.cs
             r.ReservedByGuest = guest;
             r.setState(new ConfirmedState()); 
             r.ReservationDate = DateTime.Today;
@@ -51,7 +35,7 @@ namespace SE_Assignment
 
         }
 
-        public string getStatusName() {
+        public override string getStatusName() {
             return "Submitted";
         }
     }
@@ -84,7 +68,7 @@ namespace SE_Assignment
 
         }
 
-        public string getStatusName() {
+        public override string getStatusName() {
             return "Confirmed";
         }
     }
@@ -103,7 +87,7 @@ namespace SE_Assignment
             Console.WriteLine("This booking is ongoing as guests have already checked-in");
         }
 
-        public string getStatusName() {
+        public override string getStatusName() {
             return "Fulfiiled";
         }
     }
@@ -121,7 +105,7 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been paid, and cannot be refunded as user failed to check-in ontime.");
         }
 
-        public string getStatusName() {
+        public override string getStatusName() {
             return "No Show";
         }
     }
@@ -140,7 +124,7 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been cancelled.");
         }
 
-        public string getStatusName() {
+        public override string getStatusName() {
             return "Cancelled";
         }
     }
