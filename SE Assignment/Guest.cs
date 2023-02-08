@@ -4,7 +4,7 @@ using SE_Assignment.Iterator;
 public class Guest
 {
 
-    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo,double accBal=0)
+    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo, double accBal = 0)
     {
         Name = name;
         if (icNo != null)
@@ -20,7 +20,6 @@ public class Guest
         voucherList = new List<Voucher>();
         AccBal = accBal;
     }
-
     private string name;
     public string Name
     {
@@ -58,13 +57,11 @@ public class Guest
         set { contactNo = value; }
     }
     private double accBal;
-
     public double AccBal
     {
         get { return accBal; }
         set { accBal = value; }
     }
-
     private List<Voucher> voucherList;
     public List<Voucher> VoucherList
     {
@@ -153,9 +150,9 @@ public class Guest
         {
             if (rsvp.ReservationId == reservation.ReservationId)
             {
-                if (rsvp.ReservationStatus == Reservation.Status.SUBMITTED || rsvp.ReservationStatus == Reservation.Status.CONFIRMED)
+                if (rsvp.reservationStatus == Reservation.Status.SUBMITTED || rsvp.reservationStatus == Reservation.Status.CONFIRMED)
                 {
-                    rsvp.ReservationStatus = Reservation.Status.CANCELLED;
+                    rsvp.reservationStatus = Reservation.Status.CANCELLED;
                     return true;
                 }
             }
@@ -173,12 +170,11 @@ public class Guest
             {
                 if (rsvp.ReservationStatus == Reservation.Status.FULFILLED)
                 {
-                    Review newReview = new Review(1,DateTime.Now, guest, hotel,rating,description);
+                    Review newReview = new Review(1, DateTime.Now, hotel, this, rating, description);
                     return newReview;
                     //hotel.Reviews.Add(newReview);
                 }
             }
         }
-
     }
 }

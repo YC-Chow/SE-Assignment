@@ -1,4 +1,5 @@
 ﻿
+using SE_Assignment;
 /// <summary>
 /// Summary description for Class1
 /// </summary>
@@ -52,17 +53,19 @@ public class Payment
 
     public bool makePayment(double payableAmount,Reservation reservationToPay)
     {
+        
         if(voucherUsage!=null)
         {
             //enough money in account balance
             if (reservationToPay.ReservedByGuest.AccBal > 0)
             {
                 //make calculation for both voucher and acc deduction
-                Reservation.Status.CONFIRMED;
+                reservationToPay.setState(new ConfirmedState());
                 return true;
             }
             // prompt user to add money into account
         }
         //else do base calculation
+        return false;
     }
 }

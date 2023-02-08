@@ -13,14 +13,14 @@ List<string> options = new List<string>() {
 
 //Maunally creating Guest for testing purposes
 Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
-guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1});
-guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2});
-guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3});
-guest.addReservation(new Reservation(DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4});
+guest.addReservation(new Reservation(guest,DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1});
+guest.addReservation(new Reservation(guest,DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2});
+guest.addReservation(new Reservation(guest,DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3});
+guest.addReservation(new Reservation(guest,DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4});
 #endregion
 
-main();
-void main() {
+Main();
+void Main() {
     bool end = false;
     while (!end) {
         displayOptions();
