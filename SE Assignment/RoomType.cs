@@ -11,6 +11,7 @@ public class RoomType
         this.breakfastServed = breakfastServed;
         this.roomDescription = roomDescription;
         this.facilities = new FacilityCollection();
+        this.hotel = new Hotel();
 
     }
 
@@ -60,6 +61,13 @@ public class RoomType
     {
         get { return facilities; }
         set { facilities = value; }
+    }
+
+    private Hotel hotel;
+    public Hotel Hotel 
+    {
+        get { return hotel; }  
+        set { hotel = value; }
     }
 
     public void listAllFacilities()

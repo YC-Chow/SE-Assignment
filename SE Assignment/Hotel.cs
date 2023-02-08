@@ -1,96 +1,111 @@
 ﻿
 using SE_Assignment.Iterator;
 
-namespace SE_Assignment {
-    public class Hotel {
 
-		private int hotelId;
+public class Hotel {
 
-		public int HotelId {
-			get { return hotelId; }
-			set { hotelId = value; }
-		}
+	private int hotelId;
 
-		private string hotelName;
+	public int HotelId {
+		get { return hotelId; }
+		set { hotelId = value; }
+	}
 
-		public string HotelName {
-			get { return hotelName; }
-			set { hotelName = value; }
-		}
+	private string hotelName;
 
-		private string hotelType;
+	public string HotelName {
+		get { return hotelName; }
+		set { hotelName = value; }
+	}
 
-		public string HotelType {
-			get { return hotelType; }
-			set { hotelType = value; }
-		}
+	private string hotelType;
 
-		private string area;
+	public string HotelType {
+		get { return hotelType; }
+		set { hotelType = value; }
+	}
 
-		public string Area {
-			get { return area; }
-			set { area = value; }
-		}
+	private string area;
 
-		private bool hasVoucher;
+	public string Area {
+		get { return area; }
+		set { area = value; }
+	}
 
-		public bool HasVoucher {
-			get { return hasVoucher; }
-			set { hasVoucher = value; }
-		}
+	private bool hasVoucher;
 
-		private List<Review> reviews;
+	public bool HasVoucher {
+		get { return hasVoucher; }
+		set { hasVoucher = value; }
+	}
 
-		public List<Review> Reviews {
-			get { return reviews; }
-			set { reviews = value; }
-		}
+	private List<Review> reviews;
 
-		private List<HotelAdmin> hotelAdmins;
+	public List<Review> Reviews {
+		get { return reviews; }
+		set { reviews = value; }
+	}
 
-		public List<HotelAdmin> HotelAdmins {
-			get { return hotelAdmins; }
-			set { hotelAdmins = value; }
-		}
+	private List<HotelAdmin> hotelAdmins;
 
-		private RoomTypeCollection roomTypes;
+	public List<HotelAdmin> HotelAdmins {
+		get { return hotelAdmins; }
+		set { hotelAdmins = value; }
+	}
 
-		public RoomTypeCollection RoomTypes {
-			get { return roomTypes; }
-			set { roomTypes = value; }
-		}
+	private RoomTypeCollection roomTypes;
+
+	public RoomTypeCollection RoomTypes {
+		get { return roomTypes; }
+		set { roomTypes = value; }
+	}
 
 
-		public Hotel() { }
+	public Hotel() { }
 
-		public List<Review> getReview() {
-			return reviews;
-		}
+	public List<Review> getReview() {
+		return reviews;
+	}
 
-		public int getNumOfRooms() {
-			return 0;
-		}
+	public int getNumOfRooms() {
+		return 0;
+	}
 
-		public RoomTypeCollection getRoomTypes() {
-			return roomTypes;
-		}
+	public RoomTypeCollection getRoomTypes() {
+		return roomTypes;
+	}
 
-		public RoomTypeCollection GetRoomTypes(List<Facility> facilities = null, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
-			RoomTypeCollection filteredRoomTypes = new RoomTypeCollection();
+	public RoomTypeCollection GetRoomTypes(List<Facility> facilities = null, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
+		RoomTypeCollection filteredRoomTypes = new RoomTypeCollection();
 
-			RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();
-			for (RoomType roomType = roomTypeIterator.First();
-				!roomTypeIterator.isCompleted;
-				roomType = roomTypeIterator.Next()){
+		RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();
+		for (RoomType roomType = roomTypeIterator.First();
+			!roomTypeIterator.isCompleted;
+			roomType = roomTypeIterator.Next()){
 
-				if (roomType.RoomTypeCost >= minAmt && roomType.RoomTypeCost <= maxAmt) {
-					if (roomType.hasFacilities(facilities)) {
-						filteredRoomTypes.Add(roomType);
-					}
+			if (roomType.RoomTypeCost >= minAmt && roomType.RoomTypeCost <= maxAmt) {
+				if (roomType.hasFacilities(facilities)) {
+					filteredRoomTypes.Add(roomType);
 				}
 			}
-
-			return roomTypes;
 		}
-    }
+
+		return roomTypes;
+	}
+	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, double maxReviewScore = 99999999999.99, string checkHotelType = "", bool? checkVouchers) {
+		bool satisfies = true;
+
+		//Check Area
+		if (filterArea != "" && filterArea != area) { satisfies = false; }
+
+		//Check Review Score
+
+		//Check hotel type
+		if (checkHotelType != "" && checkHotelType != hotelType) { satisfies = false; }
+
+		//Check vouchers 
+		if (checkVouchers != null && checkVouchers != hasVoucher) { satisfies = false; }
+
+		return satisfies;
+	}
 }
