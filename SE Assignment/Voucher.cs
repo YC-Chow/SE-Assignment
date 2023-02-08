@@ -6,21 +6,20 @@
 /// 
 public class Voucher
 {
-    public Voucher(int VOUCHERiD) 
-    { }
+    public Voucher(int voucherId,string issuer, DateTime expiryDate, bool isPercentage,bool isUsed) 
+    {
+        this.voucherId = voucherId;
+        this.issuer = issuer;
+        this.expiryDate = expiryDate;
+        this.isPercentage = isPercentage;
+        this.isUsed = isUsed;
+    }
    
     private int voucherId;
     public int VoucherId   // property
     {
         get { return voucherId; }   // get method
         set { voucherId = value; }  // set method
-    }
-
-    private string serialNo;
-    public string SerialNo   // property
-    {
-        get { return serialNo; }   // get method
-        set { serialNo = value; }  // set method
     }
 
     private string issuer;
