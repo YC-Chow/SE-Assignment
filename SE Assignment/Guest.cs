@@ -164,7 +164,7 @@ public class Guest
     }
 
 
-    public void makeReview(int rating, string description, Hotel hotel, Reservation res)
+    public Review makeReview(int rating, string description, Hotel hotel, Reservation res)
     {
         ReservationIterator iterator = reservationList.createIterator();
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
@@ -173,8 +173,9 @@ public class Guest
             {
                 if (rsvp.ReservationStatus == Reservation.Status.FULFILLED)
                 {
-                    Review newReview = new Review(1,DateTime.Now,hotel.HotelId, guestId,rating,description);
-                    hotel.Reviews.Add(newReview);
+                    Review newReview = new Review(1,DateTime.Now, guest, hotel,rating,description);
+                    return newReview;
+                    //hotel.Reviews.Add(newReview);
                 }
             }
         }
