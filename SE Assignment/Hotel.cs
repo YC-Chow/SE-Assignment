@@ -11,6 +11,7 @@ public class Hotel {
 		HotelType = hotelType;
 		Area = area;
 		HasVoucher = hasVoucher;
+		RoomTypes = new RoomTypeCollection();
 	}
 
 	private int hotelId;

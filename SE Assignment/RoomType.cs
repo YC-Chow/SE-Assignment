@@ -13,6 +13,7 @@ public class RoomType
         RoomTypeCost = roomTypeCost;
         BreakfastServed = breakfastServed;
         RoomDescription = roomDescription;
+        Facilities = new FacilityCollection();
 
     }
 
