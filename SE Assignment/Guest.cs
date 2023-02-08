@@ -1,10 +1,9 @@
-using SE_Assignment;
 using SE_Assignment.Iterator;
 
 public class Guest
 {
 
-    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo, double accBal = 0)
+    public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo,double accBal=0)
     {
         Name = name;
         if (icNo != null)
@@ -20,6 +19,7 @@ public class Guest
         voucherList = new List<Voucher>();
         AccBal = accBal;
     }
+
     private string name;
     public string Name
     {
@@ -57,11 +57,13 @@ public class Guest
         set { contactNo = value; }
     }
     private double accBal;
+
     public double AccBal
     {
         get { return accBal; }
         set { accBal = value; }
     }
+
     private List<Voucher> voucherList;
     public List<Voucher> VoucherList
     {
@@ -84,7 +86,7 @@ public class Guest
 
     public void addReservation(Reservation r)
     {
-        reservationList.Add(r);
+        ReservationList.Add(r);
     }
     public void addVoucher(Voucher v)
     {
@@ -130,13 +132,13 @@ public class Guest
             {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
                 rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
-                , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.ToString()));
+                , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.getStatusName()));
             }
             else
             {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
                 rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
-                , "--------", rsvp.ReservationStatus.ToString()));
+                , "--------", rsvp.ReservationStatus.getStatusName()));
             }
             count++;
         }
@@ -148,33 +150,27 @@ public class Guest
         ReservationIterator iterator = reservationList.createIterator();
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
-            if (rsvp.ReservationId == reservation.ReservationId)
+            if (rsvp.ReservationId == reservation.ReservationId && DateTime.Now <= rsvp.CheckInDate.AddDays(-2))
             {
-                if (rsvp.reservationStatus == Reservation.Status.SUBMITTED || rsvp.reservationStatus == Reservation.Status.CONFIRMED)
-                {
-                    rsvp.reservationStatus = Reservation.Status.CANCELLED;
-                    return true;
-                }
+                rsvp.ReservationStatus.cancelReservation(rsvp);
+                return true;
             }
         }
         return false;
     }
 
 
-    public Review makeReview(int rating, string description, Hotel hotel, Reservation res)
-    {
-        ReservationIterator iterator = reservationList.createIterator();
-        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
-        {
-            if (rsvp.ReservationId == res.ReservationId)
-            {
-                if (rsvp.ReservationStatus == Reservation.Status.FULFILLED)
-                {
-                    Review newReview = new Review(1, DateTime.Now, hotel, this, rating, description);
-                    return newReview;
-                    //hotel.Reviews.Add(newReview);
-                }
-            }
-        }
-    }
+    //public Review makeReview(int rating, string description, Hotel hotel, Reservation res) {
+    //    ReservationIterator iterator = reservationList.createIterator();
+    //    for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
+    //        if (rsvp.ReservationId == res.ReservationId) {
+    //            if (rsvp.ReservationStatus == Reservation.Status.FULFILLED) {
+    //                Review newReview = new Review(1, DateTime.Now, guest, hotel, rating, description);
+    //                return newReview;
+    //                //hotel.Reviews.Add(newReview);
+    //            }
+    //        }
+    //    }
+
+    //}
 }

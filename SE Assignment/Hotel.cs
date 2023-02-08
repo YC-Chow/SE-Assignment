@@ -1,8 +1,18 @@
 ﻿
 using SE_Assignment.Iterator;
 
-
 public class Hotel {
+
+	public Hotel() { }
+
+	public Hotel(int hotelId, string hotelName, string hotelType, string area, bool hasVoucher) {
+		HotelId = hotelId; ;
+		HotelName = hotelName;
+		HotelType = hotelType;
+		Area = area;
+		HasVoucher = hasVoucher;
+		RoomTypes = new RoomTypeCollection();
+	}
 
 	private int hotelId;
 
@@ -60,9 +70,6 @@ public class Hotel {
 		set { roomTypes = value; }
 	}
 
-
-	public Hotel() { }
-
 	public List<Review> getReview() {
 		return reviews;
 	}
@@ -92,7 +99,7 @@ public class Hotel {
 
 		return roomTypes;
 	}
-	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, double maxReviewScore = 99999999999.99, string checkHotelType = "", bool? checkVouchers = null) {
+	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, string checkHotelType = "", bool? allowVouchers = null) {
 		bool satisfies = true;
 
 		//Check Area
@@ -104,7 +111,7 @@ public class Hotel {
 		if (checkHotelType != "" && checkHotelType != hotelType) { satisfies = false; }
 
 		//Check vouchers 
-		if (checkVouchers != null && checkVouchers != hasVoucher) { satisfies = false; }
+		if (allowVouchers != null && allowVouchers != hasVoucher) { satisfies = false; }
 
 		return satisfies;
 	}
