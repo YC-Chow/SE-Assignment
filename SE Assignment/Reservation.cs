@@ -5,8 +5,9 @@ public class Reservation
 
 
 	
-	public Reservation(DateTime checkInDate,DateTime checkOutDate)//constructor
+	public Reservation(Guest reservedByGuest, DateTime checkInDate,DateTime checkOutDate)//constructor
 	{
+		ReservedByGuest = reservedByGuest;
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
 		
