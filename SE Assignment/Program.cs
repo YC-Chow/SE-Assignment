@@ -137,7 +137,7 @@ void browseHotelRooms()
 {
     //Initialize values
     double minAmt = 0.00;
-    double maxAmt = 0.00;
+    double maxAmt = 999999999999.99;
     string area = "";
     double minReviewScore = 0.00;
     string hotelType = "";
@@ -147,7 +147,7 @@ void browseHotelRooms()
     areas.Add("Serangoon");
     areas.Add("Sentosa");
 
-    List<String> hotelTypes= new List<String>();
+    List<String> hotelTypes = new List<String>();
     hotelTypes.Add("Budget");
     hotelTypes.Add("Luxury");
 
@@ -159,18 +159,44 @@ void browseHotelRooms()
     Console.Write("Add filters? (Y/N): ");
     string response = Console.ReadLine();
     Console.WriteLine();
-    
-    if (response.ToLower() == "y") 
+
+    if (response.ToLower() == "y")
     {
         Console.WriteLine("Press [enter] to skip filter\n");
 
         //Input Minimum Cost
         Console.Write("Enter Minimum Cost: ");
-        minAmt = double.Parse(Console.ReadLine());
+        string minAmtString = Console.ReadLine();
+        while (!double.TryParse(minAmtString, out minAmt) && minAmtString != "")
+        {
+            Console.Write("Enter a valid Cost: ");
+            minAmtString = Console.ReadLine();
+        }
+        if (minAmt < 0.00) { minAmt = 0.00; }
 
         //Input Maximium Cost
         Console.Write("Enter Maximum Cost: ");
-        maxAmt = double.Parse(Console.ReadLine());
+        string maxAmtString = Console.ReadLine();
+        bool valid = false;
+        while (!valid)
+        {
+            if (double.TryParse(maxAmtString, out maxAmt))
+            {
+                if (maxAmt > minAmt) { valid = true; }
+                else
+                {
+                    Console.Write("Enter a valid Cost: ");
+                    maxAmtString = Console.ReadLine();
+                    continue;
+                }
+            }
+            else if (maxAmtString == "") { valid = true; }
+            else
+            {
+                Console.Write("Enter a valid Cost: ");
+                maxAmtString = Console.ReadLine();
+            }
+        }
 
         //Input Area
         foreach (string a in areas)
@@ -181,12 +207,18 @@ void browseHotelRooms()
         int areaIndex = Int32.Parse(Console.ReadLine());
         if (areaIndex >= 0 && areaIndex < areas.Count)
         {
-            area = areas[areaIndex-1];
+            area = areas[areaIndex - 1];
         }
 
         //Input Minimum Review Score
         Console.Write("Enter Minimum Review Score: ");
-        minReviewScore = double.Parse(Console.ReadLine());
+        string minReviewScoreString = Console.ReadLine();
+        while (!double.TryParse(minReviewScoreString, out minReviewScore) && minReviewScoreString != "")
+        {
+            Console.Write("Enter a valid Review Score: ");
+            minReviewScoreString = Console.ReadLine();
+        }
+        if (minReviewScore < 0.00) { minReviewScore = 0.00; }
 
         //Input Hotel Type
         foreach (string h in hotelTypes)
