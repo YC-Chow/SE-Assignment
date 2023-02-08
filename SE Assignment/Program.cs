@@ -2,6 +2,7 @@
 
 
 #region Initializing objects
+using SE_Assignment
 using SE_Assignment.Iterator;
 
 List<string> options = new List<string>() {
