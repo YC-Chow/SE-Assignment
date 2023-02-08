@@ -15,10 +15,10 @@ List<string> options = new List<string>() {
 
 //Maunally creating Guest for testing purposes
 Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
-guest.addReservation(new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1});
-guest.addReservation(new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2});
-guest.addReservation(new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3});
-guest.addReservation(new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4});
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 //Create Facilities
 Facility facility1 = new Facility(1, "Bathtub");
@@ -109,17 +109,11 @@ void cancelReservationOption() {
     Console.Write("Which reservation to cancel? ");
     int opt = Int32.Parse(Console.ReadLine());
     opt -= 1;
-    if (opt >= guest.ReservationList.Count) {
+    if (opt >= guest.ReservationList.Count || opt <= 0) {
         Console.WriteLine("not valid option");
     }
     else {
-        bool success = guest.cancelReservation(guest.ReservationList.GetReservation(opt));
-        if (success) {
-            Console.WriteLine("Reservation sucessfully cancelled");
-        }
-        else {
-            Console.WriteLine("Reservation cancelled failed");
-        }
+        guest.cancelReservation(guest.ReservationList.GetReservation(opt));
     }
 }
 

@@ -87,7 +87,7 @@ public class Guest
 
     public void addReservation(Reservation r)
     {
-        reservationList.Add(r);
+        ReservationList.Add(r);
     }
     public void addVoucher(Voucher v)
     {
@@ -133,47 +133,39 @@ public class Guest
             {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
                 rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
-                , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.ToString()));
+                , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.getStatusName()));
             }
             else
             {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
                 rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
-                , "--------", rsvp.ReservationStatus.ToString()));
+                , "--------", rsvp.ReservationStatus.getStatusName()));
             }
             count++;
         }
 
     }
 
-    public bool cancelReservation(Reservation reservation)
+    public void cancelReservation(Reservation reservation)
     {
         ReservationIterator iterator = reservationList.createIterator();
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
             if (rsvp.ReservationId == reservation.ReservationId)
             {
-                if (rsvp.ReservationStatus == Reservation.Status.SUBMITTED || rsvp.ReservationStatus == Reservation.Status.CONFIRMED)
-                {
-                    rsvp.ReservationStatus = Reservation.Status.CANCELLED;
-                    return true;
-                }
+                rsvp.ReservationStatus.cancelReservation(rsvp);
+                break;
             }
         }
-        return false;
     }
 
 
-    public Review makeReview(int rating, string description, Hotel hotel, Reservation res)
-    {
+    public Review makeReview(int rating, string description, Hotel hotel, Reservation res) {
         ReservationIterator iterator = reservationList.createIterator();
-        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
-        {
-            if (rsvp.ReservationId == res.ReservationId)
-            {
-                if (rsvp.ReservationStatus == Reservation.Status.FULFILLED)
-                {
-                    Review newReview = new Review(1,DateTime.Now, guest, hotel,rating,description);
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
+            if (rsvp.ReservationId == res.ReservationId) {
+                if (rsvp.ReservationStatus == Reservation.Status.FULFILLED) {
+                    Review newReview = new Review(1, DateTime.Now, guest, hotel, rating, description);
                     return newReview;
                     //hotel.Reviews.Add(newReview);
                 }

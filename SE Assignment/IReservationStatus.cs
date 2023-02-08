@@ -2,19 +2,21 @@
 
 namespace SE_Assignment
 {
-     interface IReservationStatus
-    {
+     public interface IReservationStatus
+     {
         public void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
         public void cancelReservation(Reservation reservation);
 
         //public void makePayment(Double amount, int reservationId, string paymentMethod);
         public void guestCheckIn(Reservation reservation);
-    }
+
+        public string getStatusName();
+     }
     class SubmittedState : IReservationStatus
     {
         public void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
         {
-            Reservation r = new Reservation(checkInDate, checkOutDate);
+            Reservation r = new Reservation(guest, checkInDate, checkOutDate);
             r.ReservedByGuest = guest;
             r.ReservationStatus = new ConfirmedState(); 
             r.ReservationDate = DateTime.Today;
@@ -29,6 +31,10 @@ namespace SE_Assignment
             Console.WriteLine("This booking has been cancelled successfully. No payment amount has been deducted.");
             reservation.ReservationStatus = new CancelledState();
 
+        }
+
+        public string getStatusName() {
+            return "Submitted";
         }
     }
     class ConfirmedState : IReservationStatus
@@ -59,6 +65,10 @@ namespace SE_Assignment
             reservation.ReservationStatus = new CancelledState();
 
         }
+
+        public string getStatusName() {
+            return "Confirmed";
+        }
     }
     class FulfilledState : IReservationStatus
     {
@@ -75,8 +85,9 @@ namespace SE_Assignment
             Console.WriteLine("This booking is ongoing as guests have already checked-in");
         }
 
-
-
+        public string getStatusName() {
+            return "Fulfiiled";
+        }
     }
     class NoShowState : IReservationStatus
     {
@@ -92,6 +103,9 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been paid, and cannot be refunded as user failed to check-in ontime.");
         }
 
+        public string getStatusName() {
+            return "No Show";
+        }
     }
     class CancelledState : IReservationStatus
     {
@@ -108,5 +122,8 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been cancelled.");
         }
 
+        public string getStatusName() {
+            return "Cancelled";
+        }
     }
 }
