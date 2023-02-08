@@ -114,7 +114,10 @@ void cancelReservationOption() {
         Console.WriteLine("not valid option");
     }
     else {
-        guest.cancelReservation(guest.ReservationList.GetReservation(opt));
+        bool success = guest.cancelReservation(guest.ReservationList.GetReservation(opt));
+        if (!success) {
+            Console.WriteLine("Check in date within two days, cannot cancel");
+        }
     }
 }
 
