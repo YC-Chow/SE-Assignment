@@ -4,6 +4,7 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Transactions;
 
@@ -283,7 +284,17 @@ void reviewReservationOption()
     }
 }
 
-
+Voucher getVoucherById(List<Voucher> voucherList, int id)
+{
+    foreach (Voucher voucher in voucherList)
+    {
+        if (voucher.VoucherId == id)
+        {
+            return voucher;
+        }
+    }
+    return null;
+}
 
 List<RoomType> browseHotelRooms()
 {
@@ -531,6 +542,7 @@ void makeReservation(List<RoomType> roomToBook)
         Console.Write("Enter your option:");
         int.TryParse(Console.ReadLine(), out option);
     }
+
     switch (option)
     {
         case 1:
@@ -547,32 +559,34 @@ void makeReservation(List<RoomType> roomToBook)
             Console.WriteLine("You will be redirected to Make Payment...");
 
             //Make Payment use Case starts here
-            Payment payment = new Payment(new Random().Next(100,500), reservation, reservationTotal);
+            Payment payment = new Payment(new Random().Next(100, 500), reservation, reservationTotal);
 
-
+            Console.WriteLine("Your reservation total is:",reservationTotal);
             Console.WriteLine("Do you wish to use voucher? Y/N");
             string usageoption = Console.ReadLine();
 
-            if(usageoption.ToLower().Equals("y"))
+            Voucher voucherUsage = null;
+            if (usageoption.ToLower().Equals("y"))
             {
                 List<Voucher> voucherList = guest.GetUnUsedVouchers();
-                Console.WriteLine(voucherList.Count);
+                //Console.WriteLine(voucherList.Count);
+                Console.WriteLine(string.Format("{0} {1} {2} {3}", "Voucher ID", "Voucher Issuer", "Voucher Expiry Date", "Voucher value"));
+                int ouput;
+
                 foreach (Voucher voucher in voucherList)
                 {
-                    if(voucher != null)
+                    if (voucher != null)
                     {
-                        Console.WriteLine(voucher);
+                        Console.WriteLine(string.Format("{0} {1} {2} {3}", voucher.VoucherId, voucher.Issuer, voucher.ExpiryDate, voucher.VoucherValue));
                     }
                 }
                 Console.WriteLine("Please make a selection!");
-                //int.TryParse(Console.ReadLine());
-
-
+                int.TryParse(Console.ReadLine(), out ouput);
+                voucherUsage = getVoucherById(voucherList, ouput);
             }
-            
 
-
-            //int paymentResult = payment.makePayment(reservationTotal, reservation);
+            int paymentResult = payment.makePayment(reservationTotal, reservation,voucherUsage);
+            //Console.WriteLine(paymentResult);
 
             break;
         case 2:
@@ -584,6 +598,6 @@ void makeReservation(List<RoomType> roomToBook)
 
             displayOptions();
             break;
-
     }
+
 }
