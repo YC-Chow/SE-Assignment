@@ -98,7 +98,6 @@ public class Reservation
 	public double computeReservationTotal(List<RoomType> roomsToBook){
 		foreach(RoomType roomType in roomsToBook)
 		{
-			Console.WriteLine("LOL",roomType.RoomTypeCost.ToString());
 			this.reservationPrice += roomType.RoomTypeCost;
         }
 		return this.reservationPrice;
@@ -108,7 +107,7 @@ public class Reservation
         this.BookedRoomTypes = roomTypes;
         this.setState(new SubmittedState());
         this.ReservationId = new Random().Next(100,500);
-        guest.ReservationList.Add(this);
+        //guest.ReservationList.Add(this);
         this.ReservationDate = DateTime.Today;
         Console.WriteLine("You will be redirected to Make Payment...");
 

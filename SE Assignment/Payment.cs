@@ -45,7 +45,6 @@ public class Payment
     public void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
     {
         reservationToPay.ReservedByGuest.AccBal = reservationToPay.ReservedByGuest.AccBal - payableAmount;
-        Console.WriteLine("Your new balance is:",reservationToPay.ReservedByGuest.AccBal);
         reservationToPay.setState(new ConfirmedState());
         // Confirm and payment successful
     }
