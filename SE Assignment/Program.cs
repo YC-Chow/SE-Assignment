@@ -4,9 +4,6 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Transactions;
 
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
@@ -183,7 +180,7 @@ void viewReservationHistory() {
 
 
 void cancelReservationOption() {
-    guest.ListAllReservations();
+    List<Reservation> list = guest.ListAllReservations();
     Console.Write("Which reservation to cancel? (0 to exit): ");
     int opt = Int32.Parse(Console.ReadLine());
     if (opt == 0) {
@@ -191,11 +188,11 @@ void cancelReservationOption() {
         return;
     }
     opt -= 1;
-    if (opt >= guest.ReservationList.Count || opt < 0) {
+    if (opt >= list.Count || opt < 0) {
         Console.WriteLine("not valid option");
     }
     else {
-        guest.cancelReservation(guest.ReservationList.GetReservation(opt));
+        guest.cancelReservation(list[opt]);
     }
 }
 
