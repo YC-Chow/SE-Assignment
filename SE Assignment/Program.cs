@@ -141,7 +141,7 @@ void Main() {
                     makeReservationOption = Console.ReadLine();
                 }
 
-                if (makeReservationOption == "y")
+                if (makeReservationOption.ToLower() == "y")
                 {
                     List<RoomType> roomsToBook = new List<RoomType>();
 
@@ -154,7 +154,7 @@ void Main() {
                         addRoomOption = Console.ReadLine();
                     }
 
-                    while(addRoomOption != "n")
+                    while(addRoomOption.ToLower() != "n")
                     {
                         bookableRoomTypes = browseHotelRooms();
 
@@ -488,7 +488,7 @@ List<RoomType> browseHotelRooms()
             //Input Hotel Type
             foreach (string h in hotelTypeList)
             {
-                Console.WriteLine(string.Format("[{0}] {1}", hotelTypes.IndexOf(h) + 1, h));
+                Console.WriteLine(string.Format("[{0}] {1}", hotelTypeList.IndexOf(h) + 1, h));
             }
             Console.Write("Enter Hotel Type Index(es): ");
             string hotelIndexesString = Console.ReadLine();
