@@ -30,8 +30,13 @@ namespace SE_Assignment
         }
         public override void cancelReservation(Reservation reservation)
         {
-            Console.WriteLine("This booking has been cancelled successfully. No payment amount has been deducted.");
-            reservation.setState(new CancelledState());
+            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2)) {
+                Console.WriteLine("This booking has been cancelled successfully. No payment amount has been deducted.");
+                reservation.setState(new CancelledState());
+            }
+            else {
+                Console.WriteLine("Current day is not at least 2 days before check in date, cannot cancel");
+            }
 
         }
 
@@ -63,8 +68,14 @@ namespace SE_Assignment
         }
         public override void cancelReservation(Reservation reservation)
         {
-            Console.WriteLine("This booking has been cancelled successfully. Payment made will be refunded to you.");
-            reservation.setState(new CancelledState());
+            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2)) {
+                Console.WriteLine("This booking has been cancelled successfully. Payment made will be refunded to you.");
+                reservation.setState(new CancelledState());
+            }
+            else {
+                Console.WriteLine("Current day is not at least 2 days before check in date, cannot cancel");
+            }
+            
 
         }
 
