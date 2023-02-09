@@ -4,7 +4,6 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
-using System.Runtime.CompilerServices;
 
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
