@@ -125,6 +125,7 @@ public class Guest
         ReservationIterator iterator = reservationList.createIterator();
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
+            
             if (rsvp.CheckOutDate != null)
             {
                 Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
