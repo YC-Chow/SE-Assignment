@@ -100,7 +100,12 @@ void Main() {
                 List<RoomType> bookableRoomTypes = browseHotelRooms();
                 break;
 
+            case 2:
+                break;
 
+            case 3:
+                viewReservationHistory();
+                break;
 
             case 4:
                 cancelReservationOption();
@@ -120,6 +125,33 @@ void displayOptions() {
     }
     Console.WriteLine("[0] Exit");
 }
+
+
+void viewReservationHistory() {
+    if (guest.ReservationList.Count == 0)
+    {
+        Console.WriteLine("You do not have a reservation to review");
+        return;
+    }
+    else
+    {    
+        guest.ListAllReservations();
+        //Guest can enter the reservation id to view the details
+        Console.Write("Enter the reservation number to view the details: ");
+        int opt = Int32.Parse(Console.ReadLine());
+        if (opt == 0) {
+            return;
+        }
+        opt -= 1;
+        if (opt >= guest.ReservationList.Count || opt < 0) {
+            Console.WriteLine("not valid option");
+        }
+        else {
+            
+        }
+    }
+}
+
 
 void cancelReservationOption() {
     guest.ListAllReservations();
