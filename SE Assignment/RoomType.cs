@@ -71,7 +71,12 @@ public class RoomType
         get { return hotel; }  
         set { hotel = value; }
     }
-
+    private Double price;
+    public Double Price
+    {
+        get { return price; }
+        set { price = value; }
+    }
     public void listAllFacilities()
     {
         if (facilities.Count > 0)
@@ -82,8 +87,9 @@ public class RoomType
                 !facilityIterator.isCompleted;
                 facility = facilityIterator.Next())
             {
-                Console.WriteLine(string.Format("[{0}] {1}", facility.FacilityId, facility.FacilityName));
+                Console.Write(string.Format("{0}\t\t", facility.FacilityName));
             }
+            Console.WriteLine();
         }
         else
         {

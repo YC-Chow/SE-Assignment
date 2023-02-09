@@ -1,14 +1,20 @@
-﻿public class Review
+﻿using System.Xml.Linq;
+
+public class Review : SE_Assignment.Observer.ISubject
 {
-    public Review(int reviewId, DateTime reviewDate,Hotel hotel, Guest guest, int reviewRating, string reviewDescription)
+    private static int nextId = 1;
+    public Review(DateTime reviewDate,Hotel hotel, Guest guest, int rating, string reviewContent)
     {
-        this.reviewId = reviewId;
+        this.reviewId = nextId++;
         this.reviewDate = reviewDate;
-        this.reviewRating = reviewRating;
-        this.reviewDescription = reviewDescription;
+        this.rating = rating;
+        this.reviewContent = reviewContent;
         this.hotel = hotel;
         this.guest = guest;
+        this.Observers = new List<SE_Assignment.Observer.IObserver>();
     }
+
+    private List<SE_Assignment.Observer.IObserver> Observers { get; set; }
 
     private int reviewId;
     public int ReviewId   // property
@@ -38,27 +44,39 @@
         set { guest = value; }
     }
 
-    private int reviewRating;
-    public int ReviewRating   // property
+    private int rating;
+    public int Rating   // property
     {
-        get { return reviewRating; }   // get method
-        set { reviewRating = value; }  // set method
+        get { return rating; }   // get method
+        set { rating = value; }  // set method
     }
 
-    private string reviewDescription;
-    public string ReviewDescription   // property
+    private string reviewContent;
+    public string ReviewContent   // property
     {
-        get { return reviewDescription; }   // get method
-        set { reviewDescription = value; }  // set method
+        get { return reviewContent; }   // get method
+        set { reviewContent = value; }  // set method
     }
 
-    private Reservation reservation;
-    public Reservation Reservation
+
+
+    public void registerObserver(SE_Assignment.Observer.IObserver observer)
     {
-        get { return reservation; }   // get method
-        set { reservation = value; }
+        Observers.Add(observer);
     }
 
+    public void removeObserver(SE_Assignment.Observer.IObserver observer)
+    {
+        Observers.Remove(observer);
+    }
+
+    public void notifyObserver()
+    {
+        foreach (var observer in Observers)
+        {
+            observer.Update(this);
+        }
+    }
 }
 
 

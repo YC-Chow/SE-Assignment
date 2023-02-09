@@ -2,7 +2,7 @@ using SE_Assignment.Iterator;
 
 public class Guest
 {
-
+    public Guest() {}
     public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo,double accBal=0)
     {
         Name = name;
@@ -142,32 +142,26 @@ public class Guest
 
     }
 
-    public bool cancelReservation(Reservation reservation)
+    public void cancelReservation(Reservation reservation)
     {
         ReservationIterator iterator = reservationList.createIterator();
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
-            if (rsvp.ReservationId == reservation.ReservationId && DateTime.Now <= rsvp.CheckInDate.AddDays(-2))
-            {
+            if (rsvp.ReservationId == reservation.ReservationId) {
                 rsvp.ReservationStatus.cancelReservation(rsvp);
-                return true;
             }
         }
-        return false;
     }
 
-
-    //public Review makeReview(int rating, string description, Hotel hotel, Reservation res) {
-    //    ReservationIterator iterator = reservationList.createIterator();
-    //    for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
-    //        if (rsvp.ReservationId == res.ReservationId) {
-    //            if (rsvp.ReservationStatus == Reservation.Status.FULFILLED) {
-    //                Review newReview = new Review(1, DateTime.Now, guest, hotel, rating, description);
-    //                return newReview;
-    //                //hotel.Reviews.Add(newReview);
-    //            }
-    //        }
-    //    }
-
-    //}
+    public void makeReview(int rating, string content,Reservation reservation)
+    {
+        ReservationIterator iterator = reservationList.createIterator();
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        {
+            if (rsvp.ReservationId == reservation.ReservationId)
+            {
+                rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
+            }
+        }
+    }
 }

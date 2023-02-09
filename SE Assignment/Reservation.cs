@@ -2,16 +2,17 @@
 
 public class Reservation
 {
-
-    public Reservation(Guest reservedByGuest, DateTime checkInDate,DateTime checkOutDate)//constructor
+	~Reservation() { Console.WriteLine("Reservation Record has been deleted"); }
+	public Reservation(Guest reservedByGuest, DateTime checkInDate, DateTime checkOutDate)//constructor
 	{
 		reservationStatus = new SubmittedState(); //initalise Reservation object to Submitted State
-        ReservedByGuest = reservedByGuest;
+		ReservedByGuest = reservedByGuest;
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
-		//this.roomReservationList = roomTypeList;
-	}
-	public void setState(ReservationStatus state)
+        
+
+    }
+    public void setState(ReservationStatus state)
 	{
 		this.reservationStatus = state;
 	}
@@ -39,9 +40,9 @@ public class Reservation
 		get { return checkOutDate; }
 		set { checkOutDate = value; }
 	}
-	public ReservationStatus ReservationStatus { 
-		get { return reservationStatus; } 
-		set { reservationStatus = value; } 
+	public ReservationStatus ReservationStatus {
+		get { return reservationStatus; }
+		set { reservationStatus = value; }
 	}
 	private ReservationStatus reservationStatus;
 	private Guest reservedByguest;
@@ -59,17 +60,11 @@ public class Reservation
 	}
 	private List<RoomType> bookedRoomTypes;
 	public List<RoomType> BookedRoomTypes
-    {
-        set
-        {
-			if (bookedRoomTypes != value)
-            {
-				bookedRoomTypes = value;
-				//ReservedRoomsList.addReservation(this);
-				//create new method to add reservation
-			}
-		}
-    }
+	{
+		get { return bookedRoomTypes; }
+		set { bookedRoomTypes = value; }
+
+	}
 	private List<RoomTypeReservation> roomReservationList;
 
 	public List<RoomTypeReservation> RoomReservationList {
@@ -79,20 +74,32 @@ public class Reservation
 
 	private Payment myPayment;
 	public Payment MyPayment
-    {
+	{
 		set
-        {
+		{
 			if (myPayment != value)
-            {
+			{
 				myPayment = value;
 				value.ReservationToPay = this;
-            }
-        }
+			}
+		}
 		get
 		{
 			return myPayment;
 		}
-    }
-	
-	
+	}
+	private Double reservationPrice;
+	public Double ReservationPrice
+	{
+		get { return reservationPrice; }
+		set { reservationPrice = value; }
+	}
+	public double computeReservationTotal(List<RoomType> roomsToBook){
+		foreach(RoomType roomType in roomsToBook)
+		{
+			this.reservationPrice += roomType.RoomTypeCost;
+        }
+		return this.reservationPrice;
+	}
+
 }
