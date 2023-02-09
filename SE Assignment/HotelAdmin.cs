@@ -1,5 +1,4 @@
-﻿using SE_Assignment;
-
+﻿
 public class HotelAdmin
 {
     public HotelAdmin(string name, string email)
@@ -38,11 +37,11 @@ public class HotelAdmin
         }
     }
 
-    public Reservation BookHotelRoom(DateTime? checkInDate, DateTime? checkOutDate, int roomId, int guestId )
+    public Reservation BookHotelRoom(DateTime checkInDate, DateTime checkOutDate, int roomId, int guestId )
     {
         if (checkInDate != null &&  checkOutDate != null && roomId >0 && guestId > 0)
         {
-            Reservation res = new Reservation(null,DateTime.Now, checkInDate, checkOutDate);
+            Reservation res = new Reservation(null,checkInDate, checkOutDate);
             //Auto-generate the reservationID
             return res;
         }
