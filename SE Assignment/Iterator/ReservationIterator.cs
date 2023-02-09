@@ -1,4 +1,6 @@
 ﻿
+using System.Reflection.PortableExecutable;
+
 namespace SE_Assignment.Iterator {
     public class ReservationIterator {
         private ReservationCollection collection;
@@ -17,11 +19,13 @@ namespace SE_Assignment.Iterator {
         public Reservation Next() {
             current += 1;
             if (!IsCompleted) {
-                return collection.GetReservation(current);
+                Reservation rsvp = collection.GetReservation(current);
+                if (rsvp.ReservationStatus.getStatusName().Equals("Submitted") ||
+                    rsvp.ReservationStatus.getStatusName().Equals("Confirmed")) {
+                    return rsvp;
+                }
             }
-            else {
-                return null;
-            }
+            return null;
         }
 
         public bool IsCompleted {
