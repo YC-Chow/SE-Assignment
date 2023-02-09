@@ -25,15 +25,15 @@
         }
         public Voucher Next()
         {
-            current += step;
-            if (!isCompleted)
+            while (!isCompleted)
             {
-                return voucherCollection[current];
+                current += step;
+                if (!voucherCollection[current].IsUsed)
+                {
+                    return voucherCollection[current];
+                }
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
         public bool isCompleted
         {
