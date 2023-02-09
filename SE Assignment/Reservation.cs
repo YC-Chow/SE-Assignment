@@ -10,7 +10,6 @@ public class Reservation
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
         
-
     }
     public void setState(ReservationStatus state)
 	{
@@ -88,8 +87,8 @@ public class Reservation
 			return myPayment;
 		}
 	}
-	private Double reservationPrice;
-	public Double ReservationPrice
+	private double reservationPrice;
+	public double ReservationPrice
 	{
 		get { return reservationPrice; }
 		set { reservationPrice = value; }

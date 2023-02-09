@@ -23,11 +23,10 @@ guestList.Add(guest);
 
 new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
 
-guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
-    new Voucher(1, "whoknows", DateTime.Now, false, true));
-new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
-new Reservation(guest, DateTime.Now, null) { ReservationId = 1, ReservationStatus = new SubmittedState() };
+//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), , 100.40, "Paid");
+//new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+//new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
+//new Reservation(guest, DateTime.Now, null) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 
 
@@ -87,6 +86,14 @@ hotelCollection.Add(hotel2);
 //testing data for review a hotel
 Reservation FulfilledRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 7, ReservationStatus = new FulfilledState() };
 FulfilledRes.BookedRoomTypes = new List<RoomType> { roomType1 };
+
+//vouchers
+Voucher voucher1 = new Voucher(1, "Singapore Rediscover", 20, DateTime.Parse("10/12/2022"), false, true);// used and less than today's date
+Voucher voucher2 = new Voucher(2, "Singapore Rediscover", 30, DateTime.Parse("13/12/2023"), false, false);// unused and more than today's date
+Voucher voucher3 = new Voucher(3, "Singapore Rediscover", 40, DateTime.Parse("12/03/2022"), false, false);// unused and less than today's date
+guest.addVoucher(voucher1);
+guest.addVoucher(voucher2);
+guest.addVoucher(voucher3);
 
 #endregion
 
@@ -527,11 +534,43 @@ void makeReservation(List<RoomType> roomToBook)
         case 1:
 
             Reservation reservation = new Reservation(guestBooking, checkinDate, checkOutDate);
+
+            reservation.ReservationId = new Random().Next(100, 500);
+            guestBooking.ReservationList.Add(reservation);
+
             reservation.BookedRoomTypes = roomToBook;
             reservation.setState(new SubmittedState());
+            reservation.ReservationDate = DateTime.Today;
             double reservationTotal = reservation.computeReservationTotal(roomToBook);
             Console.WriteLine("You will be redirected to Make Payment...");
+
             //Make Payment use Case starts here
+            Payment payment = new Payment(new Random().Next(100,500), reservation, reservationTotal);
+
+
+            Console.WriteLine("Do you wish to use voucher? Y/N");
+            string usageoption = Console.ReadLine();
+
+            if(usageoption.ToLower().Equals("y"))
+            {
+                List<Voucher> voucherList = guest.GetUnUsedVouchers();
+                Console.WriteLine(voucherList.Count);
+                foreach (Voucher voucher in voucherList)
+                {
+                    if(voucher != null)
+                    {
+                        Console.WriteLine(voucher);
+                    }
+                }
+                Console.WriteLine("Please make a selection!");
+                //int.TryParse(Console.ReadLine());
+
+
+            }
+            
+
+
+            //int paymentResult = payment.makePayment(reservationTotal, reservation);
 
             break;
         case 2:

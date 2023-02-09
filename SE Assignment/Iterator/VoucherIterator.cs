@@ -21,19 +21,24 @@
         public Voucher First()
         {
             current = 0;
-            return voucherCollection[current];
+            if (!voucherCollection[current].IsUsed)
+            {
+                return voucherCollection[current];
+            }
+            return null;
         }
         public Voucher Next()
         {
             current += step;
             if (!isCompleted)
             {
-                return voucherCollection[current];
-            }
-            else
-            {
+                if (!voucherCollection[current].IsUsed)
+                {
+                    return voucherCollection[current];
+                }
                 return null;
             }
+            return null;
         }
         public bool isCompleted
         {
