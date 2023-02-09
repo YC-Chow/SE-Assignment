@@ -60,17 +60,11 @@ public class Reservation
 	private List<RoomType> bookedRoomTypes;
 	public List<RoomType> BookedRoomTypes
     {
-        set
-        {
-			if (bookedRoomTypes != value)
-            {
-				bookedRoomTypes = value;
-				//ReservedRoomsList.addReservation(this);
-				//create new method to add reservation
-			}
-		}
+		get { return bookedRoomTypes; }
+        set { bookedRoomTypes = value; }
+
     }
-	private List<RoomTypeReservation> roomReservationList;
+    private List<RoomTypeReservation> roomReservationList;
 
 	public List<RoomTypeReservation> RoomReservationList {
 		get { return roomReservationList; }

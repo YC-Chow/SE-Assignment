@@ -23,6 +23,12 @@ new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new CancelledState() };
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
+
+
+
+
+
+
 //Create Facilities
 Facility facility1 = new Facility(1, "Bathtub");
 Facility facility2 = new Facility(2, "Hot water");
@@ -51,6 +57,8 @@ roomType4.Facilities.Add(facility3);
 roomType4.Facilities.Add(facility4);
 
 
+
+
 //Create Hotels
 Hotel hotel1 = new Hotel(1, "Hotel 99", "Budget", "Serangoon", true);
 Hotel hotel2 = new Hotel(2, "Hard Jazz Cafe", "Luxury", "Sentosa", false);
@@ -70,6 +78,10 @@ HotelCollection hotelCollection = new HotelCollection();
 hotelCollection.Add(hotel1);
 hotelCollection.Add(hotel2);
 
+//testing data for review a hotel
+Reservation FulfilledRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 7, ReservationStatus = new FulfilledState() };
+FulfilledRes.BookedRoomTypes = new List<RoomType> { roomType1 };
+
 #endregion
 
 Main();
@@ -88,12 +100,14 @@ void Main() {
                 List<RoomType> bookableRoomTypes = browseHotelRooms();
                 break;
 
-            case 3:
-                reviewReservationOption();
-                break;
+
 
             case 4:
                 cancelReservationOption();
+                break;
+
+            case 5:
+                reviewReservationOption();
                 break;
 
         }
@@ -129,10 +143,37 @@ void reviewReservationOption()
     guest.ListAllReservations();
     Console.Write("Which reservation to review? ");
     int opt = Int32.Parse(Console.ReadLine());
+    if (opt == 0)
+    {
+        Console.WriteLine("Exiting");
+        return;
+    }
     opt -= 1;
-    if (opt >= guest.ReservationList.Count)
+    if (opt >= guest.ReservationList.Count || opt < 0)
     {
         Console.WriteLine("not valid option");
+    }
+    else
+    {
+        if (guest.ReservationList.GetReservation(opt).ReservationStatus.getStatusName() != "Fulfiiled")
+        {
+            Console.WriteLine("Unable to review it");
+
+        }
+        else
+        {
+            Console.Write("Please enter a rating for the hotel (1-5): ");
+            int rating = int.Parse(Console.ReadLine());
+
+            Console.Write("Please enter a short review for the hotel: ");
+            string reviewText = Console.ReadLine();
+
+            guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
+            Console.WriteLine("Thank you for your review!");
+        }
+
+
+
     }
 }
 
