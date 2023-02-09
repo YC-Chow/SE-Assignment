@@ -3,7 +3,7 @@
 public class Reservation
 {
 
-    public Reservation(Guest reservedByGuest, DateTime checkInDate,DateTime checkOutDate)//constructor
+    public Reservation(Guest reservedByGuest, DateTime checkInDate,DateTime? checkOutDate)//constructor
 	{
 		reservationStatus = new SubmittedState(); //initalise Reservation object to Submitted State
         ReservedByGuest = reservedByGuest;
@@ -33,8 +33,8 @@ public class Reservation
 		get { return checkInDate; }
 		set { checkInDate = value; }
 	}
-	private DateTime checkOutDate;
-	public DateTime CheckOutDate
+	private DateTime? checkOutDate;
+	public DateTime? CheckOutDate
 	{
 		get { return checkOutDate; }
 		set { checkOutDate = value; }

@@ -19,9 +19,9 @@ Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
 new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
 guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
     new Voucher(1, "whoknows", DateTime.Now, false, true));
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new CancelledState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
+new Reservation(guest, DateTime.Now, null) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 
 
@@ -138,75 +138,6 @@ void cancelReservationOption() {
     }
 }
 
-//void reviewReservationOption()
-//{
-//    if (guest.ReservationList.Count == 0)
-//    {
-//        Console.WriteLine("You do not have a reservation to review");
-//        return;
-//    }
-//    else{
-//        guest.ListAllReservations();
-//        Console.Write("Which reservation to review? (Enter 0 to exit the review):");
-//        int opt = Int32.Parse(Console.ReadLine());
-
-//        while (true)
-//        {
-//            if (opt == 0)
-//            {
-//                return;
-//            }
-//            opt -= 1;
-//            if (opt >= guest.ReservationList.Count || opt < 0)
-//            {
-//                Console.WriteLine("Not a valid option, please enter a valid reservation number");
-//            }
-//            else
-//            {
-//                if (guest.ReservationList.GetReservation(opt).ReservationStatus.getStatusName() != "Fulfiiled")
-//                {
-//                    Console.WriteLine("This reservation is not fulfilled, please make fulfill it first before make the review");
-//                }
-//                else
-//                {
-//                    break;
-//                }
-
-//            }
-//        }
-//        // promopt for rating an review, if invalid rating, prompt again
-//        Console.Write("Please enter a rating for the hotel (Enter rating between 1-5, enter 0 to quit rating): ");
-//        int rating = int.Parse(Console.ReadLine());
-//        while (true)
-//        {
-
-//            if (rating >= 1 && rating <= 5)
-//            {
-//                break;
-//            }
-//            else if (rating == 0)
-//            {
-//                return;
-//            }
-//            else
-//            {
-//                Console.WriteLine("Invalid rating, please enter a rating between 1 and 5");
-//            }
-//        }
-
-//        Console.Write("Please enter a short review for the hotel (Enter 0 to quit review): ");
-//        string reviewText = Console.ReadLine();
-//        //if review is empty, change the review to "No comment"
-//        if (reviewText == "")
-//        {
-//            reviewText = "No comment";
-//        }
-
-//        guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
-//        Console.WriteLine("Thank you for your review!");
-//        }
-
-//}
 
 void reviewReservationOption()
 {
