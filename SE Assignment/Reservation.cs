@@ -3,7 +3,7 @@
 public class Reservation
 {
 	~Reservation() { Console.WriteLine("Reservation Record has been deleted"); }
-	public Reservation(Guest reservedByGuest, DateTime checkInDate, DateTime checkOutDate)//constructor
+	public Reservation(Guest reservedByGuest, DateTime checkInDate, DateTime? checkOutDate)//constructor
 	{
 		reservationStatus = new SubmittedState(); //initalise Reservation object to Submitted State
 		ReservedByGuest = reservedByGuest;
