@@ -564,8 +564,13 @@ void makeReservation(List<RoomType> roomToBook)
                         Console.WriteLine(voucher);
                     }
                 }
+                Console.WriteLine("Please make a selection!");
+                //int.TryParse(Console.ReadLine());
+
+
             }
-            //
+            
+
 
             //int paymentResult = payment.makePayment(reservationTotal, reservation);
 
