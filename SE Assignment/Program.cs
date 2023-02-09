@@ -17,8 +17,8 @@ List<string> options = new List<string>() {
 //Maunally creating Guest for testing purposes
 Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new SubmittedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new CancelledState() };
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 //Create Facilities
