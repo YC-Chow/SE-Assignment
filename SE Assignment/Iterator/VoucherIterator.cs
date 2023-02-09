@@ -21,17 +21,20 @@
         public Voucher First()
         {
             current = 0;
+            //Console.WriteLine(voucherCollection[current]);
             return voucherCollection[current];
+            
         }
         public Voucher Next()
         {
-            while (!isCompleted)
+            current += step;
+            if (!isCompleted)
             {
-                current += step;
                 if (!voucherCollection[current].IsUsed)
                 {
                     return voucherCollection[current];
                 }
+                return null;
             }
             return null;
         }

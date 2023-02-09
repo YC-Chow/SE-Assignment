@@ -16,7 +16,7 @@ public class Guest
         }
         EmailAddress = emailAddress;
         ContactNo = contactNo;
-        voucherList = new List<Voucher>();
+        voucherList = new VoucherCollection();
         AccBal = accBal;
     }
     private string name;
@@ -61,8 +61,8 @@ public class Guest
         get { return accBal; }
         set { accBal = value; }
     }
-    private List<Voucher> voucherList;
-    public List<Voucher> VoucherList
+    private VoucherCollection voucherList;
+    public VoucherCollection VoucherList
     {
         get { return voucherList; }
         set
@@ -74,6 +74,12 @@ public class Guest
             }
         }
     }
+
+    public VoucherCollection getUnUsedVouchers()
+    {
+        return voucherList;
+    }
+
     private ReservationCollection reservationList = new ReservationCollection();
 
     public ReservationCollection ReservationList
@@ -89,6 +95,7 @@ public class Guest
     {
         VoucherList.Add(v);
     }
+
     public int registerGuest(string name, string emailAddress, string contactNo, string passportNo = "", string icNo = "")
     {
 
@@ -167,5 +174,20 @@ public class Guest
                 rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
             }
         }
+    }
+    public VoucherCollection GetUnUsedVouchers()
+    {
+        VoucherCollection voucherCollection = new VoucherCollection();
+        VoucherIterator voucherIterator = voucherList.CreateIterator();
+
+        for (Voucher voucher = voucherIterator.First();
+            !voucherIterator.isCompleted;
+            voucher = voucherIterator.Next())
+        {
+
+            voucherCollection.Add(voucher);
+            Console.WriteLine(voucherCollection.Count);
+        }
+        return voucherCollection;
     }
 }

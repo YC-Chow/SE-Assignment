@@ -1,14 +1,13 @@
-﻿using System;
-
-/// <summary>
+﻿/// <summary>
 /// Summary description for Class1
 /// </summary>
 /// 
 public class Voucher
 {
-    public Voucher(int voucherId, string issuer, DateTime expiryDate, bool isPercentage, bool isUsed)
+    public Voucher(int voucherId, string issuer,double voucherValue, DateTime expiryDate, bool isPercentage, bool isUsed)
     {
         this.voucherId = voucherId;
+        this.voucherValue = voucherValue;
         this.issuer = issuer;
         this.expiryDate = expiryDate;
         this.isPercentage = isPercentage;
