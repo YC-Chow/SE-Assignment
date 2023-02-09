@@ -2,7 +2,7 @@ using SE_Assignment.Iterator;
 
 public class Guest
 {
-
+    public Guest() {}
     public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo,double accBal=0)
     {
         Name = name;

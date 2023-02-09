@@ -4,6 +4,7 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
+using System.Net.Http.Headers;
 
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
@@ -15,8 +16,13 @@ List<string> options = new List<string>() {
 };
 
 //Maunally creating Guest for testing purposes
-Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
+List<Guest> guestList = new List<Guest>();
+Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 2000000);
+guest.GuestId = 1;
+guestList.Add(guest); 
+
 new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
+
 guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
     new Voucher(1, "whoknows", DateTime.Now, false, true));
 new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
@@ -98,6 +104,19 @@ void Main() {
 
             case 1:
                 List<RoomType> bookableRoomTypes = browseHotelRooms();
+                
+                
+                if (bookableRoomTypes.Count > 0)
+                {
+                    string makeReservationOption = "";
+                    Console.Write("Do you want to add these Rooms to your Reservation?[Y/N]");
+                    makeReservationOption = Console.ReadLine();
+                    
+                    if (makeReservationOption.ToUpper() == "Y"){
+                        makeReservation(bookableRoomTypes);
+                    }
+
+                }
                 break;
 
             case 2:
@@ -401,7 +420,7 @@ List<RoomType> browseHotelRooms()
                         roomType.MaxNumGuest.ToString(), roomType.RoomTypeCost.ToString(), breakfastServed, roomType.RoomDescription));
 
                         roomType.listAllFacilities();
-                        Console.WriteLine();
+                        Console.WriteLine("These are rooms that fuflill your preferences!");
                     }
                 }
             }
@@ -415,4 +434,114 @@ List<RoomType> browseHotelRooms()
         }
     }
     return bookableRoomTypes;
+}
+void makeReservation(List<RoomType> roomToBook)
+{
+    Console.WriteLine("\n\nIf you are do not have a Guest Account, please register your Guest Profile:)\n");
+    
+    int guestIdInput = 0;
+    bool isValidId = false;
+    bool guestFound = false;
+    Guest guestBooking = new Guest();
+    while (!guestFound)
+    {
+
+        Console.Write("Please Enter Your Guest ID:");
+        isValidId = int.TryParse(Console.ReadLine(), out guestIdInput);
+
+        if (isValidId && guestIdInput > 0)
+        {
+            Console.WriteLine("OK");
+            foreach (Guest g in guestList)
+            {
+                if (g.GuestId == guestIdInput)
+                {
+                    guestBooking = guestList[g.GuestId - 1];
+                    guestFound = true;
+                    break;
+                }
+            }
+            if (!guestFound)
+            {
+                Console.WriteLine("Invalid Guest credentials.");
+            }
+        }
+    }
+
+    DateTime checkinDate = new DateTime();
+    DateTime checkOutDate = new DateTime();
+    bool isValidCheckInDate = false;
+    bool isValidCheckOutDate = false;
+    while (!isValidCheckInDate)
+    {
+        Console.Write("Please enter your Check-in Date:");
+
+        isValidCheckInDate = DateTime.TryParse(Console.ReadLine(), out checkinDate);
+        if (checkinDate <= DateTime.Today)
+        {
+            isValidCheckInDate = false;
+            Console.WriteLine("Check In Date must be in a future date.");
+        }
+        else
+        {
+            isValidCheckInDate = true;
+        }
+    }
+    while (!isValidCheckOutDate) {
+        Console.Write("Please enter your Check-Out Date:");
+        isValidCheckInDate = DateTime.TryParse(Console.ReadLine(), out checkOutDate);
+
+        if (checkOutDate < checkinDate)
+        {
+            isValidCheckOutDate = false;
+
+            Console.WriteLine("Check Out Date must be later than Check In Date!");
+        }
+        else
+        {
+            isValidCheckOutDate = true;
+        }
+
+
+    }
+    Console.WriteLine(string.Format("{0}\t{1}\t\t{2}\t{3}\t{4}\t{5}\t{6}",
+"ID", "Hotel", "Room Name", "Max Guests", "Cost", "Breakfast?", "Room Description"));
+
+    foreach (RoomType roomType in roomToBook)
+    {
+        Console.WriteLine(string.Format("{0}\t{1}\t{2}\t\t{3}\t\t{4}\t{5}\t\t{6}",
+        (roomToBook.IndexOf(roomType) + 1).ToString(), roomType.Hotel.HotelName, roomType.RoomTypeName,
+        roomType.MaxNumGuest.ToString(), roomType.RoomTypeCost.ToString(), roomType.BreakfastServed, roomType.RoomDescription));
+        roomType.listAllFacilities();
+    }
+    int option = 0;
+    while (option == 0)
+    {
+        Console.WriteLine("[1] Confirm Reservation Details\n[2] Edit Reservation Details\n[3] Browse Other Hotels");
+        Console.Write("Enter your option:");
+        int.TryParse(Console.ReadLine(), out option);
+    }
+    switch (option)
+    {
+        case 1:
+
+            Reservation reservation = new Reservation(guestBooking, checkinDate, checkOutDate);
+            reservation.BookedRoomTypes = roomToBook;
+            reservation.setState(new SubmittedState());
+            double reservationTotal = reservation.computeReservationTotal(roomToBook);
+            Console.WriteLine("You will be redirected to Make Payment...");
+            //Make Payment use Case starts here
+
+            break;
+        case 2:
+            //
+            break;
+        case 3:
+            //destructor
+            Console.WriteLine("This will erase the current reservation record!");
+
+            displayOptions();
+            break;
+
+    }
 }
