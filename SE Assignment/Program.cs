@@ -8,7 +8,7 @@ using SE_Assignment.Iterator;
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
     "Make Hotel Reservation",
-    "View Booking History" , 
+    "View Reservation History" , 
     "Cancel Reservation", 
     "Make a rating and review",
     "Make payment"
