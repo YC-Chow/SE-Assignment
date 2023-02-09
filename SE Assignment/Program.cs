@@ -107,7 +107,7 @@ FulfilledRes.BookedRoomTypes = new List<RoomType> { roomType1 };
 
 //vouchers
 Voucher voucher1 = new Voucher(1, "Singapore Rediscover", 20, DateTime.Parse("10/12/2022"), false, true);// used and less than today's date
-Voucher voucher2 = new Voucher(2, "Singapore Rediscover", 30, DateTime.Parse("13/12/2023"), false, false);// unused and more than today's date
+Voucher voucher2 = new Voucher(2, "Singapore Rediscover", 30, DateTime.Parse("12/12/2023"), false, false);// unused and more than today's date
 Voucher voucher3 = new Voucher(3, "Singapore Rediscover", 40, DateTime.Parse("12/03/2022"), false, false);// unused and less than today's date
 guest.addVoucher(voucher1);
 guest.addVoucher(voucher2);
@@ -253,7 +253,7 @@ void reviewReservationOption()
     }
     else
     {
-        guest.ListAllReservations();
+        List<Reservation> list = guest.ListAllReservations();
         Console.Write("Which reservation to review? (Enter 0 to exit the review):");
 
         int opt = 0;
