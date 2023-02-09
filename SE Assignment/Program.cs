@@ -371,7 +371,6 @@ void initiatePayment(Reservation reservation,double reservationTotal)
         voucherUsage = getVoucherById(voucherList, ouput);
     }
 
-    int paymentResult = payment.makePayment(reservationTotal, reservation, voucherUsage);
     //Console.WriteLine(paymentResult);
 
 }
