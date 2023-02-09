@@ -85,7 +85,7 @@ void Main() {
                 break;
 
             case 1:
-                browseHotelRooms();
+                RoomType roomToBook = browseHotelRooms();
                 break;
 
             case 3:
