@@ -140,7 +140,7 @@ public class Guest
             if (rsvp.CheckOutDate != null) {
                 Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
                 rsvp.CheckInDate.ToString("dd/MM/yyyy")
-                , rsvp.CheckOutDate.Value.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.getStatusName()));
+                , rsvp.CheckOutDate.Value.ToString("dd/MM/yyyy"), rsvp.ReservationStatus.getStatusName()));
             }
             else {
                 Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
