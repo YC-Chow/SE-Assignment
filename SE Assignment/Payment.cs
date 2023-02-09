@@ -6,36 +6,27 @@ using SE_Assignment;
 /// 
 public class Payment
 {
-    public Payment(Reservation reservationToPay,string transactionId,double payableAmount,string paymentStatus,Voucher? voucherUsage) 
+    public Payment(int transactionId, Reservation reservationToPay, double payableAmount)
     {
-        ReservationToPay = reservationToPay;
         TransactionId = transactionId;
+        ReservationToPay = reservationToPay;
         PayableAmount = payableAmount;
-        PaymentStatus = paymentStatus;
-        VoucherUsage = voucherUsage;
     }
 
-        private string transactionId;
+    private int transactionId;
 
-        public string TransactionId   // property
-        {
-            get { return transactionId; }   // get method
-            set { transactionId = value; }  // set method
-        }
+    public int TransactionId   // property
+    {
+        get { return transactionId; }   // get method
+        set { transactionId = value; }  // set method
+    }
 
-        private double payableAmount;
-        public double PayableAmount   // property
-        {
-            get { return payableAmount; }   // get method
-            set { payableAmount = value; }  // set method
-        }
-
-        private string paymentStatus;
-        public string PaymentStatus   // property
-        {
-            get { return paymentStatus; }   // get method
-            set { paymentStatus = value; }  // set method
-        }
+    private double payableAmount;
+    public double PayableAmount   // property
+    {
+        get { return payableAmount; }   // get method
+        set { payableAmount = value; }  // set method
+    }
 
     private Reservation reservationToPay;
     public Reservation ReservationToPay
@@ -51,21 +42,38 @@ public class Payment
         set { voucherUsage = value; }
     }
 
-    public bool makePayment(double payableAmount,Reservation reservationToPay)
+    public int makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
     {
-        
-        if(voucherUsage!=null)
+        //if user decide to use voucher
+        if (voucherUsage != null)
         {
-            //enough money in account balance
-            if (reservationToPay.ReservedByGuest.AccBal > 0)
+            if(voucherUsage.ExpiryDate > DateTime.Today)
             {
-                //make calculation for both voucher and acc deduction
-                reservationToPay.setState(new ConfirmedState());
-                return true;
+                if (reservationToPay.ReservedByGuest.AccBal > 0)
+                {
+                    payableAmount = payableAmount - voucherUsage.VoucherValue;
+                    reservationToPay.ReservedByGuest.AccBal = reservationToPay.ReservedByGuest.AccBal - payableAmount;
+                    Console.WriteLine("Your new balance is:",reservationToPay.ReservedByGuest.AccBal);
+                    reservationToPay.setState(new ConfirmedState());
+                    return 1;// Confirm and payment successful
+                }
+                else
+                {
+                    return 2;//No money, call make payment method again
+                }
             }
-            // prompt user to add money into account
+            else
+            {
+                //Console.WriteLine("Your voucher has expired\n Please reselect your voucher to use.");
+                return 3;
+
+            }
         }
-        //else do base calculation
-        return false;
+        else
+        {
+            return 4;
+        }
+        return 0;
     }
 }
+

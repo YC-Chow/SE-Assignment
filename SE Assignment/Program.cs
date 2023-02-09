@@ -29,14 +29,18 @@ List<string> hotelTypeList = new List<string>()
 };
 
 //Maunally creating Guest for testing purposes
-Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
-new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
-guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
-    new Voucher(1, "whoknows", DateTime.Now, false, true));
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new CancelledState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
+List<Guest> guestList = new List<Guest>();
+Admin admin = new Admin("admin", "admin@gmail.com");
+Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 2000000);
+guest.GuestId = 1;
+guestList.Add(guest); 
 
+new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
+
+//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), , 100.40, "Paid");
+//new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+//new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
+//new Reservation(guest, DateTime.Now, null) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 
 //Create Facilities
@@ -97,6 +101,14 @@ hotelCollection.Add(hotel2);
 Reservation FulfilledRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 7, ReservationStatus = new FulfilledState() };
 FulfilledRes.BookedRoomTypes = new List<RoomType> { roomType1 };
 
+//vouchers
+Voucher voucher1 = new Voucher(1, "Singapore Rediscover", 20, DateTime.Parse("10/12/2022"), false, true);// used and less than today's date
+Voucher voucher2 = new Voucher(2, "Singapore Rediscover", 30, DateTime.Parse("13/12/2023"), false, false);// unused and more than today's date
+Voucher voucher3 = new Voucher(3, "Singapore Rediscover", 40, DateTime.Parse("12/03/2022"), false, false);// unused and less than today's date
+guest.addVoucher(voucher1);
+guest.addVoucher(voucher2);
+guest.addVoucher(voucher3);
+
 #endregion
 
 Main();
@@ -151,7 +163,7 @@ void Main() {
                         }
                     }
 
-                    //makeReservation(roomsToBook);
+                    makeReservation(roomsToBook);
                 }
                 else
                 {
@@ -160,7 +172,12 @@ void Main() {
 
                 break;
 
+            case 2:
+                break;
 
+            case 3:
+                viewReservationHistory();
+                break;
 
             case 4:
                 cancelReservationOption();
@@ -181,8 +198,35 @@ void displayOptions() {
     Console.WriteLine("[0] Exit");
 }
 
+
+void viewReservationHistory() {
+    if (guest.ReservationList.Count == 0)
+    {
+        Console.WriteLine("You do not have a reservation to review");
+        return;
+    }
+    else
+    {    
+        guest.ListAllReservations();
+        //Guest can enter the reservation id to view the details
+        Console.Write("Enter the reservation number to view the details: ");
+        int opt = Int32.Parse(Console.ReadLine());
+        if (opt == 0) {
+            return;
+        }
+        opt -= 1;
+        if (opt >= guest.ReservationList.Count || opt < 0) {
+            Console.WriteLine("not valid option");
+        }
+        else {
+            
+        }
+    }
+}
+
+
 void cancelReservationOption() {
-    guest.ListAllReservations();
+    List<Reservation> list = guest.ListAllReservations();
     Console.Write("Which reservation to cancel? (0 to exit): ");
     int opt = Int32.Parse(Console.ReadLine());
     if (opt == 0) {
@@ -190,51 +234,109 @@ void cancelReservationOption() {
         return;
     }
     opt -= 1;
-    if (opt >= guest.ReservationList.Count || opt < 0) {
+    if (opt >= list.Count || opt < 0) {
         Console.WriteLine("not valid option");
     }
     else {
-        guest.cancelReservation(guest.ReservationList.GetReservation(opt));
+        guest.cancelReservation(list[opt]);
     }
 }
 
+
 void reviewReservationOption()
 {
-    guest.ListAllReservations();
-    Console.Write("Which reservation to review? ");
-    int opt = Int32.Parse(Console.ReadLine());
-    if (opt == 0)
+    if (guest.ReservationList.Count == 0)
     {
-        Console.WriteLine("Exiting");
+        Console.WriteLine("You do not have a reservation to review");
         return;
-    }
-    opt -= 1;
-    if (opt >= guest.ReservationList.Count || opt < 0)
-    {
-        Console.WriteLine("not valid option");
     }
     else
     {
-        if (guest.ReservationList.GetReservation(opt).ReservationStatus.getStatusName() != "Fulfiiled")
-        {
-            Console.WriteLine("Unable to review it");
+        guest.ListAllReservations();
+        Console.Write("Which reservation to review? (Enter 0 to exit the review):");
 
+        int opt = 0;
+        while (true)
+        {
+            opt = Int32.Parse(Console.ReadLine());
+
+            if (opt == 0)
+            {
+                return;
+            }
+            opt -= 1;
+            if (opt >= guest.ReservationList.Count || opt < 0)
+            {
+                Console.Write("Not a valid option, please enter a valid reservation number:");
+            }
+            else
+            {
+
+                if (guest.ReservationList.GetReservation(opt).ReservationStatus.getStatusName() != "Fulfilled")
+                {
+                    Console.Write("This reservation is not fulfilled, please make fulfill it first before make the review. Choose another reservation:");
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        int rating = 0;
+        Console.Write("Please enter a rating for the hotel (Enter rating between 1-5, enter 0 to quit rating): ");
+        while (true)
+        {
+            rating = int.Parse(Console.ReadLine());
+
+            if (rating >= 1 && rating <= 5)
+            {
+                break;
+            }
+            else if (rating == 0)
+            {
+                return;
+            }
+            else
+            {
+                Console.Write("Invalid rating, please enter a rating between 1 and 5:");
+            }
+        }
+
+        Console.Write("Please enter a short review for the hotel (Enter 0 to quit review): ");
+        string reviewText = Console.ReadLine();
+
+        if (reviewText == "0")
+        {
+            return;
         }
         else
         {
-            Console.Write("Please enter a rating for the hotel (1-5): ");
-            int rating = int.Parse(Console.ReadLine());
+            if (reviewText == "")
+            {
+                reviewText = "No comment";
+            }
 
-            Console.Write("Please enter a short review for the hotel: ");
-            string reviewText = Console.ReadLine();
-
-            //guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
+            guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
+            
             Console.WriteLine("Thank you for your review!");
         }
 
-
+        //if review is empty, change the review to "No comment"
 
     }
+}
+
+Voucher getVoucherById(List<Voucher> voucherList, int id)
+{
+    foreach (Voucher voucher in voucherList)
+    {
+        if (voucher.VoucherId == id)
+        {
+            return voucher;
+        }
+    }
+    return null;
 }
 
 List<RoomType> browseHotelRooms()
@@ -528,4 +630,150 @@ List<RoomType> selectRooms(List<RoomType> bookableRoomTypes, List<RoomType> room
     }
 
     return roomsToBook;
+}
+
+void makeReservation(List<RoomType> roomToBook)
+{
+    Console.WriteLine("\n\nIf you are do not have a Guest Account, please register your Guest Profile:)\n");
+    
+    int guestIdInput = 0;
+    bool isValidId = false;
+    bool guestFound = false;
+    Guest guestBooking = new Guest();
+    while (!guestFound)
+    {
+
+        Console.Write("Please Enter Your Guest ID:");
+        isValidId = int.TryParse(Console.ReadLine(), out guestIdInput);
+
+        if (isValidId && guestIdInput > 0)
+        {
+            Console.WriteLine("OK");
+            foreach (Guest g in guestList)
+            {
+                if (g.GuestId == guestIdInput)
+                {
+                    guestBooking = guestList[g.GuestId - 1];
+                    guestFound = true;
+                    break;
+                }
+            }
+            if (!guestFound)
+            {
+                Console.WriteLine("Invalid Guest credentials.");
+            }
+        }
+    }
+
+    DateTime checkinDate = new DateTime();
+    DateTime checkOutDate = new DateTime();
+    bool isValidCheckInDate = false;
+    bool isValidCheckOutDate = false;
+    while (!isValidCheckInDate)
+    {
+        Console.Write("Please enter your Check-in Date:");
+
+        isValidCheckInDate = DateTime.TryParse(Console.ReadLine(), out checkinDate);
+        if (checkinDate <= DateTime.Today)
+        {
+            isValidCheckInDate = false;
+            Console.WriteLine("Check In Date must be in a future date.");
+        }
+        else
+        {
+            isValidCheckInDate = true;
+        }
+    }
+    while (!isValidCheckOutDate) {
+        Console.Write("Please enter your Check-Out Date:");
+        isValidCheckInDate = DateTime.TryParse(Console.ReadLine(), out checkOutDate);
+
+        if (checkOutDate < checkinDate)
+        {
+            isValidCheckOutDate = false;
+
+            Console.WriteLine("Check Out Date must be later than Check In Date!");
+        }
+        else
+        {
+            isValidCheckOutDate = true;
+        }
+
+
+    }
+    Console.WriteLine(string.Format("{0}\t{1}\t\t{2}\t{3}\t{4}\t{5}\t{6}",
+"ID", "Hotel", "Room Name", "Max Guests", "Cost", "Breakfast?", "Room Description"));
+
+    foreach (RoomType roomType in roomToBook)
+    {
+        Console.WriteLine(string.Format("{0}\t{1}\t{2}\t\t{3}\t\t{4}\t{5}\t\t{6}",
+        (roomToBook.IndexOf(roomType) + 1).ToString(), roomType.Hotel.HotelName, roomType.RoomTypeName,
+        roomType.MaxNumGuest.ToString(), roomType.RoomTypeCost.ToString(), roomType.BreakfastServed, roomType.RoomDescription));
+        roomType.listAllFacilities();
+    }
+    int option = 0;
+    while (option == 0)
+    {
+        Console.WriteLine("[1] Confirm Reservation Details\n[2] Edit Reservation Details\n[3] Browse Other Hotels");
+        Console.Write("Enter your option:");
+        int.TryParse(Console.ReadLine(), out option);
+    }
+
+    switch (option)
+    {
+        case 1:
+
+            Reservation reservation = new Reservation(guestBooking, checkinDate, checkOutDate);
+
+            reservation.ReservationId = new Random().Next(100, 500);
+            guestBooking.ReservationList.Add(reservation);
+
+            reservation.BookedRoomTypes = roomToBook;
+            reservation.setState(new SubmittedState());
+            reservation.ReservationDate = DateTime.Today;
+            double reservationTotal = reservation.computeReservationTotal(roomToBook);
+            Console.WriteLine("You will be redirected to Make Payment...");
+
+            //Make Payment use Case starts here
+            Payment payment = new Payment(new Random().Next(100, 500), reservation, reservationTotal);
+
+            Console.WriteLine("Your reservation total is:",reservationTotal);
+            Console.WriteLine("Do you wish to use voucher? Y/N");
+            string usageoption = Console.ReadLine();
+
+            Voucher voucherUsage = null;
+            if (usageoption.ToLower().Equals("y"))
+            {
+                List<Voucher> voucherList = guest.GetUnUsedVouchers();
+                //Console.WriteLine(voucherList.Count);
+                Console.WriteLine(string.Format("{0} {1} {2} {3}", "Voucher ID", "Voucher Issuer", "Voucher Expiry Date", "Voucher value"));
+                int ouput;
+
+                foreach (Voucher voucher in voucherList)
+                {
+                    if (voucher != null)
+                    {
+                        Console.WriteLine(string.Format("{0} {1} {2} {3}", voucher.VoucherId, voucher.Issuer, voucher.ExpiryDate, voucher.VoucherValue));
+                    }
+                }
+                Console.WriteLine("Please make a selection!");
+                int.TryParse(Console.ReadLine(), out ouput);
+                voucherUsage = getVoucherById(voucherList, ouput);
+            }
+
+            int paymentResult = payment.makePayment(reservationTotal, reservation,voucherUsage);
+            //Console.WriteLine(paymentResult);
+
+            break;
+        case 2:
+            //
+            break;
+        case 3:
+            //destructor
+            Console.WriteLine("This will erase the current reservation record!");
+
+            displayOptions();
+            break;
+    }
+
 }

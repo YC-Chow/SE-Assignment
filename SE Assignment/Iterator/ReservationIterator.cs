@@ -11,17 +11,33 @@ namespace SE_Assignment.Iterator {
 
         public Reservation First() {
             current = 0;
+            while ((!IsCompleted) && (collection.GetReservation(current).ReservationStatus.getStatusName() != "Submitted" &&
+                collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed")) {
+                current++;
+            }
+            if (IsCompleted) {
+                return null;
+            }
             return collection.GetReservation(current);
         }
 
         public Reservation Next() {
             current += 1;
-            if (!IsCompleted) {
-                return collection.GetReservation(current);
+            //if (!IsCompleted  && (collection.GetReservation(current).ReservationStatus.getStatusName() == "Submitted" ||
+            //    collection.GetReservation(current).ReservationStatus.getStatusName() == "Confirmed")) {
+            //    return collection.GetReservation(current);
+            //}
+            //else {
+            //    return null;
+            //}
+            while(!IsCompleted && (collection.GetReservation(current).ReservationStatus.getStatusName() != "Submitted" &&
+                collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed")) {
+                current++;
             }
-            else {
+            if (IsCompleted) {
                 return null;
             }
+            return collection.GetReservation(current);
         }
 
         public bool IsCompleted {

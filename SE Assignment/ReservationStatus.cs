@@ -123,7 +123,7 @@ namespace SE_Assignment
         }
 
         public override string getStatusName() {
-            return "Fulfiiled";
+            return "Fulfilled";
         }
 
         public override void reviewReservation(int rating, string content,Reservation reservation)

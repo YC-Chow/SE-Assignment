@@ -2,7 +2,7 @@ using SE_Assignment.Iterator;
 
 public class Guest
 {
-
+    public Guest() {}
     public Guest(string name, string passportNo, string icNo, string emailAddress, string contactNo,double accBal=0)
     {
         Name = name;
@@ -16,7 +16,7 @@ public class Guest
         }
         EmailAddress = emailAddress;
         ContactNo = contactNo;
-        voucherList = new List<Voucher>();
+        voucherList = new VoucherCollection();
         AccBal = accBal;
     }
     private string name;
@@ -61,8 +61,8 @@ public class Guest
         get { return accBal; }
         set { accBal = value; }
     }
-    private List<Voucher> voucherList;
-    public List<Voucher> VoucherList
+    private VoucherCollection voucherList;
+    public VoucherCollection VoucherList
     {
         get { return voucherList; }
         set
@@ -74,6 +74,12 @@ public class Guest
             }
         }
     }
+
+    public VoucherCollection getUnUsedVouchers()
+    {
+        return voucherList;
+    }
+
     private ReservationCollection reservationList = new ReservationCollection();
 
     public ReservationCollection ReservationList
@@ -89,6 +95,7 @@ public class Guest
     {
         VoucherList.Add(v);
     }
+
     public int registerGuest(string name, string emailAddress, string contactNo, string passportNo = "", string icNo = "")
     {
 
@@ -118,27 +125,33 @@ public class Guest
         return guestFound;
     }
 
-    public void ListAllReservations()
+    public List<Reservation> ListAllReservations()
     {
         //iterator pattern for reservation
         int count = 1;
         ReservationIterator iterator = reservationList.createIterator();
+        List<Reservation> list = new List<Reservation>();
+
+        //Write the header
+        Console.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4}", "No.", "Reservation ID", "Check In Date", "Check Out Date", "Reservation Status"));
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
-            if (rsvp.CheckOutDate != null)
-            {
-                Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
-                rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
-                , rsvp.CheckOutDate.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.getStatusName()));
+
+            if (rsvp.CheckOutDate != null) {
+                Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
+                rsvp.CheckInDate.ToString("dd/mm/yyyy")
+                , rsvp.CheckOutDate.Value.ToString("dd/mm/yyyy"), rsvp.ReservationStatus.getStatusName()));
             }
-            else
-            {
-                Console.WriteLine(string.Format("[{0}] {1} {2} {3} {4} {5}", count, rsvp.ReservationId,
-                rsvp.ReservationDate.ToString("dd/mm/yyyy"), rsvp.CheckInDate.ToString("dd/mm/yyyy")
-                , "--------", rsvp.ReservationStatus.getStatusName()));
+            else {
+                Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
+                rsvp.CheckInDate.ToString("dd/mm/yyyy")
+                , "----------", rsvp.ReservationStatus.getStatusName()));
             }
+            list.Add(rsvp);
             count++;
         }
+
+        return list;
 
     }
 
@@ -153,15 +166,31 @@ public class Guest
         }
     }
 
-    //public void makeReview(int rating, string content,Reservation reservation)
-    //{
-    //    ReservationIterator iterator = reservationList.createIterator();
-    //    for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
-    //    {
-    //        if (rsvp.ReservationId == reservation.ReservationId)
-    //        {
-    //            rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
-    //        }
-    //    }
-    //}
+    public void makeReview(int rating, string content,Reservation reservation)
+    {
+        ReservationIterator iterator = reservationList.createIterator();
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        {
+            if (rsvp.ReservationId == reservation.ReservationId)
+            {
+                rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
+            }
+        }
+    }
+    public VoucherCollection GetUnUsedVouchers()
+    {
+        VoucherCollection voucherCollection = new VoucherCollection();
+        VoucherIterator voucherIterator = voucherList.CreateIterator();
+
+        for (Voucher voucher = voucherIterator.First();
+            !voucherIterator.isCompleted;
+            voucher = voucherIterator.Next())
+        {
+            if (voucher != null)
+            {
+                voucherCollection.Add(voucher);
+            }
+        }
+        return voucherCollection;
+    }
 }
