@@ -14,6 +14,20 @@ List<string> options = new List<string>() {
     "Make payment"
 };
 
+//List of possible areas for hotels
+List<string> areaList = new List<string>()
+{
+    "Serangoon",
+    "Sentosa"
+};
+
+//List of possible hotel types
+List<string> hotelTypeList = new List<string>()
+{
+    "Budget",
+    "Luxury"
+};
+
 //Maunally creating Guest for testing purposes
 List<Guest> guestList = new List<Guest>();
 Admin admin = new Admin("admin", "admin@gmail.com");
@@ -34,16 +48,16 @@ new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { Reser
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 
-
-
-
-
-
 //Create Facilities
+List<Facility> facilityList = new List<Facility>();
 Facility facility1 = new Facility(1, "Bathtub");
 Facility facility2 = new Facility(2, "Hot water");
 Facility facility3 = new Facility(3, "King-Sized bed");
 Facility facility4 = new Facility(4, "Balcony");
+facilityList.Add(facility1);
+facilityList.Add(facility2);
+facilityList.Add(facility3);
+facilityList.Add(facility4);
 
 
 //Create Room Types
@@ -116,20 +130,51 @@ void Main() {
 
             case 1:
                 List<RoomType> bookableRoomTypes = browseHotelRooms();
-                
-                
-                if (bookableRoomTypes.Count > 0)
+
+                Console.Write("Would you like to make a reservation? (Y/N): ");
+                string makeReservationOption = Console.ReadLine();
+                string addRoomOption = "y";
+
+                while (makeReservationOption.ToLower() != "y" && makeReservationOption.ToLower() != "n") 
                 {
-                    string makeReservationOption = "";
-                    Console.Write("Do you want to add these Rooms to your Reservation?[Y/N]");
+                    Console.Write("Enter Y or N only: ");
                     makeReservationOption = Console.ReadLine();
-                    
-                    if (makeReservationOption.ToUpper() == "Y"){
-                        Console.WriteLine(bookableRoomTypes[0].RoomTypeCost.ToString());
-                        makeReservation(bookableRoomTypes);
+                }
+
+                if (makeReservationOption == "y")
+                {
+                    List<RoomType> roomsToBook = new List<RoomType>();
+
+                    roomsToBook = selectRooms(bookableRoomTypes, roomsToBook);
+                    Console.Write("Do you wish to add more rooms? (Y/N): ");
+                    addRoomOption = Console.ReadLine();
+                    while (addRoomOption.ToLower() != "y" && addRoomOption.ToLower() != "n")
+                    {
+                        Console.Write("Enter Y or N only: ");
+                        addRoomOption = Console.ReadLine();
                     }
 
+                    while(addRoomOption != "n")
+                    {
+                        bookableRoomTypes = browseHotelRooms();
+
+                        roomsToBook = selectRooms(bookableRoomTypes, roomsToBook);
+                        Console.Write("Do you wish to add more rooms? (Y/N): ");
+                        addRoomOption = Console.ReadLine();
+                        while (addRoomOption.ToLower() != "y" && addRoomOption.ToLower() != "n")
+                        {
+                            Console.Write("Enter Y or N only: ");
+                            addRoomOption = Console.ReadLine();
+                        }
+                    }
+
+                    makeReservation(roomsToBook);
                 }
+                else
+                {
+                    continue;
+                }
+
                 break;
 
             case 2:
@@ -336,18 +381,13 @@ List<RoomType> browseHotelRooms()
     //Initialize values
     double minAmt = 0.00;
     double maxAmt = 999999999999.99;
-    string area = "";
     double minReviewScore = 0.00;
-    string hotelType = "";
     bool? allowVouchers = null;
-    List<Facility> facilitiesToCheck = new List<Facility>();
-    List<String> areas = new List<String>();
-    areas.Add("Serangoon");
-    areas.Add("Sentosa");
 
-    List<String> hotelTypes = new List<String>();
-    hotelTypes.Add("Budget");
-    hotelTypes.Add("Luxury");
+    List<string> areas = new List<string>();
+    List<string> hotelTypes = new List<string>();
+
+    List<Facility> facilitiesToCheck = new List<Facility>();
 
     //Print Lines
     Console.WriteLine();
@@ -385,7 +425,7 @@ List<RoomType> browseHotelRooms()
             {
                 if (double.TryParse(maxAmtString, out maxAmt))
                 {
-                    if (maxAmt > minAmt) { valid = true; }
+                    if (minAmt <= maxAmt) {valid = true; continue; }
                     else
                     {
                         Console.Write("Enter a valid Cost: ");
@@ -393,22 +433,46 @@ List<RoomType> browseHotelRooms()
                         continue;
                     }
                 }
-                else if (maxAmtString == "") { valid = true; continue; }
+                else if (maxAmtString == "") { maxAmt = 999999999.99; valid = true; continue; }
 
                 Console.Write("Enter a valid Cost: ");
                 maxAmtString = Console.ReadLine();
             }
 
             //Input Area
-            foreach (string a in areas)
+            foreach (string a in areaList)
             {
-                Console.WriteLine(string.Format("[{0}] {1}", areas.IndexOf(a) + 1, a));
+                Console.WriteLine(string.Format("[{0}] {1}", areaList.IndexOf(a) + 1, a));
             }
-            Console.Write("Enter Area Index: ");
-            int areaIndex = Int32.Parse(Console.ReadLine());
-            if (areaIndex > 0 && areaIndex <= areas.Count)
+            Console.Write("Enter Area Index(es): ");
+            string areaIndexesString = Console.ReadLine();
+            bool areaIndexValid = false;
+            while (!areaIndexValid)
             {
-                area = areas[areaIndex - 1];
+                areas = new List<string>();
+                if (areaIndexesString == "") { areaIndexValid = true; }
+                else
+                {
+                    List<string> areaIndexesList = areaIndexesString.Split(",").ToList();
+                    foreach (string areaIndexString in areaIndexesList)
+                    {
+                        if (Int32.TryParse(areaIndexString, out int areaIndex))
+                        {
+                            if (areaIndex > 0 && areaIndex <= areaList.Count)
+                            {
+                                areas.Add(areaList[areaIndex-1]);
+                                areaIndexValid = true;
+                            }
+                            else { areaIndexValid = false; break; }
+                        }
+                        else{ areaIndexValid = false; break; }
+                    }
+                }
+                if (!areaIndexValid)
+                {
+                    Console.Write("Enter valid index(es): ");
+                    areaIndexesString = Console.ReadLine();
+                }
             }
 
             //Input Minimum Review Score
@@ -422,15 +486,39 @@ List<RoomType> browseHotelRooms()
             if (minReviewScore < 0.00) { minReviewScore = 0.00; }
 
             //Input Hotel Type
-            foreach (string h in hotelTypes)
+            foreach (string h in hotelTypeList)
             {
                 Console.WriteLine(string.Format("[{0}] {1}", hotelTypes.IndexOf(h) + 1, h));
             }
-            Console.Write("Enter Hotel Type Index: ");
-            int hotelTypeIndex = Int32.Parse(Console.ReadLine());
-            if (hotelTypeIndex >= 0 && hotelTypeIndex < hotelTypes.Count)
+            Console.Write("Enter Hotel Type Index(es): ");
+            string hotelIndexesString = Console.ReadLine();
+            bool hotelIndexValid = false;
+            while (!hotelIndexValid)
             {
-                hotelType = hotelTypes[hotelTypeIndex - 1];
+                hotelTypes = new List<string>();
+                if (hotelIndexesString == "") { hotelIndexValid = true; }
+                else
+                {
+                    List<string> hotelIndexesList = hotelIndexesString.Split(",").ToList();
+                    foreach (string hotelIndexString in hotelIndexesList)
+                    {
+                        if (Int32.TryParse(hotelIndexString, out int hotelIndex))
+                        {
+                            if (hotelIndex > 0 && hotelIndex <= hotelTypeList.Count)
+                            {
+                                hotelTypes.Add(hotelTypeList[hotelIndex - 1]);
+                                hotelIndexValid = true;
+                            }
+                            else { hotelIndexValid = false; break; }
+                        }
+                        else { hotelIndexValid = false; break; }
+                    }
+                }
+                if (!hotelIndexValid)
+                {
+                    Console.Write("Enter valid index(es): ");
+                    areaIndexesString = Console.ReadLine();
+                }
             }
 
             //Input allowing of voucher
@@ -441,8 +529,46 @@ List<RoomType> browseHotelRooms()
                 if (voucherResponse.ToLower() == "y") { allowVouchers = true; }
                 else { allowVouchers = false; }
             }
+
+            //Input Facilities
+            foreach (Facility f in facilityList)
+            {
+                Console.WriteLine(string.Format("[{0}] {1}", f.FacilityId, f.FacilityName));
+            }
+            Console.Write("Enter Facility Index(es): ");
+            string facilityIndexesString = Console.ReadLine();
+            bool facilityIndexValid = false;
+            while (!facilityIndexValid)
+            {
+                facilitiesToCheck = new List<Facility>();
+                if (facilityIndexesString == "") { facilityIndexValid = true; }
+                else
+                {
+                    List<string> facilityIndexesList = facilityIndexesString.Split(",").ToList();
+                    foreach (string facilityIndexString in facilityIndexesList)
+                    {
+                        if (Int32.TryParse(facilityIndexString, out int facilityIndex))
+                        {
+                            if (facilityIndex > 0 && facilityIndex <= facilityList.Count)
+                            {                                
+                                facilitiesToCheck.Add(facilityList[facilityIndex - 1]);
+                                facilityIndexValid = true;
+                            }
+                            else { facilityIndexValid = false; break; }
+                        }
+                        else { facilityIndexValid = false; break; }
+                    }
+                }
+                if (!facilityIndexValid)
+                {
+                    Console.Write("Enter valid index(es): ");
+                    facilityIndexesString = Console.ReadLine();
+                }
+            }
         }
         else { roomSatisfies = true; }
+
+        Console.WriteLine();
 
         //Iterate through hotels, browse if filters are met
         HotelIterator hotelIterator = hotelCollection.CreateIterator();
@@ -450,17 +576,14 @@ List<RoomType> browseHotelRooms()
             !hotelIterator.isCompleted;
             hotel = hotelIterator.Next())
         {
-            if (hotel.satisfiesFilters(area, minReviewScore, hotelType, allowVouchers))
+            if (hotel.satisfiesFilters(areas, minReviewScore, hotelTypes, allowVouchers))
             {
-                RoomTypeCollection availableRooms = hotel.GetRoomTypes(new List<Facility>(), minAmt, maxAmt);
+                RoomTypeCollection availableRooms = hotel.GetRoomTypes(facilitiesToCheck, minAmt, maxAmt);
                 if (availableRooms.Count > 0)
                 {
                     roomSatisfies = true;
 
                     RoomTypeIterator roomTypeIterator = availableRooms.CreateIterator();
-
-                    Console.WriteLine(string.Format("{0}\t{1}\t\t{2}\t{3}\t{4}\t{5}\t{6}",
-                    "ID", "Hotel", "Room Name", "Max Guests", "Cost", "Breakfast?", "Room Description"));
 
                     for (RoomType roomType = roomTypeIterator.First();
                         !roomTypeIterator.isCompleted;
@@ -471,12 +594,15 @@ List<RoomType> browseHotelRooms()
                         string breakfastServed = "No";
                         if (roomType.BreakfastServed) { breakfastServed = "Yes"; }
 
+                        Console.WriteLine(string.Format("{0}\t{1}\t\t{2}\t{3}\t{4}\t{5}\t{6}",
+                        "ID", "Hotel", "Room Name", "Max Guests", "Cost", "Breakfast?", "Room Description"));
+
                         Console.WriteLine(string.Format("{0}\t{1}\t{2}\t\t{3}\t\t{4}\t{5}\t\t{6}",
-                        (bookableRoomTypes.IndexOf(roomType)+1).ToString(), hotel.HotelName, roomType.RoomTypeName,
+                        roomType.RoomTypeId.ToString(), hotel.HotelName, roomType.RoomTypeName,
                         roomType.MaxNumGuest.ToString(), roomType.RoomTypeCost.ToString(), breakfastServed, roomType.RoomDescription));
 
                         roomType.listAllFacilities();
-                        Console.WriteLine("These are rooms that fuflill your preferences!");
+                        Console.WriteLine();
                     }
                 }
             }
@@ -491,6 +617,58 @@ List<RoomType> browseHotelRooms()
     }
     return bookableRoomTypes;
 }
+
+List<RoomType> selectRooms(List<RoomType> bookableRoomTypes, List<RoomType> roomsToBook)
+{
+    Console.Write("Enter Room ID(s): ");
+    string roomIdsString = Console.ReadLine();
+    bool roomIdValid = false;
+    RoomType tempRoom = new RoomType();
+    while (!roomIdValid)
+    {
+        roomsToBook = new List<RoomType>();
+        if (roomIdsString == "") { roomIdValid = true; }
+        else
+        {
+            List<string> roomIdList = roomIdsString.Split(",").ToList();
+            foreach (string roomIdString in roomIdList)
+            {
+                if (Int32.TryParse(roomIdString, out int roomId))
+                {
+                    foreach (RoomType roomType in bookableRoomTypes)
+                    {
+                        if (roomType.RoomTypeId == roomId)
+                        {
+                            tempRoom = roomType;
+                            roomIdValid = true;
+                            break;
+                        }
+                    }
+                    foreach (RoomType bookedRoomType in roomsToBook)
+                    {
+                        if (bookedRoomType.RoomTypeId == roomId)
+                        {
+                            roomIdValid = false;
+                            break;
+                        }
+                    }
+
+                    if (roomIdValid) { roomsToBook.Add(tempRoom); tempRoom = new RoomType(); }
+
+                }
+                else { roomIdValid = false; break; }
+            }
+        }
+        if (!roomIdValid)
+        {
+            Console.Write("Enter valid index(es): ");
+            roomIdsString = Console.ReadLine();
+        }
+    }
+
+    return roomsToBook;
+}
+
 void makeReservation(List<RoomType> roomToBook)
 {
     Console.WriteLine("\n\nIf you are do not have a Guest Account, please register your Guest Profile:)\n");
