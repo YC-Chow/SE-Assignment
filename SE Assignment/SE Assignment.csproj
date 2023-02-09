@@ -9,7 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Observer\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Observer\" />
+  </ItemGroup>
 </Project>
