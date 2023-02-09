@@ -21,7 +21,7 @@
         public Voucher First()
         {
             current = 0;
-            if (!voucherCollection[current].IsUsed)
+            if (!voucherCollection[current].IsUsed && voucherCollection[current].ExpiryDate <= DateTime.Today)
             {
                 return voucherCollection[current];
             }

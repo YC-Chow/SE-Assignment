@@ -42,38 +42,22 @@ public class Payment
         set { voucherUsage = value; }
     }
 
-    public int makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
+    public void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
     {
-        //if user decide to use voucher
+        reservationToPay.ReservedByGuest.AccBal = reservationToPay.ReservedByGuest.AccBal - payableAmount;
+        Console.WriteLine("Your new balance is:",reservationToPay.ReservedByGuest.AccBal);
+        reservationToPay.setState(new ConfirmedState());
+        // Confirm and payment successful
+    }
+
+    public double checkdiscountedprice(double payableAmount,Voucher? voucherUsage) 
+    {
         if (voucherUsage != null)
         {
-            if(voucherUsage.ExpiryDate > DateTime.Today)
-            {
-                if (reservationToPay.ReservedByGuest.AccBal > 0)
-                {
-                    payableAmount = payableAmount - voucherUsage.VoucherValue;
-                    reservationToPay.ReservedByGuest.AccBal = reservationToPay.ReservedByGuest.AccBal - payableAmount;
-                    Console.WriteLine("Your new balance is:",reservationToPay.ReservedByGuest.AccBal);
-                    reservationToPay.setState(new ConfirmedState());
-                    return 1;// Confirm and payment successful
-                }
-                else
-                {
-                    return 2;//No money, call make payment method again
-                }
-            }
-            else
-            {
-                //Console.WriteLine("Your voucher has expired\n Please reselect your voucher to use.");
-                return 3;
+            payableAmount = payableAmount - voucherUsage.VoucherValue;
+        }
+        return payableAmount;
 
-            }
-        }
-        else
-        {
-            return 4;
-        }
-        return 0;
     }
 }
 
