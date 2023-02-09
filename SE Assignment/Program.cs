@@ -136,7 +136,7 @@ void reviewReservationOption()
     }
 }
 
-void browseHotelRooms()
+RoomType browseHotelRooms()
 {
     //Initialize values
     double minAmt = 0.00;
@@ -145,6 +145,7 @@ void browseHotelRooms()
     double minReviewScore = 0.00;
     string hotelType = "";
     bool? allowVouchers = null;
+    RoomType roomToBook = null;
     List<Facility> facilitiesToCheck = new List<Facility>();
     List<String> areas = new List<String>();
     areas.Add("Serangoon");
@@ -303,7 +304,7 @@ void browseHotelRooms()
         {
             if (roomOption > 0 && roomOption <= bookableRoomTypes.Count)
             {
-                RoomType roomToBook = bookableRoomTypes[roomOption-1];
+                roomToBook = bookableRoomTypes[roomOption-1];
                 isValid = true;
                 continue;
             }
@@ -311,5 +312,6 @@ void browseHotelRooms()
 
         Console.Write("Enter a valid ID: ");
         roomOptionString = Console.ReadLine();
-    } 
+    }
+    return roomToBook;
 }
