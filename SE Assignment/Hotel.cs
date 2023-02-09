@@ -82,7 +82,7 @@ public class Hotel {
 		return roomTypes;
 	}
 
-	public RoomTypeCollection GetRoomTypes(List<Facility> facilities = null, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
+	public RoomTypeCollection GetRoomTypes(List<Facility> facilities, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
 		RoomTypeCollection filteredRoomTypes = new RoomTypeCollection();
 
 		RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();

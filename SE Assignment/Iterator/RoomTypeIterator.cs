@@ -43,5 +43,25 @@
         {
             get { return roomTypeCollection[current]; }
         }
+
+        public void printAllRoomTypes()
+        {
+            Console.WriteLine(string.Format("{0}\t{1}\t{2\t{3}\t{4}\t{5}",
+            "Room Type Name", "Max Guests", "Cost", "Breakfast served?", "Room Description"));
+
+            for (RoomType roomType = First();
+                !isCompleted;
+                roomType = Next())
+            {
+                string breakfastServed = "No";
+                if (roomType.BreakfastServed) { breakfastServed = "Yes"; }
+
+                Console.WriteLine(string.Format("{0}\t{1}\t{2\t{3}\t{4}\t{5}", 
+                roomType.RoomTypeName, roomType.MaxNumGuest.ToString(), roomType.RoomTypeCost.ToString(), 
+                breakfastServed, roomType.RoomDescription));
+
+                roomType.listAllFacilities();
+            }
+        }
     }
 }

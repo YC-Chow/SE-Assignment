@@ -82,8 +82,9 @@ public class RoomType
                 !facilityIterator.isCompleted;
                 facility = facilityIterator.Next())
             {
-                Console.WriteLine(string.Format("[{0}] {1}", facility.FacilityId, facility.FacilityName));
+                Console.Write(string.Format("{0}\t\t", facility.FacilityName));
             }
+            Console.WriteLine();
         }
         else
         {
