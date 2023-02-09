@@ -153,18 +153,15 @@ public class Guest
         }
     }
 
-
-    //public Review makeReview(int rating, string description, Hotel hotel, Reservation res) {
-    //    ReservationIterator iterator = reservationList.createIterator();
-    //    for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next()) {
-    //        if (rsvp.ReservationId == res.ReservationId) {
-    //            if (rsvp.ReservationStatus == Reservation.Status.FULFILLED) {
-    //                Review newReview = new Review(1, DateTime.Now, guest, hotel, rating, description);
-    //                return newReview;
-    //                //hotel.Reviews.Add(newReview);
-    //            }
-    //        }
-    //    }
-
-    //}
+    public void makeReview(int rating, string content,Reservation reservation)
+    {
+        ReservationIterator iterator = reservationList.createIterator();
+        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        {
+            if (rsvp.ReservationId == reservation.ReservationId)
+            {
+                rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
+            }
+        }
+    }
 }

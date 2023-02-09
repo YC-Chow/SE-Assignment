@@ -60,6 +60,7 @@ public class Reservation
 	private List<RoomType> bookedRoomTypes;
 	public List<RoomType> BookedRoomTypes
     {
+		get { return bookedRoomTypes; }
         set
         {
 			if (bookedRoomTypes != value)

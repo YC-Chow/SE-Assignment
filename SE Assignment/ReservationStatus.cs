@@ -8,6 +8,8 @@ namespace SE_Assignment
         protected Reservation? reservation = null;
         public abstract void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
         public abstract void cancelReservation(Reservation reservation);
+        public abstract void reviewReservation(int rating, string content, Reservation reservation);
+
 
         //public void makePayment(Double amount, int reservationId, string paymentMethod);
         public abstract void guestCheckIn(Reservation reservation);
@@ -48,6 +50,11 @@ namespace SE_Assignment
 
         public override string getStatusName() {
             return "Submitted";
+        }
+
+        public override void reviewReservation(int rating, string content, Reservation reservation)
+        {
+            Console.WriteLine("Payment has not been made yet. You are unable to review the hotel");
         }
     }
     class ConfirmedState : ReservationStatus
@@ -94,6 +101,11 @@ namespace SE_Assignment
         public override string getStatusName() {
             return "Confirmed";
         }
+
+        public override void reviewReservation(int rating, string content, Reservation reservation)
+        {
+            Console.WriteLine("Your reservation is not completed, please review it after you complete it.");
+        }
     }
     class FulfilledState : ReservationStatus
     {
@@ -113,6 +125,15 @@ namespace SE_Assignment
         public override string getStatusName() {
             return "Fulfiiled";
         }
+
+        public override void reviewReservation(int rating, string content,Reservation reservation)
+        {
+
+            Review review = new Review(1, DateTime.Now, reservation.BookedRoomTypes[0].Hotel, reservation.ReservedByGuest, rating, content);
+            review.notifyObserver();
+            Console.WriteLine("Your review is posted, thank you!.");
+
+        }
     }
     class NoShowState : ReservationStatus
     {
@@ -130,6 +151,11 @@ namespace SE_Assignment
 
         public override string getStatusName() {
             return "No Show";
+        }
+
+        public override void reviewReservation(int rating, string content, Reservation reservation)
+        {
+            Console.WriteLine("You are unable to review the hotel.");
         }
     }
     class CancelledState : ReservationStatus
@@ -149,6 +175,12 @@ namespace SE_Assignment
 
         public override string getStatusName() {
             return "Cancelled";
+        }
+
+        public override void reviewReservation(int rating, string content, Reservation reservation)
+        {
+            Console.WriteLine("This booking has already been cancelled, you are unable to review it");
+
         }
     }
 }
