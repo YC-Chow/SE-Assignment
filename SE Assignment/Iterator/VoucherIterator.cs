@@ -21,9 +21,11 @@
         public Voucher First()
         {
             current = 0;
-            //Console.WriteLine(voucherCollection[current]);
-            return voucherCollection[current];
-            
+            if (!voucherCollection[current].IsUsed)
+            {
+                return voucherCollection[current];
+            }
+            return null;
         }
         public Voucher Next()
         {
