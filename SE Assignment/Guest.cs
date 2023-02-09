@@ -142,18 +142,15 @@ public class Guest
 
     }
 
-    public bool cancelReservation(Reservation reservation)
+    public void cancelReservation(Reservation reservation)
     {
         ReservationIterator iterator = reservationList.createIterator();
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
-            if (rsvp.ReservationId == reservation.ReservationId && DateTime.Now <= rsvp.CheckInDate.AddDays(-2))
-            {
+            if (rsvp.ReservationId == reservation.ReservationId) {
                 rsvp.ReservationStatus.cancelReservation(rsvp);
-                return true;
             }
         }
-        return false;
     }
 
 

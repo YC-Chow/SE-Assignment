@@ -4,6 +4,7 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
+using System.Runtime.CompilerServices;
 
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
@@ -16,9 +17,11 @@ List<string> options = new List<string>() {
 
 //Maunally creating Guest for testing purposes
 Guest guest = new Guest("John", "23223", "ssdsdasd", "sdsdssd", "232132131");
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new SubmittedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
+guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
+    new Voucher(1, "whoknows", DateTime.Now, false, true));
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(8)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(9)) { ReservationId = 4, ReservationStatus = new CancelledState() };
 new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(5)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 
 //Create Facilities
@@ -107,17 +110,18 @@ void displayOptions() {
 
 void cancelReservationOption() {
     guest.ListAllReservations();
-    Console.Write("Which reservation to cancel? ");
+    Console.Write("Which reservation to cancel? (0 to exit): ");
     int opt = Int32.Parse(Console.ReadLine());
+    if (opt == 0) {
+        Console.WriteLine("Exiting");
+        return;
+    }
     opt -= 1;
-    if (opt >= guest.ReservationList.Count || opt <= 0) {
+    if (opt >= guest.ReservationList.Count || opt < 0) {
         Console.WriteLine("not valid option");
     }
     else {
-        bool success = guest.cancelReservation(guest.ReservationList.GetReservation(opt));
-        if (!success) {
-            Console.WriteLine("Check in date within two days, cannot cancel");
-        }
+        guest.cancelReservation(guest.ReservationList.GetReservation(opt));
     }
 }
 

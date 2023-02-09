@@ -30,8 +30,19 @@ namespace SE_Assignment
         }
         public override void cancelReservation(Reservation reservation)
         {
-            Console.WriteLine("This booking has been cancelled successfully. No payment amount has been deducted.");
-            reservation.setState(new CancelledState());
+            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2)) {
+                reservation.ReservedByGuest.AccBal += reservation.MyPayment.PayableAmount;
+                Console.WriteLine(string.Format("Your new account balance: {0}", reservation.ReservedByGuest.AccBal));
+                if (reservation.MyPayment.VoucherUsage != null) {
+                    reservation.MyPayment.VoucherUsage.IsUsed = false;
+                    Console.WriteLine("Voucher used has been returned");
+                }
+                Console.WriteLine("This booking has been cancelled successfully.");
+                reservation.setState(new CancelledState());
+            }
+            else {
+                Console.WriteLine("Current day is not at least 2 days before check in date, cannot cancel");
+            }
 
         }
 
@@ -63,8 +74,20 @@ namespace SE_Assignment
         }
         public override void cancelReservation(Reservation reservation)
         {
-            Console.WriteLine("This booking has been cancelled successfully. Payment made will be refunded to you.");
-            reservation.setState(new CancelledState());
+            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2)) {
+                reservation.ReservedByGuest.AccBal += reservation.MyPayment.PayableAmount;
+                Console.WriteLine(string.Format("Your new account balance: {0}"), reservation.MyPayment.PayableAmount);
+                if (reservation.MyPayment.VoucherUsage != null) {
+                    reservation.MyPayment.VoucherUsage.IsUsed = false;
+                    Console.WriteLine("Voucher used has been returned");
+                }
+                Console.WriteLine("This booking has been cancelled successfully.");
+                reservation.setState(new CancelledState());
+            }
+            else {
+                Console.WriteLine("Current day is not at least 2 days before check in date, cannot cancel");
+            }
+            
 
         }
 
