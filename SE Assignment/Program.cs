@@ -17,6 +17,7 @@ List<string> options = new List<string>() {
 
 //Maunally creating Guest for testing purposes
 List<Guest> guestList = new List<Guest>();
+Admin admin = new Admin("admin", "admin@gmail.com");
 Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 2000000);
 guest.GuestId = 1;
 guestList.Add(guest); 
@@ -265,6 +266,7 @@ void reviewReservationOption()
             }
 
             guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
+            
             Console.WriteLine("Thank you for your review!");
         }
 
