@@ -153,15 +153,15 @@ public class Guest
         }
     }
 
-    public void makeReview(int rating, string content,Reservation reservation)
-    {
-        ReservationIterator iterator = reservationList.createIterator();
-        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
-        {
-            if (rsvp.ReservationId == reservation.ReservationId)
-            {
-                rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
-            }
-        }
-    }
+    //public void makeReview(int rating, string content,Reservation reservation)
+    //{
+    //    ReservationIterator iterator = reservationList.createIterator();
+    //    for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+    //    {
+    //        if (rsvp.ReservationId == reservation.ReservationId)
+    //        {
+    //            rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
+    //        }
+    //    }
+    //}
 }

@@ -93,7 +93,7 @@ public class RoomType
     }
 
     public bool hasFacilities(List<Facility> checkFacilities) {
-        bool hasFacilities = true;
+        int facilityCount = 0;
 
         FacilityIterator facilityIterator = facilities.CreateIterator();
         foreach (Facility checkFacility in checkFacilities) {
@@ -103,15 +103,12 @@ public class RoomType
                 facility = facilityIterator.Next()) {
 
                 if(facility == checkFacility) {
+                    facilityCount++;
                     continue;
-                }
-
-                if (facilityIterator.isCompleted) {
-                    hasFacilities = false;
                 }
             }
         }
 
-        return hasFacilities;
+        return (facilityCount == checkFacilities.Count);
     }
 } 

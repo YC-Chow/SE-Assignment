@@ -76,33 +76,34 @@ public class Hotel {
 		return roomTypes;
 	}
 
-	public RoomTypeCollection GetRoomTypes(List<Facility> facilities, double minAmt = 0.00, double maxAmt = 9999999999999999.99) {
+	public RoomTypeCollection GetRoomTypes(List<Facility> facilities, double minAmt, double maxAmt) {
 		RoomTypeCollection filteredRoomTypes = new RoomTypeCollection();
 
 		RoomTypeIterator roomTypeIterator = roomTypes.CreateIterator();
 		for (RoomType roomType = roomTypeIterator.First();
 			!roomTypeIterator.isCompleted;
-			roomType = roomTypeIterator.Next()){
-
-			if (roomType.RoomTypeCost >= minAmt && roomType.RoomTypeCost <= maxAmt) {
-				if (roomType.hasFacilities(facilities)) {
+			roomType = roomTypeIterator.Next())
+		{
+			if (roomType.RoomTypeCost >= minAmt && roomType.RoomTypeCost <= maxAmt) 
+			{
+                if (roomType.hasFacilities(facilities)) {
 					filteredRoomTypes.Add(roomType);
 				}
 			}
 		}
 
-		return roomTypes;
+		return filteredRoomTypes;
 	}
-	public bool satisfiesFilters (string filterArea = "", double minReviewScore = 0.00, string checkHotelType = "", bool? allowVouchers = null) {
+	public bool satisfiesFilters (List<string> filterAreas, double minReviewScore, List<string> filterHotelTypes, bool? allowVouchers = null) {
 		bool satisfies = true;
 
 		//Check Area
-		if (filterArea != "" && filterArea != area) { satisfies = false; }
+		if (filterAreas.Count != 0 && !filterAreas.Contains(area)) { satisfies = false; }
 
 		//Check Review Score
 
 		//Check hotel type
-		if (checkHotelType != "" && checkHotelType != hotelType) { satisfies = false; }
+		if (filterHotelTypes.Count != 0 && !filterHotelTypes.Contains(hotelType)) { satisfies = false; }
 
 		//Check vouchers 
 		if (allowVouchers != null && allowVouchers != hasVoucher) { satisfies = false; }
