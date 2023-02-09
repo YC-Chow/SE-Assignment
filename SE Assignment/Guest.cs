@@ -184,9 +184,10 @@ public class Guest
             !voucherIterator.isCompleted;
             voucher = voucherIterator.Next())
         {
-
-            voucherCollection.Add(voucher);
-            Console.WriteLine(voucherCollection.Count);
+            if (voucher != null)
+            {
+                voucherCollection.Add(voucher);
+            }
         }
         return voucherCollection;
     }
