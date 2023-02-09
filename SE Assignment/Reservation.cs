@@ -34,8 +34,8 @@ public class Reservation
 		get { return checkInDate; }
 		set { checkInDate = value; }
 	}
-	private DateTime checkOutDate;
-	public DateTime CheckOutDate
+	private DateTime? checkOutDate;
+	public DateTime? CheckOutDate
 	{
 		get { return checkOutDate; }
 		set { checkOutDate = value; }
