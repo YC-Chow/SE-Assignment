@@ -2,9 +2,10 @@
 
 public class Review : SE_Assignment.Observer.ISubject
 {
-    public Review(int reviewId, DateTime reviewDate,Hotel hotel, Guest guest, int rating, string reviewContent)
+    private static int nextId = 1;
+    public Review(DateTime reviewDate,Hotel hotel, Guest guest, int rating, string reviewContent)
     {
-        this.reviewId = reviewId;
+        this.reviewId = nextId++;
         this.reviewDate = reviewDate;
         this.rating = rating;
         this.reviewContent = reviewContent;

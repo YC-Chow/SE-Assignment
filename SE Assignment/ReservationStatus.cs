@@ -129,10 +129,8 @@ namespace SE_Assignment
         public override void reviewReservation(int rating, string content,Reservation reservation)
         {
 
-            Review review = new Review(1, DateTime.Now, reservation.BookedRoomTypes[0].Hotel, reservation.ReservedByGuest, rating, content);
+            Review review = new Review(DateTime.Now, reservation.BookedRoomTypes[0].Hotel, reservation.ReservedByGuest, rating, content);
             review.notifyObserver();
-            Console.WriteLine("Your review is posted, thank you!.");
-
         }
     }
     class NoShowState : ReservationStatus
