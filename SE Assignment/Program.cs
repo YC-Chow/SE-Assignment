@@ -5,13 +5,12 @@
 using SE_Assignment;
 using SE_Assignment.Iterator;
 
+
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
-    "Make Hotel Reservation",
     "View Reservation History" , 
     "Cancel Reservation", 
     "Make a rating and review",
-    "Make payment"
 };
 
 //List of possible areas for hotels
@@ -31,7 +30,7 @@ List<string> hotelTypeList = new List<string>()
 //Maunally creating Guest for testing purposes
 List<Guest> guestList = new List<Guest>();
 Admin admin = new Admin("admin", "admin@gmail.com");
-Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 2000000);
+Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 0);
 guest.GuestId = 1;
 guestList.Add(guest); 
 
@@ -178,17 +177,14 @@ void Main() {
                 break;
 
             case 2:
-                break;
-
-            case 3:
                 viewReservationHistory();
                 break;
 
-            case 4:
+            case 3:
                 cancelReservationOption();
                 break;
 
-            case 5:
+            case 4:
                 reviewReservationOption();
                 break;
 
@@ -347,31 +343,95 @@ void initiatePayment(Reservation reservation,double reservationTotal)
 {
     Payment payment = new Payment(new Random().Next(100, 500), reservation, reservationTotal);
 
-    Console.WriteLine("Your reservation total is:"+ reservationTotal.ToString());
-    Console.WriteLine("Do you wish to use voucher? Y/N");
+    Console.WriteLine("Your reservation total is: $"+ reservationTotal.ToString());
+    Console.Write("\nDo you wish to use voucher? (Y/N): ");
     string usageoption = Console.ReadLine();
 
     Voucher voucherUsage = null;
+
+
+    while (usageoption.ToLower() != "y" && usageoption.ToLower() != "n")
+    {
+        Console.Write("Enter Y or N only: ");
+        usageoption = Console.ReadLine();
+    }
+
     if (usageoption.ToLower().Equals("y"))
     {
         List<Voucher> voucherList = guest.GetUnUsedVouchers();
         //Console.WriteLine(voucherList.Count);
-        Console.WriteLine(string.Format("{0} {1} {2} {3}", "Voucher ID", "Voucher Issuer", "Voucher Expiry Date", "Voucher value"));
-        int ouput;
+        Console.WriteLine(string.Format("{0, -8} | {1, -20} | {2, -14} | {3, -5}", "Voucher ID", "Voucher Issuer", "Voucher Expiry Date", "Voucher value"));
+        int output;
 
         foreach (Voucher voucher in voucherList)
         {
             if (voucher != null)
             {
-                Console.WriteLine(string.Format("{0} {1} {2} {3}", voucher.VoucherId, voucher.Issuer, voucher.ExpiryDate, voucher.VoucherValue));
+                Console.WriteLine(string.Format("{0 ,-12} | {1, -20} | {2, -14} | {3, -5}", voucher.VoucherId, voucher.Issuer, voucher.ExpiryDate, voucher.VoucherValue));
             }
         }
-        Console.WriteLine("Please make a selection!");
-        int.TryParse(Console.ReadLine(), out ouput);
-        voucherUsage = getVoucherById(voucherList, ouput);
+        Console.Write("Please enter a Voucher ID to use: ");
+
+
+        while (!int.TryParse(Console.ReadLine(), out output) || !voucherList.Exists(v => v.VoucherId == output))
+        {
+            Console.Write("Invalid Voucher ID. Please enter again: ");
+        }
+
+        voucherUsage = getVoucherById(voucherList, output);
+        reservationTotal = payment.checkdiscountedprice(reservationTotal, voucherUsage);
+        Console.WriteLine("\nYour discounted reservation total is: $" + reservationTotal.ToString());
+    }
+    else
+    {
+        reservationTotal = reservationTotal;
     }
 
-    //Console.WriteLine(paymentResult);
+    double guestaccbal = reservation.ReservedByGuest.AccBal;
+    Console.WriteLine("Your account balance is: $" + guestaccbal.ToString());
+    double num;
+
+    while (guestaccbal < reservationTotal)
+    {
+        Console.WriteLine("\nYou have insufficient funds in your account!");
+        Console.Write("Enter an amount to top up: $");
+
+        while (!double.TryParse(Console.ReadLine(), out num))
+        {
+            Console.Write("Invalid input. Please enter a valid amount: $");
+        }
+
+        guestaccbal = guestaccbal + num;
+        Console.WriteLine("\nYour new account balance is: $"+ guestaccbal.ToString());
+
+        if (guestaccbal >= reservationTotal)
+        {
+            Console.WriteLine("You have sufficient balance!");
+            Console.Write("Confirm Payment? (Y/N): ");
+            string paymentconfirmation = Console.ReadLine();
+
+
+            while (paymentconfirmation.ToLower() != "y" && paymentconfirmation.ToLower() != "n")
+            {
+                Console.Write("Enter Y or N only: ");
+                paymentconfirmation = Console.ReadLine();
+            }
+
+            if (paymentconfirmation.ToLower().Equals("y"))
+            {
+                payment.makePayment(reservationTotal, reservation, voucherUsage);
+                Console.WriteLine("You have confirmed your reservation!");
+            }
+            else
+            {
+                Console.WriteLine("\nYou have cancelled your payment, no reservations were made");
+            }
+
+        }
+    }
+    //Console.WriteLine("Your new account balance is:" + guestaccbal.ToString());
+
+
 
 }
 
@@ -764,7 +824,6 @@ void makeReservation(List<RoomType> roomToBook)
             reservation.createReservationRecord(roomToBook, guestBooking);
           
             double reservationTotal = reservation.computeReservationTotal(roomToBook);
-            Console.WriteLine("You will be redirected to Make Payment...");
 
             //Make Payment use Case starts here
             initiatePayment(reservation, reservation.ReservationPrice);
