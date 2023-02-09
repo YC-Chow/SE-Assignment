@@ -97,7 +97,7 @@ void Main() {
                 break;
 
             case 1:
-                RoomType roomToBook = browseHotelRooms();
+                List<RoomType> bookableRoomTypes = browseHotelRooms();
                 break;
 
 
@@ -177,7 +177,7 @@ void reviewReservationOption()
     }
 }
 
-RoomType browseHotelRooms()
+List<RoomType> browseHotelRooms()
 {
     //Initialize values
     double minAmt = 0.00;
@@ -186,7 +186,6 @@ RoomType browseHotelRooms()
     double minReviewScore = 0.00;
     string hotelType = "";
     bool? allowVouchers = null;
-    RoomType roomToBook = null;
     List<Facility> facilitiesToCheck = new List<Facility>();
     List<String> areas = new List<String>();
     areas.Add("Serangoon");
@@ -336,23 +335,5 @@ RoomType browseHotelRooms()
             continue;
         }
     }
-    Console.Write("Enter your selection (ID): ");
-    string roomOptionString = Console.ReadLine();
-    bool isValid = false;
-    while (!isValid)
-    {
-        if (Int32.TryParse(roomOptionString, out int roomOption))
-        {
-            if (roomOption > 0 && roomOption <= bookableRoomTypes.Count)
-            {
-                roomToBook = bookableRoomTypes[roomOption-1];
-                isValid = true;
-                continue;
-            }
-        }
-
-        Console.Write("Enter a valid ID: ");
-        roomOptionString = Console.ReadLine();
-    }
-    return roomToBook;
+    return bookableRoomTypes;
 }
