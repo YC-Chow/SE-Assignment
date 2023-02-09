@@ -56,12 +56,6 @@ public class Hotel {
 		set { reviews = value; }
 	}
 
-	private List<HotelAdmin> hotelAdmins;
-
-	public List<HotelAdmin> HotelAdmins {
-		get { return hotelAdmins; }
-		set { hotelAdmins = value; }
-	}
 
 	private RoomTypeCollection roomTypes;
 
