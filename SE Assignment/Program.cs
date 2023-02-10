@@ -339,8 +339,9 @@ Voucher getVoucherById(List<Voucher> voucherList, int id)
     }
     return null;
 }
-void initiatePayment(Reservation reservation,double reservationTotal)
+bool initiatePayment(Reservation reservation,double reservationTotal)
 {
+    bool paymentSuccessful = false;
     Payment payment = new Payment(new Random().Next(100, 500), reservation, reservationTotal);
 
     Console.WriteLine("Your reservation total is: $"+ reservationTotal.ToString());
@@ -429,6 +430,7 @@ void initiatePayment(Reservation reservation,double reservationTotal)
             }
 
         }
+        return paymentSuccessful;
     }
     //Console.WriteLine("Your new account balance is:" + guestaccbal.ToString());
 
@@ -827,7 +829,22 @@ void makeReservation(List<RoomType> roomToBook)
             double reservationTotal = reservation.computeReservationTotal(roomToBook);
 
             //Make Payment use Case starts here
-            initiatePayment(reservation, reservation.ReservationPrice);
+            bool paymentSuccessful = false;
+            while (!paymentSuccessful)
+            {
+                paymentSuccessful = initiatePayment(reservation, reservation.ReservationPrice);
+                if (paymentSuccessful)
+                {
+                    Console.WriteLine("Payment has been successfully made. Your reservation has been confirmed. Please check in on {0} anytime after 2pm and before 12mn.", reservation.CheckInDate);
+                }
+                else
+                {
+                    Console.WriteLine("Payment was not successful. Please complete your payment to confirm this hotel reservation.");
+
+                }
+
+            }
+
             break;
         case 2:
             //
@@ -871,7 +888,21 @@ void makeReservation(List<RoomType> roomToBook)
             reservation = new Reservation(guestBooking, checkinDate, checkOutDate);
             reservation.computeReservationTotal(roomToBook);
             reservation.createReservationRecord(roomToBook, guestBooking);
-            initiatePayment(reservation,reservation.ReservationPrice);
+            paymentSuccessful = false; //reset boolean to re-validate payment
+            while (!paymentSuccessful)
+            {
+                paymentSuccessful = initiatePayment(reservation, reservation.ReservationPrice);
+                if (paymentSuccessful)
+                {
+                    Console.WriteLine("Payment has been successfully made. Your reservation has been confirmed. Please check in on {0} anytime after 2pm and before 12mn.", reservation.CheckInDate);
+                }
+                else
+                {
+                    Console.WriteLine("There is an error with your payment. Please complete your payment to confirm this hotel reservation.");
+
+                }
+
+            }
             break;
         case 3:
             //destructor
