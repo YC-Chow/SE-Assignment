@@ -71,12 +71,7 @@ public class RoomType
         get { return hotel; }  
         set { hotel = value; }
     }
-    private Double price;
-    public Double Price
-    {
-        get { return price; }
-        set { price = value; }
-    }
+
     public void listAllFacilities()
     {
         if (facilities.Count > 0)
