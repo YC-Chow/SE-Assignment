@@ -94,13 +94,11 @@ public class Hotel {
 
 		return filteredRoomTypes;
 	}
-	public bool satisfiesFilters (List<string> filterAreas, double minReviewScore, List<string> filterHotelTypes, bool? allowVouchers = null) {
+	public bool satisfiesFilters (List<string> filterAreas, List<string> filterHotelTypes, bool? allowVouchers = null) {
 		bool satisfies = true;
 
 		//Check Area
 		if (filterAreas.Count != 0 && !filterAreas.Contains(area)) { satisfies = false; }
-
-		//Check Review Score
 
 		//Check hotel type
 		if (filterHotelTypes.Count != 0 && !filterHotelTypes.Contains(hotelType)) { satisfies = false; }
