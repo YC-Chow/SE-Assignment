@@ -136,9 +136,6 @@ public class Guest
         Console.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4}", "No.", "Reservation ID", "Check In Date", "Check Out Date", "Reservation Status"));
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
-
-
-
             if (rsvp.CheckOutDate != null) {
                 Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
                 rsvp.CheckInDate.ToString("dd/MM/yyyy")
@@ -157,6 +154,40 @@ public class Guest
 
     }
 
+    public List<Reservation> ListAllReservationsView()
+    {
+        //iterator pattern for reservation
+        int count = 1;
+        ReservationIterator iterator = reservationList.createIterator();
+        List<Reservation> list = new List<Reservation>();
+
+        //Write the header
+        Console.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4}", "No.", "Reservation ID", "Check In Date", "Check Out Date", "Reservation Status"));
+        for (Reservation rsvp = iterator.Init(); !iterator.IsCompleted; rsvp = iterator.Looping())
+        {
+            if (rsvp.CheckOutDate != null)
+            {
+                Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
+                rsvp.CheckInDate.ToString("dd/MM/yyyy")
+                , rsvp.CheckOutDate.Value.ToString("dd/MM/yyyy"), rsvp.ReservationStatus.getStatusName()));
+            }
+            else
+            {
+                Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
+                rsvp.CheckInDate.ToString("dd/MM/yyyy")
+                , "----------", rsvp.ReservationStatus.getStatusName()));
+            }
+            if (rsvp.ReservationStatus.getStatusName() != "Cancelled")
+            {
+                list.Add(rsvp);
+                count++;
+            }
+
+        }
+
+        return list;
+
+    }
 
 
 

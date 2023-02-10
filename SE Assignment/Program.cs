@@ -38,9 +38,9 @@ new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { Reser
 
 //guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
 //    new Voucher(1, "whoknows", 40,DateTime.Now, false, true));
-//new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-//new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 4, ReservationStatus = new CancelledState() };
-//new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 4, ReservationStatus = new CancelledState() };
+new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 //guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), , 100.40, "Paid");
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
@@ -208,7 +208,7 @@ void viewReservationHistory() {
     }
     else
     {    
-        guest.ListAllReservations();
+        guest.ListAllReservationsView();
         //Guest can enter the reservation id to view the details
         Console.Write("Enter the reservation number to view the details: ");
         int opt = Int32.Parse(Console.ReadLine());
@@ -246,14 +246,15 @@ void cancelReservationOption() {
 
 void reviewReservationOption()
 {
-    if (guest.ReservationList.Count == 0)
+    List<Reservation> list = guest.ListAllReservationsView();
+
+    if (list.Count == 0)
     {
         Console.WriteLine("You do not have a reservation to review");
         return;
     }
     else
     {
-        List<Reservation> list = guest.ListAllReservations();
         Console.Write("Which reservation to review? (Enter 0 to exit the review):");
 
         int opt = 0;
@@ -266,14 +267,14 @@ void reviewReservationOption()
                 return;
             }
             opt -= 1;
-            if (opt >= guest.ReservationList.Count || opt < 0)
+            if (opt >= list.Count || opt < 0)
             {
                 Console.Write("Not a valid option, please enter a valid reservation number:");
             }
             else
             {
 
-                if (guest.ReservationList.GetReservation(opt).ReservationStatus.getStatusName() != "Fulfilled")
+                if (list[opt].ReservationStatus.getStatusName() != "Fulfilled")
                 {
                     Console.Write("This reservation is not fulfilled, please make fulfill it first before make the review. Choose another reservation:");
                 }
