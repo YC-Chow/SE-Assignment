@@ -133,17 +133,20 @@ public class Guest
         List<Reservation> list = new List<Reservation>();
 
         //Write the header
-        Console.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4}", "No.", "Reservation ID", "Check In Date", "Check Out Date", "Reservation Status"));
+        string header = "{0,-5} | {1,-15} | {2,-15} | {3,-15} | {4,-15} | {5,-20}";
+        string valueFormat = "[{0}]\t {1,-16} {2,-18} {3,-16} {4,-17} {5,-20}";
+        Console.WriteLine(string.Format(header, "No.", "Reservation ID", "Hotel Name", "Check In Date", "Check Out Date", "Reservation Status"));
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
-
-            if (rsvp.CheckOutDate != null) {
-                Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
+            if (rsvp.CheckOutDate != null)
+            {
+                Console.WriteLine(string.Format(valueFormat, count, rsvp.ReservationId, rsvp.BookedRoomTypes[0].Hotel.HotelName,
                 rsvp.CheckInDate.ToString("dd/MM/yyyy")
                 , rsvp.CheckOutDate.Value.ToString("dd/MM/yyyy"), rsvp.ReservationStatus.getStatusName()));
             }
-            else {
-                Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
+            else
+            {
+                Console.WriteLine(string.Format(valueFormat, count, rsvp.ReservationId, rsvp.BookedRoomTypes[0].Hotel.HotelName,
                 rsvp.CheckInDate.ToString("dd/MM/yyyy")
                 , "----------", rsvp.ReservationStatus.getStatusName()));
             }
@@ -154,6 +157,46 @@ public class Guest
         return list;
 
     }
+
+    public List<Reservation> ListAllReservationsView()
+    {
+        //iterator pattern for reservation
+        int count = 1;
+        ReservationIterator iterator = reservationList.createIterator();
+        List<Reservation> list = new List<Reservation>();
+
+        //Write the header
+        string header = "{0,-5} | {1,-15} | {2,-15} | {3,-15} | {4,-15} | {5,-20}";
+        string valueFormat = "[{0}]\t {1,-16} {2,-18} {3,-16} {4,-17} {5,-20}";
+
+        Console.WriteLine(string.Format(header, "No.", "Reservation ID", "Hotel Name", "Check In Date", "Check Out Date", "Reservation Status"));
+        for (Reservation rsvp = iterator.Init(); !iterator.IsCompleted; rsvp = iterator.Looping())
+        {
+            if (rsvp.CheckOutDate != null)
+            {
+                Console.WriteLine(string.Format(valueFormat, count, rsvp.ReservationId,rsvp.BookedRoomTypes[0].Hotel.HotelName,
+                rsvp.CheckInDate.ToString("dd/MM/yyyy")
+                , rsvp.CheckOutDate.Value.ToString("dd/MM/yyyy"), rsvp.ReservationStatus.getStatusName()));
+            }
+            else
+            {
+                Console.WriteLine(string.Format(valueFormat, count, rsvp.ReservationId,rsvp.BookedRoomTypes[0].Hotel.HotelName,
+                rsvp.CheckInDate.ToString("dd/MM/yyyy")
+                , "----------", rsvp.ReservationStatus.getStatusName()));
+            }
+            if (rsvp.ReservationStatus.getStatusName() != "Cancelled")
+            {
+                list.Add(rsvp);
+                count++;
+            }
+
+        }
+
+        return list;
+
+    }
+
+
 
     public void cancelReservation(Reservation reservation)
     {

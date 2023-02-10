@@ -11,8 +11,7 @@ namespace SE_Assignment.Iterator {
 
         public Reservation First() {
             current = 0;
-            while ((!IsCompleted) && (collection.GetReservation(current).ReservationStatus.getStatusName() != "Submitted" &&
-                collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed")) {
+            while ((!IsCompleted) && collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed") {
                 current++;
             }
             if (IsCompleted) {
@@ -30,8 +29,7 @@ namespace SE_Assignment.Iterator {
             //else {
             //    return null;
             //}
-            while(!IsCompleted && (collection.GetReservation(current).ReservationStatus.getStatusName() != "Submitted" &&
-                collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed")) {
+            while(!IsCompleted && collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed") {
                 current++;
             }
             if (IsCompleted) {
@@ -40,10 +38,47 @@ namespace SE_Assignment.Iterator {
             return collection.GetReservation(current);
         }
 
-        public bool IsCompleted {
+
+        public Reservation Init()
+        {
+            current = 0;
+            while ((!IsCompleted) && collection.GetReservation(current).ReservationStatus.getStatusName() == "Cancelled")
+            {
+                current++;
+            }
+            if (IsCompleted)
+            {
+                return null;
+            }
+            return collection.GetReservation(current);
+        }
+
+        public Reservation Looping()
+        {
+            current += 1;
+            //if (!IsCompleted  && (collection.GetReservation(current).ReservationStatus.getStatusName() == "Submitted" ||
+            //    collection.GetReservation(current).ReservationStatus.getStatusName() == "Confirmed")) {
+            //    return collection.GetReservation(current);
+            //}
+            //else {
+            //    return null;
+            //}
+            while (!IsCompleted && collection.GetReservation(current).ReservationStatus.getStatusName() == "Cancelled")
+            {
+                current++;
+            }
+            if (IsCompleted)
+            {
+                return null;
+            }
+            return collection.GetReservation(current);
+        }
+
+        public bool IsCompleted
+        {
             get { return current >= collection.Count; }
         }
 
-      
+
     }
 }
