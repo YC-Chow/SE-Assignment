@@ -32,15 +32,9 @@ List<Guest> guestList = new List<Guest>();
 Admin admin = new Admin("admin", "admin@gmail.com");
 Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 0);
 guest.GuestId = 1;
-guestList.Add(guest); 
+guestList.Add(guest);
 
-new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
 
-//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
-//    new Voucher(1, "whoknows", 40,DateTime.Now, false, true));
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 4, ReservationStatus = new CancelledState() };
-new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 //guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), , 100.40, "Paid");
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
@@ -104,6 +98,21 @@ hotelCollection.Add(hotel2);
 //testing data for review a hotel
 Reservation FulfilledRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 7, ReservationStatus = new FulfilledState() };
 FulfilledRes.BookedRoomTypes = new List<RoomType> { roomType1 };
+
+Reservation SubRes = new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
+SubRes.BookedRoomTypes = new List<RoomType> { roomType2};
+
+
+//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
+//    new Voucher(1, "whoknows", 40,DateTime.Now, false, true));
+Reservation Conf = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+Conf.BookedRoomTypes = new List<RoomType> { roomType3 };
+
+Reservation CancRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 4, ReservationStatus = new CancelledState() };
+CancRes.BookedRoomTypes = new List<RoomType> { roomType4 };
+
+Reservation suRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
+suRes.BookedRoomTypes = new List<RoomType> { roomType2 };
 
 //vouchers
 Voucher voucher1 = new Voucher(1, "Singapore Rediscover", 20, DateTime.Parse("10/12/2022"), false, true);// used and less than today's date
@@ -203,25 +212,14 @@ void displayOptions() {
 void viewReservationHistory() {
     if (guest.ReservationList.Count == 0)
     {
-        Console.WriteLine("You do not have a reservation to review");
+        Console.WriteLine("You do not have a reservation");
         return;
     }
     else
     {    
         guest.ListAllReservationsView();
-        //Guest can enter the reservation id to view the details
-        Console.Write("Enter the reservation number to view the details: ");
-        int opt = Int32.Parse(Console.ReadLine());
-        if (opt == 0) {
-            return;
-        }
-        opt -= 1;
-        if (opt >= guest.ReservationList.Count || opt < 0) {
-            Console.WriteLine("not valid option");
-        }
-        else {
-            
-        }
+        Console.WriteLine();
+
     }
 }
 
