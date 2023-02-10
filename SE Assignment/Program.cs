@@ -4,7 +4,7 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
-
+using SE_Assignment.State;
 
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
@@ -423,6 +423,7 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
             {
                 payment.makePayment(reservationTotal, reservation, voucherUsage);
                 Console.WriteLine("You have confirmed your reservation!");
+                paymentSuccessful = true;
             }
             else
             {
@@ -432,6 +433,8 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
         }
         return paymentSuccessful;
     }
+    return paymentSuccessful;
+
     //Console.WriteLine("Your new account balance is:" + guestaccbal.ToString());
 
 

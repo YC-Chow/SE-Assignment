@@ -137,6 +137,8 @@ public class Guest
         for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
         {
 
+
+
             if (rsvp.CheckOutDate != null) {
                 Console.WriteLine(string.Format("[{0}]\t\t {1} \t {2} \t {3} \t {4}", count, rsvp.ReservationId,
                 rsvp.CheckInDate.ToString("dd/MM/yyyy")
@@ -154,6 +156,9 @@ public class Guest
         return list;
 
     }
+
+
+
 
     public void cancelReservation(Reservation reservation)
     {
