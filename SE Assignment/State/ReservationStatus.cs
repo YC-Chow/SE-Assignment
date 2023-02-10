@@ -1,9 +1,8 @@
-﻿
-
-namespace SE_Assignment
+﻿using System;
+namespace SE_Assignment.State
 {
 
-     public abstract class ReservationStatus
+    public abstract class ReservationStatus
     {
         protected Reservation? reservation = null;
         public abstract void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
@@ -15,40 +14,45 @@ namespace SE_Assignment
         public abstract void guestCheckIn(Reservation reservation);
         public abstract string getStatusName();
     }
-   
+
     class SubmittedState : ReservationStatus
     {
         public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
         {
-            Reservation r = new Reservation(guest,checkInDate, checkOutDate);
+            Reservation r = new Reservation(guest, checkInDate, checkOutDate);
             r.ReservedByGuest = guest;
-            r.setState(new ConfirmedState()); 
+            r.setState(new ConfirmedState());
             r.ReservationDate = DateTime.Today;
             r.ReservationId = 0;
             guest.addReservation(r);
         }
-        public override void guestCheckIn(Reservation r) {
+        public override void guestCheckIn(Reservation r)
+        {
             Console.WriteLine("Payment has not been made yet. Please make payment to confirm this booking.");
         }
         public override void cancelReservation(Reservation reservation)
         {
-            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2)) {
+            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2))
+            {
                 reservation.ReservedByGuest.AccBal += reservation.MyPayment.PayableAmount;
                 Console.WriteLine(string.Format("Your new account balance: {0}", reservation.ReservedByGuest.AccBal));
-                if (reservation.MyPayment.VoucherUsage != null) {
+                if (reservation.MyPayment.VoucherUsage != null)
+                {
                     reservation.MyPayment.VoucherUsage.IsUsed = false;
                     Console.WriteLine("Voucher used has been returned");
                 }
                 Console.WriteLine("This booking has been cancelled successfully.");
-                reservation.setState(new CancelledState());
+                //reservation.setState(new CancelledState());
             }
-            else {
+            else
+            {
                 Console.WriteLine("Current day is not at least 2 days before check in date, cannot cancel");
             }
 
         }
 
-        public override string getStatusName() {
+        public override string getStatusName()
+        {
             return "Submitted";
         }
 
@@ -65,7 +69,7 @@ namespace SE_Assignment
         }
         public override void guestCheckIn(Reservation reservation)
         {
-            if (DateTime.Now == reservation.CheckInDate && DateTime.Now < new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,23,59,0) && DateTime.Now.Hour >= 14)//ontime
+            if (DateTime.Now == reservation.CheckInDate && DateTime.Now < new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 0) && DateTime.Now.Hour >= 14)//ontime
             {
                 reservation.setState(new FulfilledState());
                 Console.WriteLine("Successfully checked-in to hotel.");
@@ -81,24 +85,28 @@ namespace SE_Assignment
         }
         public override void cancelReservation(Reservation reservation)
         {
-            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2)) {
+            if (DateTime.Now <= reservation.CheckInDate.AddDays(-2))
+            {
                 reservation.ReservedByGuest.AccBal += reservation.MyPayment.PayableAmount;
                 Console.WriteLine(string.Format("Your new account balance: {0}"), reservation.MyPayment.PayableAmount);
-                if (reservation.MyPayment.VoucherUsage != null) {
+                if (reservation.MyPayment.VoucherUsage != null)
+                {
                     reservation.MyPayment.VoucherUsage.IsUsed = false;
                     Console.WriteLine("Voucher used has been returned");
                 }
                 Console.WriteLine("This booking has been cancelled successfully.");
                 reservation.setState(new CancelledState());
             }
-            else {
+            else
+            {
                 Console.WriteLine("Current day is not at least 2 days before check in date, cannot cancel");
             }
-            
+
 
         }
 
-        public override string getStatusName() {
+        public override string getStatusName()
+        {
             return "Confirmed";
         }
 
@@ -122,11 +130,12 @@ namespace SE_Assignment
             Console.WriteLine("This booking is ongoing as guests have already checked-in");
         }
 
-        public override string getStatusName() {
+        public override string getStatusName()
+        {
             return "Fulfilled";
         }
 
-        public override void reviewReservation(int rating, string content,Reservation reservation)
+        public override void reviewReservation(int rating, string content, Reservation reservation)
         {
 
             Review review = new Review(DateTime.Now, reservation.BookedRoomTypes[0].Hotel, reservation.ReservedByGuest, rating, content);
@@ -135,7 +144,8 @@ namespace SE_Assignment
     }
     class NoShowState : ReservationStatus
     {
-        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest) {
+        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
+        {
             Console.WriteLine("Error. This existing reservation has been marked as no-show");
         }
         public override void guestCheckIn(Reservation reservation)
@@ -147,7 +157,8 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been paid, and cannot be refunded as user failed to check-in ontime.");
         }
 
-        public override string getStatusName() {
+        public override string getStatusName()
+        {
             return "No Show";
         }
 
@@ -171,7 +182,8 @@ namespace SE_Assignment
             Console.WriteLine("This booking has already been cancelled.");
         }
 
-        public override string getStatusName() {
+        public override string getStatusName()
+        {
             return "Cancelled";
         }
 
