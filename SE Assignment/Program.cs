@@ -402,6 +402,7 @@ void initiatePayment(Reservation reservation,double reservationTotal)
         }
 
         guestaccbal = guestaccbal + num;
+        reservation.ReservedByGuest.AccBal += num;// add the vakue to actual accbal obj
         Console.WriteLine("\nYour new account balance is: $"+ guestaccbal.ToString());
 
         if (guestaccbal >= reservationTotal)
