@@ -89,9 +89,8 @@ namespace SE_Assignment.State
             if (DateTime.Now <= reservation.CheckInDate.AddDays(-2))
             {
                 reservation.ReservedByGuest.AccBal += reservation.MyPayment.PayableAmount;
-                Console.WriteLine(string.Format("Your new account balance: {0}"), reservation.MyPayment.PayableAmount);
-                if (reservation.MyPayment.VoucherUsage != null)
-                {
+                Console.WriteLine(string.Format("Your new account balance: {0}", reservation.MyPayment.PayableAmount));
+                if (reservation.MyPayment.VoucherUsage != null) {
                     reservation.MyPayment.VoucherUsage.IsUsed = false;
                     Console.WriteLine("Voucher used has been returned");
                 }

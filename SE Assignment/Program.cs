@@ -351,7 +351,7 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
 {
     bool paymentSuccessful = false;
     Payment payment = new Payment(new Random().Next(100, 500), reservation, reservationTotal);
-
+    reservation.MyPayment = payment;
     Console.WriteLine("Your reservation total is: $"+ reservationTotal.ToString());
     Console.Write("\nDo you wish to use voucher? (Y/N): ");
     string usageoption = Console.ReadLine();
@@ -454,13 +454,14 @@ List<RoomType> browseHotelRooms()
     //Initialize values
     double minAmt = 0.00;
     double maxAmt = 999999999999.99;
-    double minReviewScore = 0.00;
     bool? allowVouchers = null;
+    bool roomSatisfies = false;
 
     List<string> areas = new List<string>();
     List<string> hotelTypes = new List<string>();
-
     List<Facility> facilitiesToCheck = new List<Facility>();
+    List<RoomType> bookableRoomTypes = new List<RoomType>();
+
 
     //Print Lines
     Console.WriteLine();
@@ -471,8 +472,6 @@ List<RoomType> browseHotelRooms()
     string response = Console.ReadLine();
     Console.WriteLine();
 
-    bool roomSatisfies = false;
-    List<RoomType> bookableRoomTypes = new List<RoomType>();
 
     while (!roomSatisfies)
     {
@@ -547,16 +546,6 @@ List<RoomType> browseHotelRooms()
                     areaIndexesString = Console.ReadLine();
                 }
             }
-
-            //Input Minimum Review Score
-            Console.Write("Enter Minimum Review Score: ");
-            string minReviewScoreString = Console.ReadLine();
-            while (!double.TryParse(minReviewScoreString, out minReviewScore) && minReviewScoreString != "")
-            {
-                Console.Write("Enter a valid Review Score: ");
-                minReviewScoreString = Console.ReadLine();
-            }
-            if (minReviewScore < 0.00) { minReviewScore = 0.00; }
 
             //Input Hotel Type
             foreach (string h in hotelTypeList)
@@ -649,7 +638,7 @@ List<RoomType> browseHotelRooms()
             !hotelIterator.isCompleted;
             hotel = hotelIterator.Next())
         {
-            if (hotel.satisfiesFilters(areas, minReviewScore, hotelTypes, allowVouchers))
+            if (hotel.satisfiesFilters(areas, hotelTypes, allowVouchers))
             {
                 RoomTypeCollection availableRooms = hotel.GetRoomTypes(facilitiesToCheck, minAmt, maxAmt);
                 if (availableRooms.Count > 0)
