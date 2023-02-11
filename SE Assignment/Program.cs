@@ -4,7 +4,7 @@
 #region Initializing objects
 using SE_Assignment;
 using SE_Assignment.Iterator;
-
+using SE_Assignment.State;
 
 List<string> options = new List<string>() {
     "Browse Hotel Rooms", 
@@ -32,15 +32,9 @@ List<Guest> guestList = new List<Guest>();
 Admin admin = new Admin("admin", "admin@gmail.com");
 Guest guest = new Guest("John", "", "R213535235", "guest1@gmail.com", "91234567", 0);
 guest.GuestId = 1;
-guestList.Add(guest); 
+guestList.Add(guest);
 
-new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
 
-//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
-//    new Voucher(1, "whoknows", 40,DateTime.Now, false, true));
-//new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-//new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 4, ReservationStatus = new CancelledState() };
-//new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
 //guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), , 100.40, "Paid");
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
 //new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
@@ -104,6 +98,21 @@ hotelCollection.Add(hotel2);
 //testing data for review a hotel
 Reservation FulfilledRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 7, ReservationStatus = new FulfilledState() };
 FulfilledRes.BookedRoomTypes = new List<RoomType> { roomType1 };
+
+Reservation SubRes = new Reservation(guest, DateTime.Now.AddDays(5), DateTime.Now.AddDays(7)) { ReservationId = 2, ReservationStatus = new SubmittedState() };
+SubRes.BookedRoomTypes = new List<RoomType> { roomType2};
+
+
+//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), "sdsd", 100.40, "Paid",
+//    new Voucher(1, "whoknows", 40,DateTime.Now, false, true));
+Reservation Conf = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
+Conf.BookedRoomTypes = new List<RoomType> { roomType3 };
+
+Reservation CancRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 4, ReservationStatus = new CancelledState() };
+CancRes.BookedRoomTypes = new List<RoomType> { roomType4 };
+
+Reservation suRes = new Reservation(guest, DateTime.Now, DateTime.Now.AddDays(4)) { ReservationId = 1, ReservationStatus = new SubmittedState() };
+suRes.BookedRoomTypes = new List<RoomType> { roomType2 };
 
 //vouchers
 Voucher voucher1 = new Voucher(1, "Singapore Rediscover", 20, DateTime.Parse("10/12/2022"), false, true);// used and less than today's date
@@ -203,25 +212,14 @@ void displayOptions() {
 void viewReservationHistory() {
     if (guest.ReservationList.Count == 0)
     {
-        Console.WriteLine("You do not have a reservation to review");
+        Console.WriteLine("You do not have a reservation");
         return;
     }
     else
     {    
-        guest.ListAllReservations();
-        //Guest can enter the reservation id to view the details
-        Console.Write("Enter the reservation number to view the details: ");
-        int opt = Int32.Parse(Console.ReadLine());
-        if (opt == 0) {
-            return;
-        }
-        opt -= 1;
-        if (opt >= guest.ReservationList.Count || opt < 0) {
-            Console.WriteLine("not valid option");
-        }
-        else {
-            
-        }
+        guest.ListAllReservationsView();
+        Console.WriteLine();
+
     }
 }
 
@@ -246,14 +244,16 @@ void cancelReservationOption() {
 
 void reviewReservationOption()
 {
-    if (guest.ReservationList.Count == 0)
+    List<Reservation> list = guest.ListAllReservationsView();
+    Reservation reviewRes = new Reservation();
+
+    if (list.Count == 0)
     {
         Console.WriteLine("You do not have a reservation to review");
         return;
     }
     else
     {
-        List<Reservation> list = guest.ListAllReservations();
         Console.Write("Which reservation to review? (Enter 0 to exit the review):");
 
         int opt = 0;
@@ -266,19 +266,20 @@ void reviewReservationOption()
                 return;
             }
             opt -= 1;
-            if (opt >= guest.ReservationList.Count || opt < 0)
+            if (opt >= list.Count || opt < 0)
             {
                 Console.Write("Not a valid option, please enter a valid reservation number:");
             }
             else
             {
 
-                if (guest.ReservationList.GetReservation(opt).ReservationStatus.getStatusName() != "Fulfilled")
+                if (list[opt].ReservationStatus.getStatusName() != "Fulfilled")
                 {
                     Console.Write("This reservation is not fulfilled, please make fulfill it first before make the review. Choose another reservation:");
                 }
                 else
                 {
+                    reviewRes = list[opt];
                     break;
                 }
             }
@@ -318,13 +319,20 @@ void reviewReservationOption()
                 reviewText = "No comment";
             }
 
-            guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
-            
-            Console.WriteLine("Thank you for your review!");
+            Review? review = guest.makeReview(rating, reviewText, reviewRes);
+
+            if (review == null)
+            {
+                Console.WriteLine("You have already made a review for this reservation");
+
+            }
+            else
+            {
+                Console.WriteLine("Thank you for your review!");
+                review.registerObserver(admin);
+                review.notifyObserver();
+            }
         }
-
-        //if review is empty, change the review to "No comment"
-
     }
 }
 
@@ -339,10 +347,11 @@ Voucher getVoucherById(List<Voucher> voucherList, int id)
     }
     return null;
 }
-void initiatePayment(Reservation reservation,double reservationTotal)
+bool initiatePayment(Reservation reservation,double reservationTotal)
 {
+    bool paymentSuccessful = false;
     Payment payment = new Payment(new Random().Next(100, 500), reservation, reservationTotal);
-
+    reservation.MyPayment = payment;
     Console.WriteLine("Your reservation total is: $"+ reservationTotal.ToString());
     Console.Write("\nDo you wish to use voucher? (Y/N): ");
     string usageoption = Console.ReadLine();
@@ -422,6 +431,7 @@ void initiatePayment(Reservation reservation,double reservationTotal)
             {
                 payment.makePayment(reservationTotal, reservation, voucherUsage);
                 Console.WriteLine("You have confirmed your reservation!");
+                paymentSuccessful = true;
             }
             else
             {
@@ -429,7 +439,10 @@ void initiatePayment(Reservation reservation,double reservationTotal)
             }
 
         }
+        return paymentSuccessful;
     }
+    return paymentSuccessful;
+
     //Console.WriteLine("Your new account balance is:" + guestaccbal.ToString());
 
 
@@ -441,13 +454,14 @@ List<RoomType> browseHotelRooms()
     //Initialize values
     double minAmt = 0.00;
     double maxAmt = 999999999999.99;
-    double minReviewScore = 0.00;
     bool? allowVouchers = null;
+    bool roomSatisfies = false;
 
     List<string> areas = new List<string>();
     List<string> hotelTypes = new List<string>();
-
     List<Facility> facilitiesToCheck = new List<Facility>();
+    List<RoomType> bookableRoomTypes = new List<RoomType>();
+
 
     //Print Lines
     Console.WriteLine();
@@ -458,8 +472,6 @@ List<RoomType> browseHotelRooms()
     string response = Console.ReadLine();
     Console.WriteLine();
 
-    bool roomSatisfies = false;
-    List<RoomType> bookableRoomTypes = new List<RoomType>();
 
     while (!roomSatisfies)
     {
@@ -534,16 +546,6 @@ List<RoomType> browseHotelRooms()
                     areaIndexesString = Console.ReadLine();
                 }
             }
-
-            //Input Minimum Review Score
-            Console.Write("Enter Minimum Review Score: ");
-            string minReviewScoreString = Console.ReadLine();
-            while (!double.TryParse(minReviewScoreString, out minReviewScore) && minReviewScoreString != "")
-            {
-                Console.Write("Enter a valid Review Score: ");
-                minReviewScoreString = Console.ReadLine();
-            }
-            if (minReviewScore < 0.00) { minReviewScore = 0.00; }
 
             //Input Hotel Type
             foreach (string h in hotelTypeList)
@@ -636,7 +638,7 @@ List<RoomType> browseHotelRooms()
             !hotelIterator.isCompleted;
             hotel = hotelIterator.Next())
         {
-            if (hotel.satisfiesFilters(areas, minReviewScore, hotelTypes, allowVouchers))
+            if (hotel.satisfiesFilters(areas, hotelTypes, allowVouchers))
             {
                 RoomTypeCollection availableRooms = hotel.GetRoomTypes(facilitiesToCheck, minAmt, maxAmt);
                 if (availableRooms.Count > 0)
@@ -827,7 +829,22 @@ void makeReservation(List<RoomType> roomToBook)
             double reservationTotal = reservation.computeReservationTotal(roomToBook);
 
             //Make Payment use Case starts here
-            initiatePayment(reservation, reservation.ReservationPrice);
+            bool paymentSuccessful = false;
+            while (!paymentSuccessful)
+            {
+                paymentSuccessful = initiatePayment(reservation, reservation.ReservationPrice);
+                if (paymentSuccessful)
+                {
+                    Console.WriteLine("Payment has been successfully made. Your reservation has been confirmed. Please check in on {0} anytime after 2pm and before 12mn.", reservation.CheckInDate);
+                }
+                else
+                {
+                    Console.WriteLine("Payment was not successful. Please complete your payment to confirm this hotel reservation.");
+
+                }
+
+            }
+
             break;
         case 2:
             //
@@ -871,7 +888,21 @@ void makeReservation(List<RoomType> roomToBook)
             reservation = new Reservation(guestBooking, checkinDate, checkOutDate);
             reservation.computeReservationTotal(roomToBook);
             reservation.createReservationRecord(roomToBook, guestBooking);
-            initiatePayment(reservation,reservation.ReservationPrice);
+            paymentSuccessful = false; //reset boolean to re-validate payment
+            while (!paymentSuccessful)
+            {
+                paymentSuccessful = initiatePayment(reservation, reservation.ReservationPrice);
+                if (paymentSuccessful)
+                {
+                    Console.WriteLine("Payment has been successfully made. Your reservation has been confirmed. Please check in on {0} anytime after 2pm and before 12mn.", reservation.CheckInDate);
+                }
+                else
+                {
+                    Console.WriteLine("There is an error with your payment. Please complete your payment to confirm this hotel reservation.");
+
+                }
+
+            }
             break;
         case 3:
             //destructor
