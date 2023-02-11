@@ -7,7 +7,7 @@ namespace SE_Assignment.State
         protected Reservation? reservation = null;
         public abstract void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
         public abstract void cancelReservation(Reservation reservation);
-        public abstract void reviewReservation(int rating, string content, Reservation reservation);
+        public abstract Review? reviewReservation(int rating, string content, Reservation reservation);
 
 
         //public void makePayment(Double amount, int reservationId, string paymentMethod);
@@ -56,9 +56,10 @@ namespace SE_Assignment.State
             return "Submitted";
         }
 
-        public override void reviewReservation(int rating, string content, Reservation reservation)
+        public override Review? reviewReservation(int rating, string content, Reservation reservation)
         {
             Console.WriteLine("Payment has not been made yet. You are unable to review the hotel");
+            return null;
         }
     }
     class ConfirmedState : ReservationStatus
@@ -110,9 +111,10 @@ namespace SE_Assignment.State
             return "Confirmed";
         }
 
-        public override void reviewReservation(int rating, string content, Reservation reservation)
+        public override Review? reviewReservation(int rating, string content, Reservation reservation)
         {
             Console.WriteLine("Your reservation is not completed, please review it after you complete it.");
+            return null;
         }
     }
     class FulfilledState : ReservationStatus
@@ -135,11 +137,11 @@ namespace SE_Assignment.State
             return "Fulfilled";
         }
 
-        public override void reviewReservation(int rating, string content, Reservation reservation)
+        public override Review reviewReservation(int rating, string content, Reservation reservation)
         {
 
             Review review = new Review(DateTime.Now, reservation.BookedRoomTypes[0].Hotel, reservation.ReservedByGuest, rating, content);
-            review.notifyObserver();
+            return review;
         }
     }
     class NoShowState : ReservationStatus
@@ -162,9 +164,10 @@ namespace SE_Assignment.State
             return "No Show";
         }
 
-        public override void reviewReservation(int rating, string content, Reservation reservation)
+        public override Review? reviewReservation(int rating, string content, Reservation reservation)
         {
             Console.WriteLine("You are unable to review the hotel.");
+            return null;
         }
     }
     class CancelledState : ReservationStatus
@@ -187,9 +190,10 @@ namespace SE_Assignment.State
             return "Cancelled";
         }
 
-        public override void reviewReservation(int rating, string content, Reservation reservation)
+        public override Review? reviewReservation(int rating, string content, Reservation reservation)
         {
             Console.WriteLine("This booking has already been cancelled, you are unable to review it");
+            return null;
 
         }
     }

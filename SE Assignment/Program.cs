@@ -245,6 +245,7 @@ void cancelReservationOption() {
 void reviewReservationOption()
 {
     List<Reservation> list = guest.ListAllReservationsView();
+    Reservation reviewRes = new Reservation();
 
     if (list.Count == 0)
     {
@@ -278,6 +279,7 @@ void reviewReservationOption()
                 }
                 else
                 {
+                    reviewRes = list[opt];
                     break;
                 }
             }
@@ -317,13 +319,20 @@ void reviewReservationOption()
                 reviewText = "No comment";
             }
 
-            guest.makeReview(rating, reviewText, guest.ReservationList.GetReservation(opt));
-            
-            Console.WriteLine("Thank you for your review!");
+            Review? review = guest.makeReview(rating, reviewText, reviewRes);
+
+            if (review == null)
+            {
+                Console.WriteLine("You have already made a review for this reservation");
+
+            }
+            else
+            {
+                Console.WriteLine("Thank you for your review!");
+                review.registerObserver(admin);
+                review.notifyObserver();
+            }
         }
-
-        //if review is empty, change the review to "No comment"
-
     }
 }
 

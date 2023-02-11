@@ -209,16 +209,18 @@ public class Guest
         }
     }
 
-    public void makeReview(int rating, string content,Reservation reservation)
+    public Review? makeReview(int rating, string content,Reservation reservation)
     {
         ReservationIterator iterator = reservationList.createIterator();
-        for (Reservation rsvp = iterator.First(); !iterator.IsCompleted; rsvp = iterator.Next())
+        for (Reservation rsvp = iterator.Init(); !iterator.IsCompleted; rsvp = iterator.Looping())
         {
             if (rsvp.ReservationId == reservation.ReservationId)
             {
-                rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
+                Review? review = rsvp.ReservationStatus.reviewReservation(rating,content,rsvp);
+                return review;
             }
         }
+        return null;
     }
     public VoucherCollection GetUnUsedVouchers()
     {
