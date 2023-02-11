@@ -22,13 +22,6 @@ namespace SE_Assignment.Iterator {
 
         public Reservation Next() {
             current += 1;
-            //if (!IsCompleted  && (collection.GetReservation(current).ReservationStatus.getStatusName() == "Submitted" ||
-            //    collection.GetReservation(current).ReservationStatus.getStatusName() == "Confirmed")) {
-            //    return collection.GetReservation(current);
-            //}
-            //else {
-            //    return null;
-            //}
             while(!IsCompleted && collection.GetReservation(current).ReservationStatus.getStatusName() != "Confirmed") {
                 current++;
             }
