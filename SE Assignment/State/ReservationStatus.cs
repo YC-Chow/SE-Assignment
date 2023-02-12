@@ -5,7 +5,8 @@ namespace SE_Assignment.State
     public abstract class ReservationStatus
     {
         protected Reservation? reservation = null;
-        public abstract void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest);
+
+        public abstract void makeReservation(Reservation r, DateTime checkInDate, DateTime checkOutDate, List<RoomType> RoomTypeList, Guest guest, double reservationPrice);
         public abstract void cancelReservation(Reservation reservation);
         public abstract Review? reviewReservation(int rating, string content, Reservation reservation);
 
@@ -17,14 +18,21 @@ namespace SE_Assignment.State
 
     class SubmittedState : ReservationStatus
     {
-        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
+        public override void makeReservation(Reservation r, DateTime checkInDate, DateTime checkOutDate, List<RoomType> RoomTypeList, Guest guest,double reservationPrice)
         {
-            Reservation r = new Reservation(guest, checkInDate, checkOutDate);
             r.ReservedByGuest = guest;
-            r.setState(new ConfirmedState());
+            r.CheckInDate = checkInDate;
+            r.CheckOutDate = checkOutDate;
+            r.BookedRoomTypes = RoomTypeList;
+            r.ReservationPrice = reservationPrice;
+            r.ReservationId = new Random().Next(100, 500);
             r.ReservationDate = DateTime.Today;
-            r.ReservationId = 0;
+            r.ReservedByGuest = guest;
+            r.ReservationDate = DateTime.Today;
+            
             guest.addReservation(r);
+            Console.WriteLine("You will be redirected to Make Payment...");
+
         }
         public override void guestCheckIn(Reservation r)
         {
@@ -70,7 +78,7 @@ namespace SE_Assignment.State
     }
     class ConfirmedState : ReservationStatus
     {
-        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
+        public override void makeReservation(Reservation r, DateTime checkInDate, DateTime checkOutDate, List<RoomType> RoomTypeList, Guest guest, double reservationPrice)
         {
             Console.WriteLine("You have an existing reservation confirmed! You can't rebook the same reservation.");
         }
@@ -129,7 +137,7 @@ namespace SE_Assignment.State
     }
     class FulfilledState : ReservationStatus
     {
-        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
+        public override void makeReservation(Reservation r, DateTime checkInDate, DateTime checkOutDate, List<RoomType> RoomTypeList, Guest guest, double reservationPrice)
         {
             Console.WriteLine("Error. An existing reservation with the similarly specified reservation details has been fulfilled");
         }
@@ -160,7 +168,7 @@ namespace SE_Assignment.State
     }
     class NoShowState : ReservationStatus
     {
-        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
+        public override void makeReservation(Reservation r, DateTime checkInDate, DateTime checkOutDate, List<RoomType> RoomTypeList, Guest guest, double reservationPrice)
         {
             Console.WriteLine("Error. This existing reservation has been marked as no-show");
         }
@@ -191,7 +199,7 @@ namespace SE_Assignment.State
     }
     class CancelledState : ReservationStatus
     {
-        public override void makeReservation(DateTime checkInDate, DateTime checkOutDate, List<int> RoomTypeIdList, Guest guest)
+        public override void makeReservation(Reservation r, DateTime checkInDate, DateTime checkOutDate, List<RoomType> RoomTypeList, Guest guest,double reservationPrice)
         {
             Console.WriteLine("This reservation has been cancelled.");
         }

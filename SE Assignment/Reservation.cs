@@ -3,7 +3,7 @@ using SE_Assignment.State;
 
 public class Reservation
 {
-	~Reservation() { Console.WriteLine("Reservation Record has been deleted"); }
+	~Reservation() { Console.WriteLine("Reservation Record has been deleted"); }//destrcutor
 	public Reservation() { }
 	public Reservation(Guest reservedByGuest, DateTime checkInDate, DateTime checkOutDate)//constructor
 	{
@@ -103,14 +103,5 @@ public class Reservation
         }
 		return this.reservationPrice;
 	}
-	public void createReservationRecord(List<RoomType> roomTypes,Guest guest)
-	{
-        this.BookedRoomTypes = roomTypes;
-        this.setState(new SubmittedState());
-        this.ReservationId = new Random().Next(100,500);
-        //guest.ReservationList.Add(this);
-        this.ReservationDate = DateTime.Today;
-        Console.WriteLine("You will be redirected to Make Payment...");
-
-    }
+	
 }
