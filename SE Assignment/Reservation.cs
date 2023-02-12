@@ -14,10 +14,7 @@ public class Reservation
 		reservationPrice = 0;
 
     }
-    public void setState(ReservationStatus state)
-	{
-		this.reservationStatus = state;
-	}
+   
 	private int reservationId;
 	public int ReservationId
 	{
@@ -103,5 +100,8 @@ public class Reservation
         }
 		return this.reservationPrice;
 	}
-	
+    public void setState(ReservationStatus state)
+    {
+        this.reservationStatus = state;
+    }
 }

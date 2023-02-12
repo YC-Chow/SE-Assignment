@@ -21,12 +21,6 @@ public class Voucher
         set { voucherId = value; }  // set method
     }
 
-    private string serialNo;
-    public string SerialNo   // property
-    {
-        get { return serialNo; }   // get method
-        set { serialNo = value; }  // set method
-    }
 
     private string issuer;
     public string Issuer   // property

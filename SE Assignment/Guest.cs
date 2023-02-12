@@ -75,10 +75,7 @@ public class Guest
         }
     }
 
-    public VoucherCollection getUnUsedVouchers()
-    {
-        return voucherList;
-    }
+   
 
     private ReservationCollection reservationList = new ReservationCollection();
 
@@ -94,35 +91,6 @@ public class Guest
     public void addVoucher(Voucher v)
     {
         VoucherList.Add(v);
-    }
-
-    public int registerGuest(string name, string emailAddress, string contactNo, string passportNo = "", string icNo = "")
-    {
-
-        if (!string.IsNullOrEmpty(name) && (!string.IsNullOrEmpty(passportNo) || !string.IsNullOrEmpty(icNo)) && !string.IsNullOrEmpty(emailAddress) && !string.IsNullOrEmpty(contactNo))
-        {
-            Guest guest = new Guest(name, passportNo, icNo, emailAddress, contactNo);
-            guest.guestId = 1; //to be confirmed
-            return guest.guestId;
-        }
-        else
-        {
-            Console.WriteLine("Missing Guest Credentials. Please check whether Name, Contact No., Email Address and Passport Number or NRIC are provided. ");
-            return 0;
-        }
-    }
-    public bool loginGuest(int idNo, List<Guest> guestList)
-    {
-        bool guestFound = false;
-        foreach (Guest g in guestList)
-        {
-            if (g.guestId == idNo)
-            {
-                guestFound = true;
-                break;
-            }
-        }
-        return guestFound;
     }
 
     public List<Reservation> ListAllReservations()
