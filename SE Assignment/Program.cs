@@ -429,7 +429,7 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
 
             if (paymentconfirmation.ToLower().Equals("y"))
             {
-                payment.makePayment(reservationTotal, reservation, voucherUsage);
+                reservation.ReservationStatus.makePayment(reservationTotal, reservation, voucherUsage);
                 Console.WriteLine("You have confirmed your reservation!");
                 paymentSuccessful = true;
             }

@@ -10,7 +10,7 @@ namespace SE_Assignment.State
         public abstract Review? reviewReservation(int rating, string content, Reservation reservation);
 
 
-        //public void makePayment(Double amount, int reservationId, string paymentMethod);
+        public abstract void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage);
         public abstract void guestCheckIn(Reservation reservation);
         public abstract string getStatusName();
     }
@@ -61,6 +61,13 @@ namespace SE_Assignment.State
             Console.WriteLine("Payment has not been made yet. You are unable to review the hotel");
             return null;
         }
+        public override void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
+        {
+            reservationToPay.ReservedByGuest.AccBal = reservationToPay.ReservedByGuest.AccBal - payableAmount;
+            reservationToPay.setState(new ConfirmedState());
+            // Confirm and payment successful
+        }
+
     }
     class ConfirmedState : ReservationStatus
     {
@@ -115,6 +122,11 @@ namespace SE_Assignment.State
             Console.WriteLine("Your reservation is not completed, please review it after you complete it.");
             return null;
         }
+        public override void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
+        {
+            Console.WriteLine("Error. Payment has already been made for this confirmed reservation.");
+        }
+
     }
     class FulfilledState : ReservationStatus
     {
@@ -142,6 +154,10 @@ namespace SE_Assignment.State
             Review review = new Review(DateTime.Now, reservation.BookedRoomTypes[0].Hotel, reservation.ReservedByGuest, rating, content);
             return review;
         }
+        public override void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
+        {
+            Console.WriteLine("Error. Payment has already been made for this reservation. Reservation has also been fulfilled by guest");
+        }
     }
     class NoShowState : ReservationStatus
     {
@@ -168,6 +184,11 @@ namespace SE_Assignment.State
             Console.WriteLine("You are unable to review the hotel.");
             return null;
         }
+        public override void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
+        {
+            Console.WriteLine("Payment has already been made for this no-show reservation.");
+        }
+
     }
     class CancelledState : ReservationStatus
     {
@@ -195,5 +216,10 @@ namespace SE_Assignment.State
             return null;
 
         }
+        public override void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
+        {
+            Console.WriteLine("This booking has been cancelled, no payment is allowed.");
+        }
+
     }
 }
