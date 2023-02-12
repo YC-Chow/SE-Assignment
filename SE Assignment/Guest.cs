@@ -227,13 +227,16 @@ public class Guest
         VoucherCollection voucherCollection = new VoucherCollection();
         VoucherIterator voucherIterator = voucherList.CreateIterator();
 
-        for (Voucher voucher = voucherIterator.First();
-            !voucherIterator.isCompleted;
-            voucher = voucherIterator.Next())
+        if (voucherCollection.Count > 0)
         {
-            if (voucher != null)
+            for (Voucher voucher = voucherIterator.First();
+           !voucherIterator.isCompleted;
+           voucher = voucherIterator.Next())
             {
-                voucherCollection.Add(voucher);
+                if (voucher != null)
+                {
+                    voucherCollection.Add(voucher);
+                }
             }
         }
         return voucherCollection;

@@ -118,9 +118,9 @@ suRes.BookedRoomTypes = new List<RoomType> { roomType2 };
 Voucher voucher1 = new Voucher(1, "Singapore Rediscover", 20, DateTime.Parse("10/12/2022"), false, true);// used and less than today's date
 Voucher voucher2 = new Voucher(2, "Singapore Rediscover", 30, DateTime.Parse("12/12/2023"), false, false);// unused and more than today's date
 Voucher voucher3 = new Voucher(3, "Singapore Rediscover", 40, DateTime.Parse("12/03/2022"), false, false);// unused and less than today's date
-guest.addVoucher(voucher1);
-guest.addVoucher(voucher2);
-guest.addVoucher(voucher3);
+//guest.addVoucher(voucher1);
+//guest.addVoucher(voucher2);
+//guest.addVoucher(voucher3);
 
 #endregion
 
@@ -367,33 +367,40 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
 
     if (usageoption.ToLower().Equals("y"))
     {
-        List<Voucher> voucherList = guest.GetUnUsedVouchers();
-        //Console.WriteLine(voucherList.Count);
-        Console.WriteLine(string.Format("{0, -8} | {1, -20} | {2, -14} | {3, -5}", "Voucher ID", "Voucher Issuer", "Voucher Expiry Date", "Voucher value"));
-        int output;
-
-        foreach (Voucher voucher in voucherList)
+        if (guest.VoucherList.Count > 0)
         {
-            if (voucher != null)
+            List<Voucher> voucherList = guest.GetUnUsedVouchers();
+            //Console.WriteLine(voucherList.Count);
+            Console.WriteLine(string.Format("{0, -8} | {1, -20} | {2, -14} | {3, -5}", "Voucher ID", "Voucher Issuer", "Voucher Expiry Date", "Voucher value"));
+            int output;
+
+
+            foreach (Voucher voucher in voucherList)
             {
-                Console.WriteLine(string.Format("{0 ,-12} | {1, -20} | {2, -14} | {3, -5}", voucher.VoucherId, voucher.Issuer, voucher.ExpiryDate, voucher.VoucherValue));
+                if (voucher != null)
+                {
+                    Console.WriteLine(string.Format("{0 ,-12} | {1, -20} | {2, -14} | {3, -5}", voucher.VoucherId, voucher.Issuer, voucher.ExpiryDate, voucher.VoucherValue));
+                }
             }
+            Console.Write("Please enter a Voucher ID to use: ");
+
+            while (!int.TryParse(Console.ReadLine(), out output) || !voucherList.Exists(v => v.VoucherId == output))
+            {
+                Console.Write("Invalid Voucher ID. Please enter again: ");
+            }
+
+            voucherUsage = getVoucherById(voucherList, output);
+            if (voucherUsage != null)
+            {
+                voucherUsage.IsUsed = true;
+            }
+            reservationTotal = payment.checkdiscountedprice(reservationTotal, voucherUsage);
+            Console.WriteLine("\nYour discounted reservation total is: $" + reservationTotal.ToString());
         }
-        Console.Write("Please enter a Voucher ID to use: ");
-
-
-        while (!int.TryParse(Console.ReadLine(), out output) || !voucherList.Exists(v => v.VoucherId == output))
+        else
         {
-            Console.Write("Invalid Voucher ID. Please enter again: ");
+            Console.WriteLine("You have no voucher to use.");
         }
-
-        voucherUsage = getVoucherById(voucherList, output);
-        if (voucherUsage != null) 
-        {
-            voucherUsage.IsUsed = true;
-        }
-        reservationTotal = payment.checkdiscountedprice(reservationTotal, voucherUsage);
-        Console.WriteLine("\nYour discounted reservation total is: $" + reservationTotal.ToString());
     }
     else
     {
