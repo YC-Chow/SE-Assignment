@@ -35,12 +35,6 @@ guest.GuestId = 1;
 guestList.Add(guest);
 
 
-//guest.ReservationList.GetReservation(0).MyPayment = new Payment(guest.ReservationList.GetReservation(0), , 100.40, "Paid");
-//new Reservation(guest, DateTime.Now, null) { ReservationId = 3, ReservationStatus = new ConfirmedState() };
-//new Reservation(guest, DateTime.Now, null) { ReservationId = 4, ReservationStatus = new CancelledState() };
-//new Reservation(guest, DateTime.Now, null) { ReservationId = 1, ReservationStatus = new SubmittedState() };
-
-
 //Create Facilities
 List<Facility> facilityList = new List<Facility>();
 Facility facility1 = new Facility(1, "Bathtub");

@@ -1,9 +1,6 @@
 ﻿
 using SE_Assignment.State;
-/// <summary>
-/// Summary description for Class1
-/// </summary>
-/// 
+
 public class Payment
 {
     public Payment(int transactionId, Reservation reservationToPay, double payableAmount)
