@@ -2,7 +2,6 @@
 
 
 #region Initializing objects
-using SE_Assignment;
 using SE_Assignment.Iterator;
 using SE_Assignment.State;
 using System.Collections.Generic;
@@ -389,6 +388,10 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
         }
 
         voucherUsage = getVoucherById(voucherList, output);
+        if (voucherUsage != null) 
+        {
+            voucherUsage.IsUsed = true;
+        }
         reservationTotal = payment.checkdiscountedprice(reservationTotal, voucherUsage);
         Console.WriteLine("\nYour discounted reservation total is: $" + reservationTotal.ToString());
     }
@@ -444,9 +447,6 @@ bool initiatePayment(Reservation reservation,double reservationTotal)
     return paymentSuccessful;
 
     //Console.WriteLine("Your new account balance is:" + guestaccbal.ToString());
-
-
-
 }
 
 List<RoomType> browseHotelRooms()
