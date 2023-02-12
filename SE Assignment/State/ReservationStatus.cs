@@ -64,7 +64,6 @@ namespace SE_Assignment.State
         public override void makePayment(double payableAmount, Reservation reservationToPay, Voucher? voucherUsage)
         {
             reservationToPay.ReservedByGuest.AccBal = reservationToPay.ReservedByGuest.AccBal - payableAmount;
-            reservationToPay.setState(new ConfirmedState());
             // Confirm and payment successful
         }
 
