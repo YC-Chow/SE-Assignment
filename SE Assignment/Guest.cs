@@ -195,7 +195,7 @@ public class Guest
         VoucherCollection voucherCollection = new VoucherCollection();
         VoucherIterator voucherIterator = voucherList.CreateIterator();
 
-        if (voucherCollection.Count > 0)
+        if (VoucherList.Count > 0)
         {
             for (Voucher voucher = voucherIterator.First();
            !voucherIterator.isCompleted;
