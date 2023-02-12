@@ -1,7 +1,4 @@
-﻿/// <summary>
-/// Summary description for Class1
-/// </summary>
-/// 
+﻿
 public class Voucher
 {
     public Voucher(int voucherId, string issuer,double voucherValue, DateTime expiryDate, bool isPercentage, bool isUsed)
